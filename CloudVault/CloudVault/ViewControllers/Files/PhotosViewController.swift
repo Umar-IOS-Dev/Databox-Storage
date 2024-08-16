@@ -9,6 +9,7 @@ import UIKit
 import Anchorage
 import Photos
 import AVKit
+import SDWebImage
 
 class PhotosViewController: BaseViewController {
     
@@ -77,6 +78,10 @@ class PhotosViewController: BaseViewController {
     private let imageManager = PHCachingImageManager()
     private var assetMapping: [IndexPath: PHAsset] = [:]
     private let spacerString:String = "    "
+    private var batchSize = 100
+    private var currentBatchIndex = 0
+    private var isUpdatingLayout = false
+    private var fetchResult: PHFetchResult<PHAsset>?
     private lazy var collectionView: UICollectionView = {
         let layout = createLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -141,6 +146,7 @@ class PhotosViewController: BaseViewController {
         
         hideFocusbandOptionFromNavBar()
         showHideFooterView(isShowFooterView: false)
+        collectionView.dataSource = dataSource
         configureDataSource()
         // setupData() // Moved setupData here to ensure dataSource is initialized before applying snapshot
         collectionView.delegate = self
@@ -169,7 +175,7 @@ class PhotosViewController: BaseViewController {
             present(documentPicker, animated: true, completion: nil)
         } else {
             // Fallback on earlier versions
-           // documentPicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypeItem)], in: .import)
+            // documentPicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypeItem)], in: .import)
         }
         
     }
@@ -236,33 +242,43 @@ class PhotosViewController: BaseViewController {
             switch self.currentViewType {
             case .grid:
                 // Grid layout
-                let itemWidth: CGFloat = 82
                 let itemHeight: CGFloat = 82
-                let maxItemsPerRow: CGFloat = 3
-                let totalSpacing: CGFloat = 5 * (maxItemsPerRow - 1)
+                    let spacing: CGFloat = 5
+                    let itemsPerRow: CGFloat = 3
+                        
                 let availableWidth = environment.container.effectiveContentSize.width
-                let numberOfItemsPerRow = min(maxItemsPerRow, floor((availableWidth + 5) / (itemWidth + 5)))
-                let adjustedItemWidth = (availableWidth - (numberOfItemsPerRow - 1) * 5) / numberOfItemsPerRow
-                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(adjustedItemWidth - 10), heightDimension: .absolute(itemHeight))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(itemHeight))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                group.interItemSpacing = .fixed(5)
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 5
-                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
-                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
-                section.decorationItems = [backgroundItem]
-                section.boundarySupplementaryItems = [
-                    NSCollectionLayoutBoundarySupplementaryItem(
-                        layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
-                        elementKind: UICollectionView.elementKindSectionHeader,
-                        alignment: .top
-                    )
-                ]
-                return section
+                        // Calculate the width for each item to fit exactly 3 items per row
+                        let itemWidth = (availableWidth - 30) / itemsPerRow
+                        
+                        // Define item size with the calculated width
+                        let itemSize = NSCollectionLayoutSize(
+                            widthDimension: .absolute(itemWidth),
+                            heightDimension: .absolute(itemHeight)
+                        )
+                        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+                        
+                        // Define group size with full width and item height
+                        let groupSize = NSCollectionLayoutSize(
+                            widthDimension: .fractionalWidth(1.0),
+                            heightDimension: .absolute(itemHeight)
+                        )
+                        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                        group.interItemSpacing = .fixed(spacing)
+                        
+                        let section = NSCollectionLayoutSection(group: group)
+                        section.interGroupSpacing = spacing
+                        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                        section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: "background")]
+                        section.boundarySupplementaryItems = [
+                            NSCollectionLayoutBoundarySupplementaryItem(
+                                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+                                elementKind: UICollectionView.elementKindSectionHeader,
+                                alignment: .top
+                            )
+                        ]
+                        
+                        return section
                 
             case .list:
                 // List layout
@@ -274,9 +290,7 @@ class PhotosViewController: BaseViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = 10
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
-                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
-                section.decorationItems = [backgroundItem]
+                section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: "background")]
                 section.boundarySupplementaryItems = [
                     NSCollectionLayoutBoundarySupplementaryItem(
                         layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
@@ -285,6 +299,7 @@ class PhotosViewController: BaseViewController {
                     )
                 ]
                 return section
+                self.collectionView.register(ImagesCollectionViewCell1.self, forCellWithReuseIdentifier: ImagesCollectionViewCell1.reuseIdentifier)
             }
         }
         
@@ -297,18 +312,58 @@ class PhotosViewController: BaseViewController {
         listViewButton.setImage(UIImage(named: "listViewSelectedIcon"), for: .normal)
         gridViewButton.setImage(UIImage(named: "gridViewDeselectedIcon"), for: .normal)
         collectionView.register(ImagesCollectionViewCell1.self, forCellWithReuseIdentifier: ImagesCollectionViewCell1.reuseIdentifier)
-        collectionView.setCollectionViewLayout(createLayout(), animated: true)
-        collectionView.reloadData()
+        switchToGridLayout()
+//        collectionView.performBatchUpdates({
+//            collectionView.collectionViewLayout.invalidateLayout()
+//            collectionView.setCollectionViewLayout(createLayout(), animated: true)
+//            applySnapshot()
+//        }, completion: nil)
     }
     
     @objc private func gridViewButtonTapped(_ sender: UIButton) {
         currentViewType = .grid
-        listViewButton.setImage(UIImage(named: "listViewDeselectedIcon"), for: .normal)
         gridViewButton.setImage(UIImage(named: "gridViewSelectedIcon"), for: .normal)
+        listViewButton.setImage(UIImage(named: "listViewDeselectedIcon"), for: .normal)
+        
+        // Register cell classes for grid view
         collectionView.register(ImagesCollectionViewCell.self, forCellWithReuseIdentifier: ImagesCollectionViewCell.reuseIdentifier)
-        collectionView.setCollectionViewLayout(createLayout(), animated: true)
-        collectionView.reloadData()
+        
+        switchToGridLayout()
+//        collectionView.performBatchUpdates({
+//            collectionView.collectionViewLayout.invalidateLayout()
+//            collectionView.setCollectionViewLayout(createLayout(), animated: true)
+//            applySnapshot()
+//        }, completion: nil)
     }
+    
+    // Method to update the layout safely
+       func updateLayout(to layout: UICollectionViewLayout, animated: Bool = true) {
+           if isUpdatingLayout {
+               // If a layout update is in progress, delay the new layout change
+               DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                   self.updateLayout(to: layout, animated: animated)
+               }
+               return
+           }
+
+           isUpdatingLayout = true
+           collectionView.setCollectionViewLayout(layout, animated: animated) { _ in
+               self.isUpdatingLayout = false
+               self.applySnapshot()
+               self.configureDataSource()
+               //self.collectionView.reloadData()
+           }
+       }
+
+       func switchToGridLayout() {
+           let gridLayout = createLayout() // Your method to create grid layout
+           updateLayout(to: gridLayout)
+       }
+
+       func switchToListLayout() {
+           let listLayout = createLayout() // Your method to create list layout
+           updateLayout(to: listLayout)
+       }
     
     func requestPhotosPermission() {
         PHPhotoLibrary.requestAuthorization { status in
@@ -335,32 +390,25 @@ class PhotosViewController: BaseViewController {
     }
     
     private func fetchFiles() {
-            let fetchOptions = PHFetchOptions()
-            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            
-            var fetchResult: PHFetchResult<PHAsset>?
-            
-            switch currentMediaType {
-            case .image, .favourite, .shared:
-                fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-                fetchResult?.enumerateObjects { (asset, index, stop) in
-                    self.getPhotoDetails(asset: asset)
-                }
-            case .video:
-                fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions)
-                fetchResult?.enumerateObjects { (asset, index, stop) in
-                    self.getPhotoDetails(asset: asset)
-                }
-            case .document:
-                for url in selectedDocumentURLs {
-                    self.getDocumentDetails(url: url)
-                }
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        
+        switch currentMediaType {
+        case .image, .favourite, .shared:
+            fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        case .video:
+            fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions)
+        case .document:
+            for url in selectedDocumentURLs {
+                self.getDocumentDetails(url: url)
             }
+                self.applySnapshot()
             
-            sortSectionKeys()
-            applySnapshot()
-            hideProgress()
+            return
         }
+        
+        loadNextBatch()
+    }
     
     func getPhotoDetails(asset: PHAsset) {
         let imageManager = PHImageManager.default()
@@ -384,42 +432,57 @@ class PhotosViewController: BaseViewController {
             let dateCreatedString = dateFormatter.string(from: dateCreated ?? Date())
             
             let imageName = "\(asset.localIdentifier)"
-            let imageInfo = MediaData(icon: image, size: "\(formattedSizeInMB)", name: imageName, createdAt: dateCreatedString,type: .video, asset: asset, url: nil)
+            let imageInfo = MediaData(icon: image, size: "\(formattedSizeInMB)", name: imageName, createdAt: dateCreatedString, type: .video, asset: asset, url: nil)
             
             self.filesDataSource[dateCreatedString, default: []].append(imageInfo)
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+        }
+    }
+    
+    private func loadNextBatch() {
+        guard let fetchResult = fetchResult else { return }
+        
+        let start = currentBatchIndex * batchSize
+        let end = min(start + batchSize, fetchResult.count)
+        
+        if start < end {
+            for index in start..<end {
+                let asset = fetchResult.object(at: index)
+                self.getPhotoDetails(asset: asset)
             }
+            currentBatchIndex += 1
+            DispatchQueue.main.async {
+                self.applySnapshot()
+            }
+            sortSectionKeys()
         }
     }
     
     private func getDocumentDetails(url: URL) {
-            let fileManager = FileManager.default
-            let attributes = try? fileManager.attributesOfItem(atPath: url.path)
-            let fileSize = attributes?[.size] as? NSNumber
-            let sizeInBytes = fileSize?.intValue ?? 0
-            let sizeInMB = Double(sizeInBytes) / (1024 * 1024) // Convert bytes to MB
-            
-            let formattedSizeInMB = String(format: "%.2f MB", sizeInMB)
-            
-            let dateCreated = attributes?[.creationDate] as? Date ?? Date()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateStyle = .short
-            dateFormatter.timeStyle = .none
-            let dateCreatedString = dateFormatter.string(from: dateCreated)
-            
-            let documentName = url.lastPathComponent
-            let documentIcon = UIImage(named: "documentsImage") ?? UIImage() // Placeholder icon for documents
-            
+        let fileManager = FileManager.default
+        let attributes = try? fileManager.attributesOfItem(atPath: url.path)
+        let fileSize = attributes?[.size] as? NSNumber
+        let sizeInBytes = fileSize?.intValue ?? 0
+        let sizeInMB = Double(sizeInBytes) / (1024 * 1024) // Convert bytes to MB
+        
+        let formattedSizeInMB = String(format: "%.2f MB", sizeInMB)
+        
+        let dateCreated = attributes?[.creationDate] as? Date ?? Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+        let dateCreatedString = dateFormatter.string(from: dateCreated)
+        
+        let documentName = url.lastPathComponent
+        let documentIcon = UIImage(named: "documentsImage") ?? UIImage() // Placeholder icon for documents
+        
         let documentInfo = MediaData(icon: documentIcon, size: "\(formattedSizeInMB)", name: documentName, createdAt: dateCreatedString, type: .document, asset: nil, url: url)
-            
-            self.filesDataSource[dateCreatedString, default: []].append(documentInfo)
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+        
+        self.filesDataSource[dateCreatedString, default: []].append(documentInfo)
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
         }
+    }
     
     
     func handlePermissionDenied() {
@@ -457,11 +520,11 @@ class PhotosViewController: BaseViewController {
         imageManager.requestAVAsset(forVideo: asset, options: videoOptions) { avAsset, _, _ in
             guard let avAsset = avAsset else { return }
             DispatchQueue.main.async {
-            let playerItem = AVPlayerItem(asset: avAsset)
-            let player = AVPlayer(playerItem: playerItem)
-            let playerViewController = AVPlayerViewController()
-            playerViewController.player = player
-            
+                let playerItem = AVPlayerItem(asset: avAsset)
+                let player = AVPlayer(playerItem: playerItem)
+                let playerViewController = AVPlayerViewController()
+                playerViewController.player = player
+                
                 self.present(playerViewController, animated: true) {
                     player.play()
                 }
@@ -506,9 +569,9 @@ class PhotosViewController: BaseViewController {
                 cell.imageNameLabel.text = imageData.name
                 let isSelected = self.selectedIndexPaths.contains(indexPath)
                 cell.setSelected(isSelected)
-//                cell.optionsButton.tag = indexPath.item
-//                self.selectedSection = indexPath.section
-//                cell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+                //                cell.optionsButton.tag = indexPath.item
+                //                self.selectedSection = indexPath.section
+                //                cell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                 cell.optionsButton.params = (section: indexPath.section, item: indexPath.item)
                 cell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                 return cell
@@ -532,18 +595,24 @@ class PhotosViewController: BaseViewController {
             }
             return nil
         }
+        
+        collectionView.dataSource = dataSource
     }
     
     private func applySnapshot(animatingDifferences: Bool = true) {
-        guard !sortedSectionKeys.isEmpty else { return }
-        var snapshot = NSDiffableDataSourceSnapshot<String, MediaData>()
-        for section in sortedSectionKeys {
-            snapshot.appendSections([section])
-            if let items = filesDataSource[section] {
-                snapshot.appendItems(items)
+        DispatchQueue.main.async {
+            guard !self.sortedSectionKeys.isEmpty else { return }
+            var snapshot = NSDiffableDataSourceSnapshot<String, MediaData>()
+            for section in self.sortedSectionKeys {
+                snapshot.appendSections([section])
+                if let items = self.filesDataSource[section] {
+                    snapshot.appendItems(items)
+                }
             }
+            self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences) {
+//                       self.configureDataSource()
+                   }
         }
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
     
     
@@ -611,6 +680,46 @@ class PhotosViewController: BaseViewController {
     
     @objc private func uploadButtonTapped(_ sender: UIButton) {
         self.gotoUploadInfoViewController()
+//        duplicateImages(inDirectory: "/Users/appinatorstechnology/Library/Developer/CoreSimulator/Devices/66D8CFB8-36E1-4376-BCD7-C502EAFE114A/data/Media/DCIM/100APPLE", count: 507)
+    }
+    
+    func duplicateImages(inDirectory directory: String, count: Int) {
+        let fileManager = FileManager.default
+        
+        // Ensure the target directory exists
+        guard fileManager.fileExists(atPath: directory) else {
+            print("Directory does not exist: \(directory)")
+            return
+        }
+        
+        do {
+            // Get all image files in the target directory
+            let imageFiles = try fileManager.contentsOfDirectory(atPath: directory).filter { fileName in
+                let fileExtension = (fileName as NSString).pathExtension.lowercased()
+                return fileExtension == "jpg" || fileExtension == "png"
+            }
+            
+            guard !imageFiles.isEmpty else {
+                print("No images found in the directory.")
+                return
+            }
+            
+            // Duplicate images
+            for i in 7..<count {
+                let imageName = imageFiles[i % imageFiles.count]
+                let sourcePath = (directory as NSString).appendingPathComponent(imageName)
+                let fileExtension = (imageName as NSString).pathExtension
+                let newImageName = "\(UUID().uuidString).\(fileExtension)"
+                let destinationPath = (directory as NSString).appendingPathComponent(newImageName)
+                
+                try fileManager.copyItem(atPath: sourcePath, toPath: destinationPath)
+            }
+            
+            print("\(count) images duplicated successfully.")
+            
+        } catch {
+            print("Error duplicating images: \(error)")
+        }
     }
     
     @objc private func filterButtonTapped(_ sender: UIButton) {
@@ -627,39 +736,39 @@ class PhotosViewController: BaseViewController {
     
     @objc private func verticalDotTapped(_ sender: UIButton) {
         guard let params = sender.params else {
-                print("No parameters found")
-                return
-            }
-
-            let section = params.section
-            let item = params.item
+            print("No parameters found")
+            return
+        }
+        
+        let section = params.section
+        let item = params.item
         
         let indexPath = IndexPath(item: item, section: section) // Adjust section as needed
         let dateKey = sortedSectionKeys[indexPath.section]
         switch currentMediaType {
         case .image,.favourite,.shared:
             let imageName = filesDataSource[dateKey]?[indexPath.item].name ?? ""
-                        let options = [
-                            BottomSheetOption(icon: UIImage(named: "shareIcon")!, title: "Share"),
-                            BottomSheetOption(icon: UIImage(named: "accessIcon")!, title: "Manage Access"),
-                            BottomSheetOption(icon: UIImage(named: "favouriteIcon")!, title: "Add To Favourite"),
-                            BottomSheetOption(icon: UIImage(named: "offlineIcon")!, title: "Make Available Offline"),
-                            BottomSheetOption(icon: UIImage(named: "linkCopyIcon")!, title: "Copy Link"),
-                            BottomSheetOption(icon: UIImage(named: "copyIcon")!, title: "Make a Copy"),
-                            BottomSheetOption(icon: UIImage(named: "sendIcon")!, title: "Send a Copy"),
-                            BottomSheetOption(icon: UIImage(named: "openWithIcon")!, title: "Open With"),
-                            BottomSheetOption(icon: UIImage(named: "downloadIcon")!, title: "Download in Device"),
-                            BottomSheetOption(icon: UIImage(named: "renameIcon")!, title: "Rename"),
-                            BottomSheetOption(icon: UIImage(named: "moveIcon")!, title: "Move"),
-                            BottomSheetOption(icon: UIImage(named: "deleteIcon")!, title: "Delete"),
-                            // Add more options here
-                        ]
+            let options = [
+                BottomSheetOption(icon: UIImage(named: "shareIcon")!, title: "Share"),
+                BottomSheetOption(icon: UIImage(named: "accessIcon")!, title: "Manage Access"),
+                BottomSheetOption(icon: UIImage(named: "favouriteIcon")!, title: "Add To Favourite"),
+                BottomSheetOption(icon: UIImage(named: "offlineIcon")!, title: "Make Available Offline"),
+                BottomSheetOption(icon: UIImage(named: "linkCopyIcon")!, title: "Copy Link"),
+                BottomSheetOption(icon: UIImage(named: "copyIcon")!, title: "Make a Copy"),
+                BottomSheetOption(icon: UIImage(named: "sendIcon")!, title: "Send a Copy"),
+                BottomSheetOption(icon: UIImage(named: "openWithIcon")!, title: "Open With"),
+                BottomSheetOption(icon: UIImage(named: "downloadIcon")!, title: "Download in Device"),
+                BottomSheetOption(icon: UIImage(named: "renameIcon")!, title: "Rename"),
+                BottomSheetOption(icon: UIImage(named: "moveIcon")!, title: "Move"),
+                BottomSheetOption(icon: UIImage(named: "deleteIcon")!, title: "Delete"),
+                // Add more options here
+            ]
             if let mediaData = filesDataSource[dateKey]?[indexPath.item] {
-                       
+                
                 let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: options, previewImage: mediaData.icon)
-                                       self.navigationController?.pushViewController(imagePreviewVC, animated: true)
-                       
-                   }
+                self.navigationController?.pushViewController(imagePreviewVC, animated: true)
+                
+            }
         case .video:
             if let mediaData = filesDataSource[dateKey]?[indexPath.item] {
                 if let asset = mediaData.asset {
@@ -694,18 +803,18 @@ class PhotosViewController: BaseViewController {
     func updateSelectionState() {
         let selectedItemsCount = getSelectedItems().count
         areAllCellsSelected() ? showCheckBoxChecked() : showCheckBoxUnChecked()
+
         if selectedItemsCount > 0 {
             showFocusbandOptionFromNavBar()
             showHideFooterView(isShowFooterView: true)
-            let newTitle = "\(spacerString)\(selectedIndexPaths.count) Files Selected"
+            let newTitle = "\(spacerString)\(selectedItemsCount) Files Selected"
             changeTitle(titleOfNavigation: newTitle)
-            
         } else {
             showHideFooterView(isShowFooterView: false)
             hideFocusbandOptionFromNavBar()
             selectedItemSize = 0.0
+
             switch currentMediaType {
-                
             case .image:
                 changeTitle(titleOfNavigation: "Photos")
             case .video:
@@ -717,26 +826,27 @@ class PhotosViewController: BaseViewController {
             case .document:
                 changeTitle(titleOfNavigation: "Documents")
             }
-           
         }
-        
     }
+
     
     func getSelectedItems() -> [MediaData] {
         var selectedItems: [MediaData] = []
         selectedItemSize = 0.0
+        
         for indexPath in selectedIndexPaths {
             let dateKey = sortedSectionKeys[indexPath.section]
             if let item = filesDataSource[dateKey]?[indexPath.item] {
                 let sizeLabelItems = item.size.split(separator: " ")
-                let sizeInString = sizeLabelItems[0]
+                let sizeInString = String(sizeLabelItems[0])
                 let sizeInDouble = Double(sizeInString)
-                selectedItemSize = selectedItemSize + (sizeInDouble ?? 0.0)
+                selectedItemSize += sizeInDouble ?? 0.0
                 selectedItems.append(item)
             }
         }
         return selectedItems
     }
+
     
     func areAllCellsSelected() -> Bool {
         var totalItems = 0
@@ -750,6 +860,7 @@ class PhotosViewController: BaseViewController {
         // Compare the total number of items with the count of selected items
         return selectedIndexPaths.count == totalItems
     }
+
     
     override func checkboxButtonAction() {
         areAllCellsSelected() ? removeAllItems() : selectAllItems()
@@ -761,23 +872,33 @@ class PhotosViewController: BaseViewController {
     
     func selectAllItems() {
         selectedIndexPaths.removeAll()
-        
+
+        var snapshot = dataSource.snapshot()
+
         for section in 0..<collectionView.numberOfSections {
             for item in 0..<collectionView.numberOfItems(inSection: section) {
                 let indexPath = IndexPath(item: item, section: section)
                 selectedIndexPaths.insert(indexPath)
             }
         }
-        
-        collectionView.reloadData()
+
+        // No need to reload data, just update the snapshot
         updateSelectionState()
+        applySnapshot()
+        configureDataSource()
+        
     }
-    
+
     func removeAllItems() {
         selectedIndexPaths.removeAll()
-        collectionView.reloadData()
+        
+        // No need to reload data, just update the snapshot
         updateSelectionState()
+        applySnapshot()
+        configureDataSource()
+        
     }
+
     
     private func gotoUploadInfoViewController() {
         let uploadVC = UploadInfoViewController()
@@ -792,39 +913,38 @@ extension PhotosViewController: UICollectionViewDelegate {
         case .grid:
             switch self.currentMediaType {
             case .image, .video, .favourite, .shared:
-                let cell = collectionView.cellForItem(at: indexPath) as! ImagesCollectionViewCell
+                let cell = collectionView.cellForItem(at: indexPath)
                 let isSelected = selectedIndexPaths.contains(indexPath)
-                if(isSelected) {
+                
+                if isSelected {
                     selectedIndexPaths.remove(indexPath)
-                    cell.setSelected(false)
-                }
-                else {
+                    (cell as? ImagesCollectionViewCell)?.setSelected(false)
+                } else {
                     selectedIndexPaths.insert(indexPath)
-                    cell.setSelected(true)
+                    (cell as? ImagesCollectionViewCell)?.setSelected(true)
                 }
             case .document:
-                let cell = collectionView.cellForItem(at: indexPath) as! DocumentTableViewCell
+                let cell = collectionView.cellForItem(at: indexPath)
                 let isSelected = selectedIndexPaths.contains(indexPath)
-                if(isSelected) {
+                
+                if isSelected {
                     selectedIndexPaths.remove(indexPath)
-                    cell.setSelected(false)
-                }
-                else {
+                    (cell as? DocumentTableViewCell)?.setSelected(false)
+                } else {
                     selectedIndexPaths.insert(indexPath)
-                    cell.setSelected(true)
+                    (cell as? DocumentTableViewCell)?.setSelected(true)
                 }
             }
-            
         case .list:
-            let cell = collectionView.cellForItem(at: indexPath) as! ImagesCollectionViewCell1
+            let cell = collectionView.cellForItem(at: indexPath)
             let isSelected = selectedIndexPaths.contains(indexPath)
-            if(isSelected) {
+            
+            if isSelected {
                 selectedIndexPaths.remove(indexPath)
-                cell.setSelected(false)
-            }
-            else {
+                (cell as? ImagesCollectionViewCell1)?.setSelected(false)
+            } else {
                 selectedIndexPaths.insert(indexPath)
-                cell.setSelected(true)
+                (cell as? ImagesCollectionViewCell1)?.setSelected(true)
             }
         }
         
@@ -837,43 +957,80 @@ extension PhotosViewController: UICollectionViewDelegate {
         case .grid:
             switch self.currentMediaType {
             case .image, .video, .favourite, .shared:
-                let cell = collectionView.cellForItem(at: indexPath) as! ImagesCollectionViewCell
+                let cell = collectionView.cellForItem(at: indexPath)
                 let isSelected = selectedIndexPaths.contains(indexPath)
-                if(isSelected) {
+                
+                if isSelected {
                     selectedIndexPaths.remove(indexPath)
-                    cell.setSelected(false)
-                }
-                else {
+                    (cell as? ImagesCollectionViewCell)?.setSelected(false)
+                } else {
                     selectedIndexPaths.insert(indexPath)
-                    cell.setSelected(true)
+                    (cell as? ImagesCollectionViewCell)?.setSelected(true)
                 }
             case .document:
-                let cell = collectionView.cellForItem(at: indexPath) as! DocumentTableViewCell
+                let cell = collectionView.cellForItem(at: indexPath)
                 let isSelected = selectedIndexPaths.contains(indexPath)
-                if(isSelected) {
+                
+                if isSelected {
                     selectedIndexPaths.remove(indexPath)
-                    cell.setSelected(false)
-                }
-                else {
+                    (cell as? DocumentTableViewCell)?.setSelected(false)
+                } else {
                     selectedIndexPaths.insert(indexPath)
-                    cell.setSelected(true)
+                    (cell as? DocumentTableViewCell)?.setSelected(true)
                 }
             }
         case .list:
-            let cell = collectionView.cellForItem(at: indexPath) as! ImagesCollectionViewCell1
+            let cell = collectionView.cellForItem(at: indexPath)
             let isSelected = selectedIndexPaths.contains(indexPath)
-            if(isSelected) {
+            
+            if isSelected {
                 selectedIndexPaths.remove(indexPath)
-                cell.setSelected(false)
-            }
-            else {
+                (cell as? ImagesCollectionViewCell1)?.setSelected(false)
+            } else {
                 selectedIndexPaths.insert(indexPath)
-                cell.setSelected(true)
+                (cell as? ImagesCollectionViewCell1)?.setSelected(true)
             }
         }
         
         updateSelectionState()
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let section = sortedSectionKeys[indexPath.section]
+        if let items = filesDataSource[section], indexPath.item < items.count {
+            let mediaData = items[indexPath.item]
+            // Start loading high-resolution image if necessary
+            loadImage(for: mediaData.asset!, into: cell)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let section = sortedSectionKeys[indexPath.section]
+        if let items = filesDataSource[section], indexPath.item < items.count {
+            let mediaData = items[indexPath.item]
+            // Cancel image loading if necessary
+            cancelImageLoad(for: mediaData.asset!)
+        }
+    }
+    
+    private func loadImage(for asset: PHAsset, into cell: UICollectionViewCell) {
+        let imageManager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.isSynchronous = false
+        options.deliveryMode = .highQualityFormat
+        
+        imageManager.requestImage(for: asset, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFill, options: options) { (image, _) in
+            // Update cell with the image
+            if let imageCell = cell as? ImagesCollectionViewCell {
+                imageCell.imagesView.image = image
+            }
+        }
+    }
+    
+    private func cancelImageLoad(for asset: PHAsset) {
+        // Implement if you want to cancel ongoing requests
+    }
+    
 }
 
 extension PhotosViewController: UIDocumentPickerDelegate, UIDocumentInteractionControllerDelegate {

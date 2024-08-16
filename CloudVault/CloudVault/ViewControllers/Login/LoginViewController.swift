@@ -281,6 +281,7 @@ class LoginViewController: BaseViewController {
                         } else {
                             // User is signed in
                             print("User signed in")
+                            self.navigateOutOfOtpPinForGoogleAndPhone()
                         }
                     }
                 }
@@ -313,9 +314,31 @@ class LoginViewController: BaseViewController {
 
 extension LoginViewController {
     func navigateOutOfOtpPin() {
-       // hideViews()
-        let createProfileVC = CreateProfileViewController(titleOfProfile: .guestUser, createProfileWith: .profileGuestUser)
-        self.navigationController?.pushViewController(createProfileVC, animated: true)
+      // // hideViews()
+//        let createProfileVC = CreateProfileViewController(titleOfProfile: .guestUser, createProfileWith: .profileGuestUser)
+//        self.navigationController?.pushViewController(createProfileVC, animated: true)
+        hideViews()
+        let cardVC = OtpSuccessViewController(title: "Verification Completed", subTitle: "Lorem Ipsum is simply dummy text of the printing and typesetting industry", buttonTitle: "Create Your Profile", loginAsGuest: false, createProfileWith: .profileGuestUser, isButtonHidden: false, successViewHeight: 400)
+        
+        let transitionDelegate = CardTransitioningDelegate()
+        cardVC.transitioningDelegate = transitionDelegate
+        cardVC.modalPresentationStyle = .custom
+        cardVC.delegate = self
+        present(cardVC, animated: true, completion: nil)
+        print("goto Main ViewController")
+    }
+    
+    func navigateOutOfOtpPinForGoogleAndPhone() {
+            hideViews()
+            let cardVC = OtpSuccessViewController(title: "Verification Completed", subTitle: "Lorem Ipsum is simply dummy text of the printing and typesetting industry", buttonTitle: "Create Your Profile", loginAsGuest: false, createProfileWith: .profileGoogle, isButtonHidden: false, successViewHeight: 400)
+            
+            let transitionDelegate = CardTransitioningDelegate()
+            cardVC.transitioningDelegate = transitionDelegate
+            cardVC.modalPresentationStyle = .custom
+            cardVC.delegate = self
+            present(cardVC, animated: true, completion: nil)
+            print("goto Main ViewController")
+        
     }
     
     private func hideViews() {

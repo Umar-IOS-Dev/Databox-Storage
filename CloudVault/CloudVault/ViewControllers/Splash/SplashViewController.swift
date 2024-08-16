@@ -107,11 +107,11 @@ class SplashViewController: BaseViewController {
                 // Navigate to the main app screen or perform any other actions needed.
            // activityIndicator.stopAnimating()
             hideProgress()
-            //self.showHomeViewController()
-            let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-            onboardingPageVC.modalTransitionStyle = .crossDissolve
-            onboardingPageVC.modalPresentationStyle = .fullScreen
-            present(onboardingPageVC, animated: true, completion: nil)
+            self.showHomeViewController()
+//            let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+//            onboardingPageVC.modalTransitionStyle = .crossDissolve
+//            onboardingPageVC.modalPresentationStyle = .fullScreen
+//            present(onboardingPageVC, animated: true, completion: nil)
             } else {
                 // No user is signed in.
                 print("No user is signed in.")

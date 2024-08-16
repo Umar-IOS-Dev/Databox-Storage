@@ -516,7 +516,15 @@ struct MediaData: Hashable {
     let createdAt: String
     let type: MediaType
     let asset: PHAsset?
-    let url:URL?
+    let url: URL?
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(asset?.localIdentifier)
+    }
+    
+    static func ==(lhs: MediaData, rhs: MediaData) -> Bool {
+        return lhs.asset?.localIdentifier == rhs.asset?.localIdentifier
+    }
 }
 
 enum MediaType {

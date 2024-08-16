@@ -404,7 +404,7 @@ class OTPViewController: BaseViewController {
                     self.wrongOtpLabel.isHidden = true
                     // User signed in
                     print("User signed in: \(String(describing: authResult?.user))")
-                    
+                    self.navigateOutOfOtpPin()
                 }
     }
     
@@ -447,6 +447,7 @@ class OTPViewController: BaseViewController {
         otpContainerView.isHidden = false
         verifyOtpContainerView.isHidden = false
         resendOtpContainerView.isHidden = false
+        timerLabel.isHidden = false
         self.view.alpha = 1.0
     }
     
@@ -456,6 +457,7 @@ class OTPViewController: BaseViewController {
         otpContainerView.isHidden = true
         verifyOtpContainerView.isHidden = true
         resendOtpContainerView.isHidden = true
+        timerLabel.isHidden = true
         self.view.alpha = 0.7
         
     }

@@ -146,7 +146,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         //setupLoadingView()
        // self.view.isUserInteractionEnabled = false
 //        showProgress()
-        scheduleLocalNotification()
+       // scheduleLocalNotification()
     }
     
     func scheduleLocalNotification() {

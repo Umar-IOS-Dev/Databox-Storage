@@ -377,6 +377,26 @@ class CreateProfileViewController: BaseViewController {
     }
     
     @objc func saveButtonTapped() {
+        switch createProfileWith {
+        case .profileGuestUser:
+            if(nameTextField.text == "" || genderTextField.text == "") {
+                self.showAlert(on: self, title: "DataBox", message: "Please fill all required fields to proceed.")
+                return
+            }
+        case .profilePhoneNumber:
+            
+            if(nameTextField.text == "" || genderTextField.text == "") {
+                self.showAlert(on: self, title: "DataBox", message: "Please fill all required fields to proceed.")
+              return
+            }
+            
+        case .profileGoogle:
+            if(nameTextField.text == "" || genderTextField.text == "") {
+                self.showAlert(on: self, title: "DataBox", message: "Please fill all required fields to proceed.")
+              return
+            }
+        }
+        
         showHomeViewController()
     }
     

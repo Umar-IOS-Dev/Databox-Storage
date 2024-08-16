@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		631869BD2C6F83850026F389 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 631869BC2C6F83850026F389 /* SDWebImage */; };
+		631869BF2C6F83850026F389 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 631869BE2C6F83850026F389 /* SDWebImageMapKit */; };
 		63603EE32C6213D700F4C115 /* UploadInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603EE22C6213D600F4C115 /* UploadInfoViewController.swift */; };
 		63603EF62C64B9F300F4C115 /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 63603EF52C64B9F300F4C115 /* SVProgressHUD */; };
 		63603EFC2C64F77E00F4C115 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603EFB2C64F77E00F4C115 /* StorageViewController.swift */; };
@@ -185,10 +187,12 @@
 			files = (
 				63603EF62C64B9F300F4C115 /* SVProgressHUD in Frameworks */,
 				63C3E55F2C5BB9E80060F257 /* FirebaseAppDistribution-Beta in Frameworks */,
+				631869BF2C6F83850026F389 /* SDWebImageMapKit in Frameworks */,
 				63C3E4D62C3C081C0060F257 /* Anchorage in Frameworks */,
 				63C3E55B2C5BB9E80060F257 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				63C3E4DF2C3C0EE10060F257 /* SwiftyGif in Frameworks */,
 				63C3E5572C5BB9E80060F257 /* FirebaseAnalytics in Frameworks */,
+				631869BD2C6F83850026F389 /* SDWebImage in Frameworks */,
 				63C3E5682C5CEAA20060F257 /* GoogleSignInSwift in Frameworks */,
 				63C3E55D2C5BB9E80060F257 /* FirebaseAppCheck in Frameworks */,
 				63C3E5592C5BB9E80060F257 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
@@ -529,6 +533,8 @@
 				63C3E5652C5CEAA20060F257 /* GoogleSignIn */,
 				63C3E5672C5CEAA20060F257 /* GoogleSignInSwift */,
 				63603EF52C64B9F300F4C115 /* SVProgressHUD */,
+				631869BC2C6F83850026F389 /* SDWebImage */,
+				631869BE2C6F83850026F389 /* SDWebImageMapKit */,
 			);
 			productName = CloudVault;
 			productReference = 63C3E49D2C3BFAEF0060F257 /* CloudVault.app */;
@@ -608,6 +614,7 @@
 				63C3E5552C5BB9E70060F257 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				63C3E5642C5CEAA20060F257 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */,
+				631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = 63C3E49E2C3BFAEF0060F257 /* Products */;
 			projectDirPath = "";
@@ -921,8 +928,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 385W4V923B;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/CloudVault/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudVault/Info.plist;
@@ -941,6 +950,7 @@
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.appinator.CloudVault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -956,8 +966,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 385W4V923B;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/CloudVault/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudVault/Info.plist;
@@ -976,6 +988,7 @@
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.appinator.CloudVault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1108,6 +1121,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.19.6;
+			};
+		};
 		63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SVProgressHUD/SVProgressHUD.git";
@@ -1151,6 +1172,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		631869BC2C6F83850026F389 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		631869BE2C6F83850026F389 /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
+		};
 		63603EF52C64B9F300F4C115 /* SVProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */;
