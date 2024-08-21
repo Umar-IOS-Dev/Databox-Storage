@@ -21,7 +21,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     
     let contactNameInitialLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultBoldText(ofSize: 20)
+        label.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 20)
         label.textColor = .white
        // label.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         label.layer.cornerRadius = 4
@@ -48,7 +48,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     
     let sizeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultSemiBoldText(ofSize: 10)
+        label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
        // label.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         label.layer.cornerRadius = 4
@@ -70,7 +70,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     
     let documentNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         label.textAlignment = .center
        // label.backgroundColor = UIColor.black.withAlphaComponent(0.5)

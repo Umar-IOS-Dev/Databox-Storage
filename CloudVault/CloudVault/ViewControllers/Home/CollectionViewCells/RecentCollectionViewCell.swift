@@ -27,14 +27,14 @@ class RecentCollectionViewCell: UICollectionViewCell {
         let imageNameLabel = UILabel()
         imageNameLabel.textAlignment = .left
         imageNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        imageNameLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 10)
+        imageNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         return imageNameLabel
     }()
     private let imageSizeLabel: UILabel = {
         let imageSizeLabel = UILabel()
         imageSizeLabel.textAlignment = .left
         imageSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        imageSizeLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 8)
+        imageSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
         return imageSizeLabel
     }()
     var recentImageName: String = "" {

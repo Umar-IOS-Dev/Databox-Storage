@@ -141,7 +141,7 @@ class CreateProfileViewController: BaseViewController {
         camerImageView.contentMode = .scaleAspectFit
         
         let fromGallerLabel = UILabel()
-        fromGallerLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 10)
+        fromGallerLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         fromGallerLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         fromGallerLabel.textAlignment = .left
         fromGallerLabel.text = "From Gallery"
@@ -168,7 +168,7 @@ class CreateProfileViewController: BaseViewController {
         containerStackForName.spacing = DesignMetrics.Padding.size4
         
         let headingLabel = UILabel()
-        headingLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 18)
+        headingLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 18)
         headingLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         headingLabel.textAlignment = .left
         headingLabel.text = "Your Name*"
@@ -185,7 +185,7 @@ class CreateProfileViewController: BaseViewController {
         containerStackForGender.spacing = DesignMetrics.Padding.size4
         
         let headingLabelGender = UILabel()
-        headingLabelGender.font = UIFont.cloudVaultSemiBoldText(ofSize: 18)
+        headingLabelGender.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 18)
         headingLabelGender.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         headingLabelGender.textAlignment = .left
         headingLabelGender.text = "Your Gender"
@@ -245,14 +245,14 @@ class CreateProfileViewController: BaseViewController {
         headingStackView.spacing = DesignMetrics.Padding.size16
         
         let headingLabelGender = UILabel()
-        headingLabelGender.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        headingLabelGender.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         headingLabelGender.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         headingLabelGender.textAlignment = .left
         headingLabelGender.text = "Choose your Personality"
         headingLabelGender.heightAnchor == DesignMetrics.Dimensions.height20
         
         let seeAllBtn = UIButton()
-        seeAllBtn.setFont(UIFont.cloudVaultSemiBoldText(ofSize: 14), for: .normal)
+        seeAllBtn.setFont(FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14), for: .normal)
         seeAllBtn.setTitleColor(#colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1), for: .normal)
         seeAllBtn.setTitle("See All", for: .normal)
         seeAllBtn.backgroundColor = .clear

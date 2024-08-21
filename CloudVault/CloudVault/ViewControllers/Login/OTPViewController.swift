@@ -22,7 +22,7 @@ class OTPViewController: BaseViewController {
         let otplabel = UILabel()
         otplabel.textAlignment = .left
         otplabel.textColor = #colorLiteral(red: 0.9529411765, green: 0.3019607843, blue: 0.3019607843, alpha: 1)
-        otplabel.font = UIFont.cloudVaultRegularText(ofSize: 14)
+        otplabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 14)
         otplabel.isHidden = true
         otplabel.text = "Your Verification code is wrong try another one"
         return otplabel
@@ -30,7 +30,7 @@ class OTPViewController: BaseViewController {
     private let numberTextField1: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
-        textField.font = UIFont.cloudVaultSemiBoldText(ofSize: 22)
+        textField.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 22)
         textField.textAlignment = .center
         textField.keyboardType = .numberPad
         textField.borderStyle = .none
@@ -39,7 +39,7 @@ class OTPViewController: BaseViewController {
     private let numberTextField2: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
-        textField.font = UIFont.cloudVaultSemiBoldText(ofSize: 22)
+        textField.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 22)
         textField.textAlignment = .center
         textField.keyboardType = .numberPad
         textField.borderStyle = .none
@@ -48,7 +48,7 @@ class OTPViewController: BaseViewController {
     private let numberTextField3: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
-        textField.font = UIFont.cloudVaultSemiBoldText(ofSize: 22)
+        textField.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 22)
         textField.textAlignment = .center
         textField.keyboardType = .numberPad
         textField.borderStyle = .none
@@ -57,7 +57,7 @@ class OTPViewController: BaseViewController {
     private let numberTextField4: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
-        textField.font = UIFont.cloudVaultSemiBoldText(ofSize: 22)
+        textField.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 22)
         textField.textAlignment = .center
         textField.keyboardType = .numberPad
         textField.borderStyle = .none
@@ -66,7 +66,7 @@ class OTPViewController: BaseViewController {
     private let numberTextField5: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
-        textField.font = UIFont.cloudVaultSemiBoldText(ofSize: 22)
+        textField.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 22)
         textField.textAlignment = .center
         textField.keyboardType = .numberPad
         textField.borderStyle = .none
@@ -75,7 +75,7 @@ class OTPViewController: BaseViewController {
     private let numberTextField6: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
-        textField.font = UIFont.cloudVaultSemiBoldText(ofSize: 22)
+        textField.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 22)
         textField.textAlignment = .center
         textField.keyboardType = .numberPad
         textField.borderStyle = .none
@@ -99,7 +99,7 @@ class OTPViewController: BaseViewController {
     }()
     private let timerLabel: UILabel = {
             let label = UILabel()
-            label.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+            label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
             label.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
             label.textAlignment = .center
             label.text = "00:60"
@@ -108,7 +108,7 @@ class OTPViewController: BaseViewController {
     private let resendButton: UIButton = {
             let button = UIButton()
             let titleColorForButton = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
-            button.titleLabel?.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+            button.titleLabel?.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
             button.backgroundColor = .clear
             button.setTitleColor(titleColorForButton, for: .normal)
             button.setTitle("Resend OTP", for: .normal)
@@ -169,14 +169,14 @@ class OTPViewController: BaseViewController {
         containerStack.spacing = DesignMetrics.Padding.size12
         
         let headingLabel = UILabel()
-        headingLabel.font = UIFont.cloudVaultBoldText(ofSize: 24)
+        headingLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 24)
         headingLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         headingLabel.textAlignment = .left
         headingLabel.text = "Verify OTP"
         headingLabel.heightAnchor == DesignMetrics.Padding.size32
         
         let subHeadingLabel = UILabel()
-        subHeadingLabel.font = UIFont.cloudVaultItalicSemiLightText(ofSize: 16)
+        subHeadingLabel.font = FontManagerDatabox.shared.cloudVaultItalicSemiLightText(ofSize: 16)
         subHeadingLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 0.6978900935)
         subHeadingLabel.textAlignment = .left
         subHeadingLabel.numberOfLines = 0
@@ -293,7 +293,7 @@ class OTPViewController: BaseViewController {
         buttonContainerView.addSubview(verifyButton)
         
         verifyButton.layer.cornerRadius = DesignMetrics.Padding.size8
-        verifyButton.titleLabel?.font = UIFont.cloudVaultBoldText(ofSize: 20)
+        verifyButton.titleLabel?.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 20)
         verifyButton.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
         verifyButton.setTitleColor(titleColorForButton, for: .normal)
         verifyButton.setTitle("Verify", for: .normal)
@@ -325,7 +325,7 @@ class OTPViewController: BaseViewController {
         containerStack.spacing = 0
         
         let resendLabel = UILabel()
-        resendLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+        resendLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         resendLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         resendLabel.textAlignment = .left
         resendLabel.text = "Didn't received OTP?"

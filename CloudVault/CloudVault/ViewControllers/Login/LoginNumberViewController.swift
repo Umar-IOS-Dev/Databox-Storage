@@ -69,14 +69,14 @@ class LoginNumberViewController: BaseViewController {
         containerStack.spacing = DesignMetrics.Padding.size12
         
         let headingLabel = UILabel()
-        headingLabel.font = UIFont.cloudVaultBoldText(ofSize: 24)
+        headingLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 24)
         headingLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         headingLabel.textAlignment = .left
         headingLabel.text = "Enter Your Number"
         headingLabel.heightAnchor == DesignMetrics.Padding.size20
         
         let subHeadingLabel = UILabel()
-        subHeadingLabel.font = UIFont.cloudVaultItalicSemiLightText(ofSize: 16)
+        subHeadingLabel.font = FontManagerDatabox.shared.cloudVaultItalicSemiLightText(ofSize: 16)
         subHeadingLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 0.6978900935)
         subHeadingLabel.textAlignment = .left
         subHeadingLabel.numberOfLines = 0
@@ -131,7 +131,7 @@ class LoginNumberViewController: BaseViewController {
         
         let countryCodeButton = UIButton()
         countryCodeButton.setTitle("+92", for: .normal)
-        countryCodeButton.setFont(UIFont.cloudVaultSemiBoldText(ofSize: 23), for: .normal)
+        countryCodeButton.setFont(FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 23), for: .normal)
         countryCodeButton.heightAnchor == DesignMetrics.Dimensions.height33
         countryCodeButton.widthAnchor == DesignMetrics.Dimensions.width50
         let buttonColor: UIColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)

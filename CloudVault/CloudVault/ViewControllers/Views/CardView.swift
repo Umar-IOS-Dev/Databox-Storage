@@ -32,7 +32,7 @@ class CardView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultBoldText(ofSize: 18)
+        label.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 18)
         label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -57,7 +57,7 @@ class CardView: UIView {
     
     private let descriptionLabel: UITextView = {
         let label = UITextView()
-        label.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        label.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         label.backgroundColor = .clear
         label.textAlignment = .justified
@@ -66,7 +66,7 @@ class CardView: UIView {
     
     private let subTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultSemiBoldText(ofSize: 10)
+        label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.4582801871)
         label.text = "First read Terms & Conditions then continue"
         label.textAlignment = .center
@@ -148,7 +148,7 @@ class CardView: UIView {
         descriptionLabel.trailingAnchor == contentView.trailingAnchor - DesignMetrics.Padding.size16
         descriptionLabel.heightAnchor == DesignMetrics.Dimensions.height110
         
-        let attributedTextForDescription = setAttributedText(description, fontForText: UIFont.cloudVaultSemiBoldText(ofSize: 10))
+        let attributedTextForDescription = setAttributedText(description, fontForText: FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10))
         descriptionLabel.attributedText = attributedTextForDescription
         
         contentView.addSubview(agreementTermsView)
@@ -173,7 +173,7 @@ class CardView: UIView {
         let checkTermsText = "By clicking continue button you are agree to the Privacy Policy and Terms & Conditions"
         checkTermsLabel.numberOfLines = 0
         checkTermsLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        let attributedTextForCheckTerms = setAttributedText(checkTermsText, fontForText: UIFont.cloudVaultSemiBoldText(ofSize: 12))
+        let attributedTextForCheckTerms = setAttributedText(checkTermsText, fontForText: FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12))
         checkTermsLabel.attributedText = attributedTextForCheckTerms
         
         agreementTermsStack.addArrangedSubview(checkBoxButton)

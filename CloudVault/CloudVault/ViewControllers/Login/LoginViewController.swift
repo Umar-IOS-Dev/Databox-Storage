@@ -77,14 +77,14 @@ class LoginViewController: BaseViewController {
         welcomeStack.spacing = DesignMetrics.Padding.size0
         
         let welcomeLabel = UILabel()
-        welcomeLabel.font = UIFont.cloudVaultItalicSemiLightText(ofSize: 22)
+        welcomeLabel.font = FontManagerDatabox.shared.cloudVaultItalicSemiLightText(ofSize: 22)
         welcomeLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         welcomeLabel.textAlignment = .left
         welcomeLabel.text = "Welcome to"
         welcomeLabel.heightAnchor == DesignMetrics.Padding.size24
         
         let dataBoxLabel = UILabel()
-        dataBoxLabel.font = UIFont.cloudVaultBoldText(ofSize: 50)
+        dataBoxLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 50)
         dataBoxLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         dataBoxLabel.textAlignment = .left
         dataBoxLabel.text = "Databox"
@@ -130,7 +130,7 @@ class LoginViewController: BaseViewController {
         let guestLabel = UILabel()
         guestLabel.textColor = UIColor.white
         guestLabel.text = "Continue as Guest"
-        guestLabel.font = UIFont.cloudVaultBoldText(ofSize: 20)
+        guestLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 20)
         
         guestViewStack.addArrangedSubview(guestIconImageView)
         guestViewStack.addArrangedSubview(guestLabel)
@@ -154,7 +154,7 @@ class LoginViewController: BaseViewController {
         let numberLabel = UILabel()
         numberLabel.textColor = UIColor.white
         numberLabel.text = "Continue with Number"
-        numberLabel.font = UIFont.cloudVaultBoldText(ofSize: 20)
+        numberLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 20)
         
         numberViewStack.addArrangedSubview(numberIconImageView)
         numberViewStack.addArrangedSubview(numberLabel)
@@ -196,7 +196,7 @@ class LoginViewController: BaseViewController {
         
         let sepratorLabel = UILabel()
         sepratorLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
-        sepratorLabel.font = UIFont.cloudVaultRegularText(ofSize: 18)
+        sepratorLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 18)
         sepratorLabel.text = "OR continue with"
         sepratorLabel.heightAnchor == DesignMetrics.Padding.size14
         
@@ -237,7 +237,7 @@ class LoginViewController: BaseViewController {
         
         let googleAccountLabel = UILabel()
         googleAccountLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
-        googleAccountLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 18)
+        googleAccountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 18)
         googleAccountLabel.text = "Google Account"
         
         googleStackView.addArrangedSubview(googleIconImageView)

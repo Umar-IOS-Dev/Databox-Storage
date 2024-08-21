@@ -24,7 +24,7 @@ class PhotosViewController: BaseViewController {
         let filterNameLabel = UILabel()
         filterNameLabel.textAlignment = .left
         filterNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        filterNameLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+        filterNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         filterNameLabel.text = "By Date"
         return filterNameLabel
     }()
@@ -50,11 +50,16 @@ class PhotosViewController: BaseViewController {
         button.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
         return button
     }()
+    private let filterButton : UIButton = {
+        let filterButton = UIButton()
+        filterButton.setImage(UIImage(named: "filterIcon"), for: .normal)
+        return filterButton
+    }()
     private let uploadSizeLabel: UILabel = {
         let uploadSizeLabel = UILabel()
         uploadSizeLabel.textAlignment = .left
         uploadSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        uploadSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 28)
+        uploadSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 28)
         uploadSizeLabel.text = "0.0 MB"
         return uploadSizeLabel
     }()
@@ -62,7 +67,7 @@ class PhotosViewController: BaseViewController {
         let uploadSubHeadingLabel = UILabel()
         uploadSubHeadingLabel.textAlignment = .left
         uploadSubHeadingLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        uploadSubHeadingLabel.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        uploadSubHeadingLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         uploadSubHeadingLabel.text = "selected to upload on databox"
         return uploadSubHeadingLabel
     }()
@@ -74,20 +79,19 @@ class PhotosViewController: BaseViewController {
     private var selectedDocumentURLs: [URL] = []
     var documentInteractionController: UIDocumentInteractionController?
     private var dataSource: UICollectionViewDiffableDataSource<String, MediaData>!
-    private var assets: [PHAsset] = []
     private let imageManager = PHCachingImageManager()
-    private var assetMapping: [IndexPath: PHAsset] = [:]
     private let spacerString:String = "    "
     private var batchSize = 100
     private var currentBatchIndex = 0
     private var isUpdatingLayout = false
     private var fetchResult: PHFetchResult<PHAsset>?
+    private var imageRequestIDs: [String: PHImageRequestID] = [:]
     private lazy var collectionView: UICollectionView = {
         let layout = createLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.register(ImagesCollectionViewCell.self, forCellWithReuseIdentifier: ImagesCollectionViewCell.reuseIdentifier)
-        collectionView.register(DocumentTableViewCell.self, forCellWithReuseIdentifier: DocumentTableViewCell.reuseIdentifier)
+        collectionView.register(ImagesCollectionViewCell1.self, forCellWithReuseIdentifier: ImagesCollectionViewCell1.reuseIdentifier)
         collectionView.register(DateHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DateHeaderView.reuseIdentifier)
         collectionView.collectionViewLayout.register(SectionBackgroundDecorationView.self, forDecorationViewOfKind: "background")
         
@@ -97,6 +101,7 @@ class PhotosViewController: BaseViewController {
         return collectionView
     }()
     
+    private var layoutUpdateWorkItem: DispatchWorkItem?
     private var _selectedItemSize = 0.0
     // Computed property for selectedItemSize
     var selectedItemSize: Double {
@@ -122,10 +127,42 @@ class PhotosViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("PhotosViewController is being deallocated")
+        // Remove target to break any strong references
+        uploadButton.removeTarget(self, action: #selector(self.uploadButtonTapped(_:)), for: .touchUpInside)
+        filterButton.removeTarget(self, action: #selector(self.filterButtonTapped(_:)), for: .touchUpInside)
+        listViewButton.removeTarget(self, action: #selector(listViewButtonTapped(_:)), for: .touchUpInside)
+        gridViewButton.removeTarget(self, action: #selector(gridViewButtonTapped(_:)), for: .touchUpInside)
+        
+        
+        // Clear image cache
+        SDImageCache.shared.clearMemory()
+        
+        // Nullify fetch result
+        fetchResult = nil
+        
+        // Cancel any ongoing image fetch requests
+        imageManager.stopCachingImagesForAllAssets()
+        
+        // Clear any large data structures
+        filesDataSource.removeAll()
+        
+        // Release collection view data source and delegate
+        // collectionView.dataSource = nil
+        //  collectionView.delegate = nil
+        
+        // Unload the collection view if possible
+        // collectionView.removeFromSuperview()
+        //  dataSource = nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "appBackgroundColor")
-        
+        configureDataSource()
+        // setupData() // Moved setupData here to ensure dataSource is initialized before applying snapshot
+        collectionView.delegate = self
         switch currentMediaType {
         case .image:
             configureUI(title: "Photos", showBackButton: true, hideBackground: true, showMainNavigation: false)
@@ -141,16 +178,11 @@ class PhotosViewController: BaseViewController {
             requestPhotosPermission()
         case .document:
             configureUI(title: "Documents", showBackButton: true, hideBackground: true, showMainNavigation: false)
-            
+            collectionView.register(DocumentTableViewCell.self, forCellWithReuseIdentifier: DocumentTableViewCell.reuseIdentifier)
         }
         
         hideFocusbandOptionFromNavBar()
         showHideFooterView(isShowFooterView: false)
-        collectionView.dataSource = dataSource
-        configureDataSource()
-        // setupData() // Moved setupData here to ensure dataSource is initialized before applying snapshot
-        collectionView.delegate = self
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -166,13 +198,25 @@ class PhotosViewController: BaseViewController {
         
     }
     
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+        SDImageCache.shared.clearDisk(onCompletion: nil)
+        SDImageCache.shared.clearMemory()
+    }
+    
     private func presentDocumentPicker() {
-        var documentPicker: UIDocumentPickerViewController
+        //var documentPicker: UIDocumentPickerViewController
         if #available(iOS 14.0, *) {
-            documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.item], asCopy: true)
-            documentPicker.delegate = self
-            documentPicker.allowsMultipleSelection = true
-            present(documentPicker, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                let documentPicker: UIDocumentPickerViewController
+                documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.item], asCopy: true)
+                documentPicker.delegate = self
+                documentPicker.allowsMultipleSelection = true
+                self.present(documentPicker, animated: true, completion: nil)
+            }
+            
         } else {
             // Fallback on earlier versions
             // documentPicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypeItem)], in: .import)
@@ -238,47 +282,49 @@ class PhotosViewController: BaseViewController {
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment) -> NSCollectionLayoutSection? in
+            guard let self = self else { return nil } // Safely unwrap self
+            
             switch self.currentViewType {
             case .grid:
                 // Grid layout
                 let itemHeight: CGFloat = 82
-                    let spacing: CGFloat = 5
-                    let itemsPerRow: CGFloat = 3
-                        
+                let spacing: CGFloat = 5
+                let itemsPerRow: CGFloat = 3
+                
                 let availableWidth = environment.container.effectiveContentSize.width
-                        // Calculate the width for each item to fit exactly 3 items per row
-                        let itemWidth = (availableWidth - 30) / itemsPerRow
-                        
-                        // Define item size with the calculated width
-                        let itemSize = NSCollectionLayoutSize(
-                            widthDimension: .absolute(itemWidth),
-                            heightDimension: .absolute(itemHeight)
-                        )
-                        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                        
-                        // Define group size with full width and item height
-                        let groupSize = NSCollectionLayoutSize(
-                            widthDimension: .fractionalWidth(1.0),
-                            heightDimension: .absolute(itemHeight)
-                        )
-                        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                        group.interItemSpacing = .fixed(spacing)
-                        
-                        let section = NSCollectionLayoutSection(group: group)
-                        section.interGroupSpacing = spacing
-                        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                        section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: "background")]
-                        section.boundarySupplementaryItems = [
-                            NSCollectionLayoutBoundarySupplementaryItem(
-                                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
-                                elementKind: UICollectionView.elementKindSectionHeader,
-                                alignment: .top
-                            )
-                        ]
-                        
-                        return section
+                // Calculate the width for each item to fit exactly 3 items per row
+                let itemWidth = (availableWidth - 30) / itemsPerRow
+                
+                // Define item size with the calculated width
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .absolute(itemWidth),
+                    heightDimension: .absolute(itemHeight)
+                )
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+                
+                // Define group size with full width and item height
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(itemHeight)
+                )
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                group.interItemSpacing = .fixed(spacing)
+                
+                let section = NSCollectionLayoutSection(group: group)
+                section.interGroupSpacing = spacing
+                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: "background")]
+                section.boundarySupplementaryItems = [
+                    NSCollectionLayoutBoundarySupplementaryItem(
+                        layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+                        elementKind: UICollectionView.elementKindSectionHeader,
+                        alignment: .top
+                    )
+                ]
+                
+                return section
                 
             case .list:
                 // List layout
@@ -299,7 +345,6 @@ class PhotosViewController: BaseViewController {
                     )
                 ]
                 return section
-                self.collectionView.register(ImagesCollectionViewCell1.self, forCellWithReuseIdentifier: ImagesCollectionViewCell1.reuseIdentifier)
             }
         }
         
@@ -311,13 +356,9 @@ class PhotosViewController: BaseViewController {
         currentViewType = .list
         listViewButton.setImage(UIImage(named: "listViewSelectedIcon"), for: .normal)
         gridViewButton.setImage(UIImage(named: "gridViewDeselectedIcon"), for: .normal)
-        collectionView.register(ImagesCollectionViewCell1.self, forCellWithReuseIdentifier: ImagesCollectionViewCell1.reuseIdentifier)
-        switchToGridLayout()
-//        collectionView.performBatchUpdates({
-//            collectionView.collectionViewLayout.invalidateLayout()
-//            collectionView.setCollectionViewLayout(createLayout(), animated: true)
-//            applySnapshot()
-//        }, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+            self?.switchToGridLayout()
+        }
     }
     
     @objc private func gridViewButtonTapped(_ sender: UIButton) {
@@ -325,60 +366,68 @@ class PhotosViewController: BaseViewController {
         gridViewButton.setImage(UIImage(named: "gridViewSelectedIcon"), for: .normal)
         listViewButton.setImage(UIImage(named: "listViewDeselectedIcon"), for: .normal)
         
-        // Register cell classes for grid view
-        collectionView.register(ImagesCollectionViewCell.self, forCellWithReuseIdentifier: ImagesCollectionViewCell.reuseIdentifier)
-        
-        switchToGridLayout()
-//        collectionView.performBatchUpdates({
-//            collectionView.collectionViewLayout.invalidateLayout()
-//            collectionView.setCollectionViewLayout(createLayout(), animated: true)
-//            applySnapshot()
-//        }, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+            self?.switchToGridLayout()
+        }
     }
     
-    // Method to update the layout safely
-       func updateLayout(to layout: UICollectionViewLayout, animated: Bool = true) {
-           if isUpdatingLayout {
-               // If a layout update is in progress, delay the new layout change
-               DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                   self.updateLayout(to: layout, animated: animated)
-               }
-               return
-           }
-
-           isUpdatingLayout = true
-           collectionView.setCollectionViewLayout(layout, animated: animated) { _ in
-               self.isUpdatingLayout = false
-               self.applySnapshot()
-               self.configureDataSource()
-               //self.collectionView.reloadData()
-           }
-       }
-
-       func switchToGridLayout() {
-           let gridLayout = createLayout() // Your method to create grid layout
-           updateLayout(to: gridLayout)
-       }
-
-       func switchToListLayout() {
-           let listLayout = createLayout() // Your method to create list layout
-           updateLayout(to: listLayout)
-       }
+    func updateLayout(to layout: UICollectionViewLayout, animated: Bool = true) {
+        // Cancel any existing layout update work item
+        layoutUpdateWorkItem?.cancel()
+        
+        // Create a new work item to perform the layout update
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            
+            if self.isUpdatingLayout {
+                // If a layout update is in progress, delay the new layout change
+                self.updateLayout(to: layout, animated: animated)
+                return
+            }
+            
+            self.isUpdatingLayout = true
+            self.collectionView.setCollectionViewLayout(layout, animated: animated) { [weak self] _ in
+                guard let self = self else { return }
+                
+                self.isUpdatingLayout = false
+                self.applySnapshot()
+                self.configureDataSource()
+                
+                // Optional: Log or debug here
+                print("Layout updated and data source configured.")
+                
+                // Explicitly release the work item
+                self.layoutUpdateWorkItem = nil
+            }
+        }
+        
+        // Schedule the work item
+        layoutUpdateWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
+    }
+    
+    
+    func switchToGridLayout() {
+        let gridLayout = createLayout() // Your method to create grid layout
+        updateLayout(to: gridLayout)
+    }
     
     func requestPhotosPermission() {
-        PHPhotoLibrary.requestAuthorization { status in
+        PHPhotoLibrary.requestAuthorization { [weak self] status in
+            guard let self = self else { return }
+            
             switch status {
             case .authorized:
                 DispatchQueue.main.async {
                     self.showPhotoGallery()
                 }
-                
                 print("Authorized Gallery")
             case .denied, .restricted, .notDetermined:
                 // Handle permission denial
-                print("denied")
-                self.handlePermissionDenied()
-                break
+                print("Denied")
+                DispatchQueue.main.async {
+                    self.handlePermissionDenied()
+                }
             default:
                 break
             }
@@ -402,7 +451,7 @@ class PhotosViewController: BaseViewController {
             for url in selectedDocumentURLs {
                 self.getDocumentDetails(url: url)
             }
-                self.applySnapshot()
+            self.applySnapshot()
             
             return
         }
@@ -415,8 +464,8 @@ class PhotosViewController: BaseViewController {
         let options = PHImageRequestOptions()
         options.isSynchronous = true
         
-        imageManager.requestImageDataAndOrientation(for: asset, options: options) { (data, dataUTI, orientation, info) in
-            guard let data = data, let image = UIImage(data: data) else { return }
+        imageManager.requestImageDataAndOrientation(for: asset, options: options) { [weak self] (data, dataUTI, orientation, info) in
+            guard let self = self, let data = data, let image = UIImage(data: data) else { return }
             
             let sizeInBytes = data.count // Size in bytes
             let sizeInMB = Double(sizeInBytes) / (1024 * 1024) // Convert bytes to MB
@@ -450,9 +499,8 @@ class PhotosViewController: BaseViewController {
                 self.getPhotoDetails(asset: asset)
             }
             currentBatchIndex += 1
-            DispatchQueue.main.async {
-                self.applySnapshot()
-            }
+            self.applySnapshot()
+            
             sortSectionKeys()
         }
     }
@@ -516,15 +564,35 @@ class PhotosViewController: BaseViewController {
     private func playVideo(asset: PHAsset) {
         let videoOptions = PHVideoRequestOptions()
         videoOptions.isNetworkAccessAllowed = true
+        videoOptions.version = .original // Ensure we get the original version of the video
         
-        imageManager.requestAVAsset(forVideo: asset, options: videoOptions) { avAsset, _, _ in
-            guard let avAsset = avAsset else { return }
+        imageManager.requestAVAsset(forVideo: asset, options: videoOptions) { avAsset, _, info in
+            // Handle errors and check if asset was successfully retrieved
+            if let error = info?[PHImageErrorKey] as? Error {
+                DispatchQueue.main.async {
+                    // Optionally show an alert or error message to the user
+                    print("Error retrieving video asset: \(error.localizedDescription)")
+                }
+                return
+            }
+            
+            guard let avAsset = avAsset else {
+                DispatchQueue.main.async {
+                    print("No AVAsset retrieved")
+                }
+                return
+            }
+            
             DispatchQueue.main.async {
+                // Create player item and player
                 let playerItem = AVPlayerItem(asset: avAsset)
                 let player = AVPlayer(playerItem: playerItem)
+                player.allowsExternalPlayback = true
+                // Create player view controller
                 let playerViewController = AVPlayerViewController()
                 playerViewController.player = player
                 
+                // Present player view controller
                 self.present(playerViewController, animated: true) {
                     player.play()
                 }
@@ -533,26 +601,28 @@ class PhotosViewController: BaseViewController {
     }
     
     private func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<String, MediaData>(collectionView: collectionView) { collectionView, indexPath, imageData -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<String, MediaData>(collectionView: collectionView) { [weak self] collectionView, indexPath, imageData -> UICollectionViewCell? in
+            guard let self = self else { return nil }
+            
             switch self.currentViewType {
             case .grid:
                 switch self.currentMediaType {
                 case .image, .video, .favourite, .shared:
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagesCollectionViewCell.reuseIdentifier, for: indexPath) as! ImagesCollectionViewCell
-                    cell.imagesView.image = imageData.icon
-                    cell.sizeLabel.text = imageData.size
-                    cell.imageNameLabel.text = imageData.name
+                    if let asset = imageData.asset {
+                        loadImage(for: asset, into: cell, ImageName: imageData.name, ImageSize: imageData.size)
+                    }
+                    //  cell.configure(with: imageData)
                     let isSelected = self.selectedIndexPaths.contains(indexPath)
                     cell.setSelected(isSelected)
                     cell.button.tag = indexPath.item
                     cell.button.params = (section: indexPath.section, item: indexPath.item)
                     cell.button.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                     return cell
+                    
                 case .document:
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DocumentTableViewCell.reuseIdentifier, for: indexPath) as! DocumentTableViewCell
-                    cell.imagesView.image = imageData.icon
-                    cell.sizeLabel.text = imageData.size
-                    cell.documentNameLabel.text = imageData.name
+                    cell.configure(with: imageData)
                     let isSelected = self.selectedIndexPaths.contains(indexPath)
                     cell.setSelected(isSelected)
                     cell.button.tag = indexPath.item
@@ -561,24 +631,23 @@ class PhotosViewController: BaseViewController {
                     return cell
                 }
                 
-                
             case .list:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagesCollectionViewCell1.reuseIdentifier, for: indexPath) as! ImagesCollectionViewCell1
-                cell.imagesView.image = imageData.icon
-                cell.sizeLabel.text = imageData.size
-                cell.imageNameLabel.text = imageData.name
+                if let asset = imageData.asset {
+                    loadImage(for: asset, into: cell, ImageName: imageData.name, ImageSize: imageData.size)
+                }
+                // cell.configure(with: imageData)
                 let isSelected = self.selectedIndexPaths.contains(indexPath)
                 cell.setSelected(isSelected)
-                //                cell.optionsButton.tag = indexPath.item
-                //                self.selectedSection = indexPath.section
-                //                cell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                 cell.optionsButton.params = (section: indexPath.section, item: indexPath.item)
                 cell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                 return cell
             }
         }
         
-        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath -> UICollectionReusableView? in
+        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath -> UICollectionReusableView? in
+            guard let self = self else { return nil }
+            
             if kind == UICollectionView.elementKindSectionHeader {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DateHeaderView.reuseIdentifier, for: indexPath) as! DateHeaderView
                 let dateKey = self.sortedSectionKeys[indexPath.section]
@@ -596,12 +665,13 @@ class PhotosViewController: BaseViewController {
             return nil
         }
         
-        collectionView.dataSource = dataSource
     }
     
     private func applySnapshot(animatingDifferences: Bool = true) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             guard !self.sortedSectionKeys.isEmpty else { return }
+            
             var snapshot = NSDiffableDataSourceSnapshot<String, MediaData>()
             for section in self.sortedSectionKeys {
                 snapshot.appendSections([section])
@@ -610,8 +680,8 @@ class PhotosViewController: BaseViewController {
                 }
             }
             self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences) {
-//                       self.configureDataSource()
-                   }
+                // self.configureDataSource()
+            }
         }
     }
     
@@ -619,8 +689,9 @@ class PhotosViewController: BaseViewController {
     private func sortSectionKeys() {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        sortedSectionKeys = filesDataSource.keys.sorted {
-            formatter.date(from: $0) ?? Date() > formatter.date(from: $1) ?? Date()
+        sortedSectionKeys = filesDataSource.keys.sorted { [weak self] in
+            guard let _ = self else { return false }
+            return formatter.date(from: $0) ?? Date() > formatter.date(from: $1) ?? Date()
         }
     }
     
@@ -637,8 +708,7 @@ class PhotosViewController: BaseViewController {
         filterStackView.axis = .horizontal
         filterStackView.spacing = DesignMetrics.Padding.size8
         
-        let filterButton = UIButton()
-        filterButton.setImage(UIImage(named: "filterIcon"), for: .normal)
+        
         filterButton.widthAnchor == DesignMetrics.Dimensions.width18
         filterButton.addTarget(self, action: #selector(filterButtonTapped(_:)), for: .touchUpInside)
         
@@ -679,8 +749,9 @@ class PhotosViewController: BaseViewController {
     }
     
     @objc private func uploadButtonTapped(_ sender: UIButton) {
+        
         self.gotoUploadInfoViewController()
-//        duplicateImages(inDirectory: "/Users/appinatorstechnology/Library/Developer/CoreSimulator/Devices/66D8CFB8-36E1-4376-BCD7-C502EAFE114A/data/Media/DCIM/100APPLE", count: 507)
+        //        duplicateImages(inDirectory: "/Users/appinatorstechnology/Library/Developer/CoreSimulator/Devices/66D8CFB8-36E1-4376-BCD7-C502EAFE114A/data/Media/DCIM/100APPLE", count: 507)
     }
     
     func duplicateImages(inDirectory directory: String, count: Int) {
@@ -803,7 +874,7 @@ class PhotosViewController: BaseViewController {
     func updateSelectionState() {
         let selectedItemsCount = getSelectedItems().count
         areAllCellsSelected() ? showCheckBoxChecked() : showCheckBoxUnChecked()
-
+        
         if selectedItemsCount > 0 {
             showFocusbandOptionFromNavBar()
             showHideFooterView(isShowFooterView: true)
@@ -813,54 +884,61 @@ class PhotosViewController: BaseViewController {
             showHideFooterView(isShowFooterView: false)
             hideFocusbandOptionFromNavBar()
             selectedItemSize = 0.0
-
-            switch currentMediaType {
-            case .image:
-                changeTitle(titleOfNavigation: "Photos")
-            case .video:
-                changeTitle(titleOfNavigation: "Videos")
-            case .favourite:
-                changeTitle(titleOfNavigation: "\(spacerString)Favourite Files")
-            case .shared:
-                changeTitle(titleOfNavigation: "\(spacerString)Shared Files")
-            case .document:
-                changeTitle(titleOfNavigation: "Documents")
-            }
+            
+            let defaultTitles: [MediaType: String] = [
+                .image: "Photos",
+                .video: "Videos",
+                .favourite: "\(spacerString)Favourite Files",
+                .shared: "\(spacerString)Shared Files",
+                .document: "Documents"
+            ]
+            
+            changeTitle(titleOfNavigation: defaultTitles[currentMediaType] ?? "Files")
         }
     }
-
     
     func getSelectedItems() -> [MediaData] {
-        var selectedItems: [MediaData] = []
         selectedItemSize = 0.0
+        var selectedItems: [MediaData] = []
         
         for indexPath in selectedIndexPaths {
             let dateKey = sortedSectionKeys[indexPath.section]
             if let item = filesDataSource[dateKey]?[indexPath.item] {
-                let sizeLabelItems = item.size.split(separator: " ")
-                let sizeInString = String(sizeLabelItems[0])
-                let sizeInDouble = Double(sizeInString)
-                selectedItemSize += sizeInDouble ?? 0.0
-                selectedItems.append(item)
+                if let sizeInDouble = Double(item.size.split(separator: " ").first ?? "0.0") {
+                    selectedItemSize += sizeInDouble
+                    selectedItems.append(item)
+                }
             }
         }
         return selectedItems
     }
-
     
     func areAllCellsSelected() -> Bool {
-        var totalItems = 0
-        
-        // Count all items in all sections
-        let numberOfSections = collectionView.numberOfSections
-        for section in 0..<numberOfSections {
-            totalItems += collectionView.numberOfItems(inSection: section)
+        let totalItems = (0..<collectionView.numberOfSections).reduce(0) {
+            $0 + collectionView.numberOfItems(inSection: $1)
         }
-        
-        // Compare the total number of items with the count of selected items
         return selectedIndexPaths.count == totalItems
     }
-
+    
+    func selectAllItems() {
+        selectedIndexPaths = Set((0..<collectionView.numberOfSections).flatMap { section in
+            (0..<collectionView.numberOfItems(inSection: section)).map {
+                IndexPath(item: $0, section: section)
+            }
+        })
+        
+        updateSelectionState()
+        applySnapshot()
+        configureDataSource()
+    }
+    
+    func removeAllItems() {
+        selectedIndexPaths.removeAll()
+        
+        updateSelectionState()
+        applySnapshot()
+        configureDataSource()
+    }
     
     override func checkboxButtonAction() {
         areAllCellsSelected() ? removeAllItems() : selectAllItems()
@@ -869,36 +947,6 @@ class PhotosViewController: BaseViewController {
     override func changeTitle(titleOfNavigation: String) {
         super.changeTitle(titleOfNavigation: titleOfNavigation)
     }
-    
-    func selectAllItems() {
-        selectedIndexPaths.removeAll()
-
-        var snapshot = dataSource.snapshot()
-
-        for section in 0..<collectionView.numberOfSections {
-            for item in 0..<collectionView.numberOfItems(inSection: section) {
-                let indexPath = IndexPath(item: item, section: section)
-                selectedIndexPaths.insert(indexPath)
-            }
-        }
-
-        // No need to reload data, just update the snapshot
-        updateSelectionState()
-        applySnapshot()
-        configureDataSource()
-        
-    }
-
-    func removeAllItems() {
-        selectedIndexPaths.removeAll()
-        
-        // No need to reload data, just update the snapshot
-        updateSelectionState()
-        applySnapshot()
-        configureDataSource()
-        
-    }
-
     
     private func gotoUploadInfoViewController() {
         let uploadVC = UploadInfoViewController()
@@ -999,8 +1047,7 @@ extension PhotosViewController: UICollectionViewDelegate {
         let section = sortedSectionKeys[indexPath.section]
         if let items = filesDataSource[section], indexPath.item < items.count {
             let mediaData = items[indexPath.item]
-            // Start loading high-resolution image if necessary
-            loadImage(for: mediaData.asset!, into: cell)
+            loadImage(for: mediaData.asset!, into: cell, ImageName: mediaData.name, ImageSize: mediaData.size)
         }
     }
     
@@ -1008,27 +1055,65 @@ extension PhotosViewController: UICollectionViewDelegate {
         let section = sortedSectionKeys[indexPath.section]
         if let items = filesDataSource[section], indexPath.item < items.count {
             let mediaData = items[indexPath.item]
-            // Cancel image loading if necessary
             cancelImageLoad(for: mediaData.asset!)
+        }
+        if let cell = cell as? ImagesCollectionViewCell {
+            cell.button.removeTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
         }
     }
     
-    private func loadImage(for asset: PHAsset, into cell: UICollectionViewCell) {
+    private func loadImage(for asset: PHAsset, into cell: UICollectionViewCell, ImageName: String, ImageSize: String) {
         let imageManager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.isSynchronous = false
         options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = true
         
-        imageManager.requestImage(for: asset, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFill, options: options) { (image, _) in
-            // Update cell with the image
-            if let imageCell = cell as? ImagesCollectionViewCell {
-                imageCell.imagesView.image = image
+        // Adjust the target size based on the current layout
+        let targetSize: CGSize
+        if currentViewType == .grid {
+            targetSize = CGSize(width: 80, height: 80) // Adjusted for grid view
+        } else {
+            targetSize = CGSize(width: cell.bounds.width, height: cell.bounds.height) // Adjusted for list view
+        }
+        
+        // Cancel any existing request for this asset
+        cancelImageLoad(for: asset)
+        
+        let requestID = imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { [weak cell] (image, info) in
+            guard let cell = cell else { return }
+            
+            DispatchQueue.main.async {
+                if let gridCell = cell as? ImagesCollectionViewCell {
+                    // Update image for grid cell
+                    if gridCell.isDescendant(of: gridCell.superview ?? UIView()) {
+                        gridCell.imagesView.image = image
+                        gridCell.imageNameLabel.text = ImageName
+                        gridCell.sizeLabel.text = ImageSize
+                    }
+                } else if let listCell = cell as? ImagesCollectionViewCell1 {
+                    // Update image for list cell
+                    if listCell.isDescendant(of: listCell.superview ?? UIView()) {
+                        listCell.imagesView.image = image
+                        listCell.imageNameLabel.text = ImageName
+                        listCell.sizeLabel.text = ImageSize
+                    }
+                }
             }
         }
+        
+        // Track the request ID for cancellation if needed
+        let assetIdentifier = asset.localIdentifier
+        imageRequestIDs[assetIdentifier] = requestID
     }
     
     private func cancelImageLoad(for asset: PHAsset) {
-        // Implement if you want to cancel ongoing requests
+        let assetIdentifier = asset.localIdentifier
+        if let requestID = imageRequestIDs[assetIdentifier] {
+            PHImageManager.default().cancelImageRequest(requestID)
+            imageRequestIDs.removeValue(forKey: assetIdentifier)
+        }
+        
     }
     
 }

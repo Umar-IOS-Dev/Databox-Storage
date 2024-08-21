@@ -22,7 +22,7 @@ class DataBoxCollectionViewCell: UICollectionViewCell {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .left
         titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        titleLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        titleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         return titleLabel
     }()
     private let descriptionLabel: UILabel = {
@@ -30,7 +30,7 @@ class DataBoxCollectionViewCell: UICollectionViewCell {
         descriptionLabel.textAlignment = .left
         descriptionLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        descriptionLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         return descriptionLabel
     }()
     private let dataBoxImageView: UIImageView = {

@@ -31,7 +31,7 @@ class ContactsViewController: BaseViewController {
         let uploadSizeLabel = UILabel()
         uploadSizeLabel.textAlignment = .left
         uploadSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        uploadSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 28)
+        uploadSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 28)
         uploadSizeLabel.text = "0.0 MB"
         return uploadSizeLabel
     }()
@@ -39,7 +39,7 @@ class ContactsViewController: BaseViewController {
         let uploadSubHeadingLabel = UILabel()
         uploadSubHeadingLabel.textAlignment = .left
         uploadSubHeadingLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        uploadSubHeadingLabel.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        uploadSubHeadingLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         uploadSubHeadingLabel.text = "selected to upload on databox"
         return uploadSubHeadingLabel
     }()

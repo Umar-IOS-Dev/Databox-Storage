@@ -43,7 +43,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     }()
     private let gotoAllButton: UIButton = {
         let seeAllBtn = UIButton()
-        seeAllBtn.setFont(UIFont.cloudVaultSemiBoldText(ofSize: 12), for: .normal)
+        seeAllBtn.setFont(FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12), for: .normal)
         seeAllBtn.setTitleColor(#colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1), for: .normal)
         seeAllBtn.setTitle("Go To All", for: .normal)
         seeAllBtn.backgroundColor = .clear
@@ -53,7 +53,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         let storageLabel = UILabel()
         storageLabel.textAlignment = .left
         storageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        storageLabel.font = UIFont.cloudVaultBoldText(ofSize: 20)
+        storageLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 20)
         storageLabel.text = "Storage Overview"
         return storageLabel
     }()
@@ -61,7 +61,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         let usedStorageLabel = UILabel()
         usedStorageLabel.textAlignment = .left
         usedStorageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5409491922)
-        usedStorageLabel.font = UIFont.cloudVaultRegularText(ofSize: 10)
+        usedStorageLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 10)
         usedStorageLabel.text = "01GB used from out of 100GB"
         return usedStorageLabel
     }()
@@ -422,7 +422,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         let recentFileLabel = UILabel()
         recentFileLabel.textAlignment = .left
         recentFileLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        recentFileLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        recentFileLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         recentFileLabel.text = "Recent Files"
         
         
@@ -474,7 +474,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         let noRecentFileLabel = UILabel()
         noRecentFileLabel.textAlignment = .center
         noRecentFileLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.1486500851)
-        noRecentFileLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 10)
+        noRecentFileLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         noRecentFileLabel.text = "No Recent File Found Here"
         
         containerView.addSubview(emptyRecentImageView)

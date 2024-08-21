@@ -59,7 +59,7 @@ class SystemSettingView: UIView {
            ])
            
            titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-           titleLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+           titleLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
        }
 
 }

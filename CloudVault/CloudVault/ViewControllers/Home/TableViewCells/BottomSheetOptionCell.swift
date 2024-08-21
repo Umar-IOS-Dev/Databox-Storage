@@ -19,7 +19,7 @@ class BottomSheetOptionCell: UITableViewCell {
     }()
      let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultSemiBoldText(ofSize: 16)
+        label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 16)
         label.heightAnchor == 20
         return label
     }()

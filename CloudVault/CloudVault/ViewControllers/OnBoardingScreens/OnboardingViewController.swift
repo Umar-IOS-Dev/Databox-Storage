@@ -21,7 +21,7 @@ class OnboardingViewController: UIViewController {
     weak var delegate: OnboardingViewControllerDelegate?
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultBoldText(ofSize: 32)
+        label.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 32)
         label.textAlignment = .center
         label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         label.numberOfLines = 0
@@ -29,7 +29,7 @@ class OnboardingViewController: UIViewController {
     }()
     let subHeadingLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        label.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         label.textAlignment = .center
         label.textColor = .lightGray
         label.textColor = #colorLiteral(red: 0.6078431373, green: 0.6117647059, blue: 0.6156862745, alpha: 1)
@@ -41,7 +41,7 @@ class OnboardingViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Skip", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
-        button.titleLabel?.font = UIFont.cloudVaultBoldText(ofSize: 18)
+        button.titleLabel?.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 18)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

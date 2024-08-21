@@ -13,7 +13,7 @@ class DateHeaderView: UICollectionReusableView {
        
         let label: UILabel = {
            let label = UILabel()
-            label.font = UIFont.cloudVaultSemiBoldText(ofSize: 16)
+            label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 16)
            label.textColor = .black
            return label
        }()

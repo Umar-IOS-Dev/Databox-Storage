@@ -7,9 +7,12 @@
 
 import UIKit
 import Anchorage
+import Photos
+import SDWebImage
 
 class ImagesCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "ImagesCollectionViewCell"
+    private var imageRequestID: PHImageRequestID?
     
     let imagesView: UIImageView = {
         let imageView = UIImageView()
@@ -27,9 +30,9 @@ class ImagesCollectionViewCell: UICollectionViewCell {
     }()
 
     
-    let sizeLabel: UILabel = {
+    var sizeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultSemiBoldText(ofSize: 10)
+        label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         label.textColor = .white
         label.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         label.layer.cornerRadius = 4
@@ -49,9 +52,9 @@ class ImagesCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    let imageNameLabel: UILabel = {
+    var imageNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         label.textColor = .white
         label.textAlignment = .center
         label.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -72,9 +75,32 @@ class ImagesCollectionViewCell: UICollectionViewCell {
         setupViews()
     }
     
+    
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        overlayView.frame = contentView.bounds
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+            super.prepareForReuse()
+
+            // Remove the target for the button to avoid multiple actions being added
+            button.removeTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+        }
+
+        func configureCell() {
+            // Add the target-action after configuring the cell
+            button.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+        }
+
+        @objc private func verticalDotTapped(_ sender: UIButton) {
+            // Handle button tap action
+        }
     
     private func setupViews() {
         contentView.addSubview(imagesView)
@@ -82,6 +108,7 @@ class ImagesCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(button)
         contentView.addSubview(imageNameLabel)
         contentView.addSubview(overlayView)
+        contentView.layer.cornerRadius = 8
         
         imagesView.edgeAnchors == contentView.edgeAnchors
         
@@ -98,8 +125,6 @@ class ImagesCollectionViewCell: UICollectionViewCell {
         imageNameLabel.leadingAnchor >= contentView.leadingAnchor + 4
         imageNameLabel.trailingAnchor <= contentView.trailingAnchor - 4
         
-        // Configure overlay view
-        overlayView.frame = contentView.bounds
         overlayView.isHidden = true
         
         overlayView.addSubview(selectedIcon)
@@ -110,7 +135,7 @@ class ImagesCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with data: MediaData) {
-        imagesView.image = data.icon
+       // imagesView.image = data.icon
         sizeLabel.text = data.size
         imageNameLabel.text = data.name
     }
@@ -118,9 +143,88 @@ class ImagesCollectionViewCell: UICollectionViewCell {
     func setSelected(_ selected: Bool) {
         contentView.layer.borderColor = selected ? #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1) : UIColor.clear.cgColor
         contentView.layer.borderWidth = selected ? 1 : 0
-        contentView.layer.cornerRadius = 8
         overlayView.isHidden = !selected
     }
+    
+//    func setImage(with asset: PHAsset, targetSize: CGSize) {
+//            let options = PHImageRequestOptions()
+//            options.isSynchronous = false
+//            options.deliveryMode = .highQualityFormat
+//            
+//            let imageManager = PHImageManager.default()
+//            
+//            // Fetch a blurred placeholder image
+//            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { [weak self] (image, _) in
+//                guard let self = self else { return }
+//                
+//                // Set the blurred image as a placeholder
+//                let blurredImage = image?.sd_blurredImage(withRadius: 10)
+//                self.imagesView.sd_setImage(with: nil, placeholderImage: blurredImage)
+//                
+//                // Load the full-resolution image asynchronously
+//                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (highResImage, _) in
+//                    self.imagesView.sd_setImage(with: nil, placeholderImage: highResImage)
+//                }
+//            }
+//        }
+    
+    
+//    func setImage(with asset: PHAsset, targetSize: CGSize) {
+//        let options = PHImageRequestOptions()
+//        options.isSynchronous = false
+//        options.deliveryMode = .highQualityFormat
+//
+//        let imageManager = PHImageManager.default()
+//
+//        // Fetch image
+//        imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { [weak self] (image, _) in
+//            guard let self = self else { return }
+//            
+//            // Set the image
+//            self.imagesView.sd_setImage(with: nil, placeholderImage: image)
+//        }
+//    }
+    
+//    func setImage(with asset: PHAsset, targetSize: CGSize) {
+//           // Cancel any ongoing request for this cell before starting a new one
+//           cancelImageLoad()
+//
+//           let options = PHImageRequestOptions()
+//           options.isSynchronous = false
+//           options.deliveryMode = .highQualityFormat
+//           
+//           let imageManager = PHImageManager.default()
+//
+//           // Fetch a blurred placeholder image
+//           let requestID = imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { [weak self] (image, _) in
+//               guard let self = self else { return }
+//               
+//               // Set the blurred image as a placeholder
+//               let blurredImage = image?.sd_blurredImage(withRadius: 10)
+//               self.imagesView.sd_setImage(with: nil, placeholderImage: blurredImage)
+//               
+//               // Load the full-resolution image asynchronously
+//               let highResRequestID = imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (highResImage, _) in
+//                   self.imagesView.sd_setImage(with: nil, placeholderImage: highResImage)
+//               }
+//               
+//               // Store the request ID for cancellation if needed
+//               self.imageRequestID = highResRequestID
+//           }
+//           
+//           // Store the request ID for cancellation if needed
+//           self.imageRequestID = requestID
+//       }
+//
+//       func cancelImageLoad() {
+//           // Cancel the ongoing request if any
+//           if let requestID = imageRequestID {
+//               PHImageManager.default().cancelImageRequest(requestID)
+//           }
+//       }
+    
+    
+    
 }
 
 
@@ -145,6 +249,7 @@ class SectionBackgroundDecorationView: UICollectionReusableView {
 
 class ImagesCollectionViewCell1: UICollectionViewCell {
     static let reuseIdentifier = "ImagesCollectionViewCell1"
+    private var imageRequestID: PHImageRequestID?
     
     let imagesView: UIImageView = {
         let imageView = UIImageView()
@@ -154,9 +259,9 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
         return imageView
     }()
     
-    let imageNameLabel: UILabel = {
+    var imageNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        label.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         label.textAlignment = .left
         label.layer.cornerRadius = 4
@@ -164,9 +269,9 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
         return label
     }()
     
-    let sizeLabel: UILabel = {
+    var sizeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        label.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         label.clipsToBounds = true
         label.textAlignment = .left
@@ -260,7 +365,7 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
     }
     
     func configure(with data: MediaData) {
-        imagesView.image = data.icon
+        //imagesView.image = data.icon
         sizeLabel.text = data.size
         imageNameLabel.text = data.name
     }
@@ -270,4 +375,65 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
         contentView.layer.borderWidth = selected ? 1 : 0
         overlayView.isHidden = !selected
     }
+    
+//    func setImage(with asset: PHAsset, targetSize: CGSize) {
+//            let options = PHImageRequestOptions()
+//            options.isSynchronous = false
+//            options.deliveryMode = .highQualityFormat
+//            
+//            let imageManager = PHImageManager.default()
+//            
+//            // Fetch a blurred placeholder image
+//            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { [weak self] (image, _) in
+//                guard let self = self else { return }
+//                
+//                // Set the blurred image as a placeholder
+//                let blurredImage = image?.sd_blurredImage(withRadius: 10)
+//                self.imagesView.sd_setImage(with: nil, placeholderImage: blurredImage)
+//                
+//                // Load the full-resolution image asynchronously
+//                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (highResImage, _) in
+//                    self.imagesView.sd_setImage(with: nil, placeholderImage: highResImage)
+//                }
+//            }
+//        }
+//    func setImage(with asset: PHAsset, targetSize: CGSize) {
+//           // Cancel any ongoing request for this cell before starting a new one
+//           cancelImageLoad()
+//
+//           let options = PHImageRequestOptions()
+//           options.isSynchronous = false
+//           options.deliveryMode = .highQualityFormat
+//           
+//           let imageManager = PHImageManager.default()
+//
+//           // Fetch a blurred placeholder image
+//           let requestID = imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { [weak self] (image, _) in
+//               guard let self = self else { return }
+//               
+//               // Set the blurred image as a placeholder
+//               let blurredImage = image?.sd_blurredImage(withRadius: 10)
+//               self.imagesView.sd_setImage(with: nil, placeholderImage: blurredImage)
+//               
+//               // Load the full-resolution image asynchronously
+//               let highResRequestID = imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (highResImage, _) in
+//                   self.imagesView.sd_setImage(with: nil, placeholderImage: highResImage)
+//               }
+//               
+//               // Store the request ID for cancellation if needed
+//               self.imageRequestID = highResRequestID
+//           }
+//           
+//           // Store the request ID for cancellation if needed
+//           self.imageRequestID = requestID
+//       }
+//
+//       func cancelImageLoad() {
+//           // Cancel the ongoing request if any
+//           if let requestID = imageRequestID {
+//               PHImageManager.default().cancelImageRequest(requestID)
+//           }
+//       }
+    
+    
 }

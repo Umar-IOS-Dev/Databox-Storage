@@ -67,7 +67,7 @@ class LoginWithEmailViewController: BaseViewController {
         containerStack.spacing = DesignMetrics.Padding.size12
         
         let headingLabel = UILabel()
-        headingLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 18)
+        headingLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 18)
         headingLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
         headingLabel.textAlignment = .left
         headingLabel.text = "Email"

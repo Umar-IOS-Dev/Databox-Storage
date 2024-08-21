@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		631869BD2C6F83850026F389 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 631869BC2C6F83850026F389 /* SDWebImage */; };
 		631869BF2C6F83850026F389 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 631869BE2C6F83850026F389 /* SDWebImageMapKit */; };
+		631869C22C731D150026F389 /* SubmitFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C12C731D150026F389 /* SubmitFeedbackViewController.swift */; };
+		631869C42C731D2B0026F389 /* YourFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C32C731D2B0026F389 /* YourFeedbackViewController.swift */; };
+		631869C62C731D430026F389 /* ReplyFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C52C731D430026F389 /* ReplyFeedbackViewController.swift */; };
+		631869CA2C731F380026F389 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C92C731F380026F389 /* FeedbackViewController.swift */; };
+		631869CC2C732FD60026F389 /* FeedbackSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869CB2C732FD50026F389 /* FeedbackSegmentedView.swift */; };
 		63603EE32C6213D700F4C115 /* UploadInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603EE22C6213D600F4C115 /* UploadInfoViewController.swift */; };
 		63603EF62C64B9F300F4C115 /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 63603EF52C64B9F300F4C115 /* SVProgressHUD */; };
 		63603EFC2C64F77E00F4C115 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603EFB2C64F77E00F4C115 /* StorageViewController.swift */; };
@@ -107,6 +112,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		631869C12C731D150026F389 /* SubmitFeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitFeedbackViewController.swift; sourceTree = "<group>"; };
+		631869C32C731D2B0026F389 /* YourFeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourFeedbackViewController.swift; sourceTree = "<group>"; };
+		631869C52C731D430026F389 /* ReplyFeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyFeedbackViewController.swift; sourceTree = "<group>"; };
+		631869C92C731F380026F389 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		631869CB2C732FD50026F389 /* FeedbackSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackSegmentedView.swift; sourceTree = "<group>"; };
 		63603EE22C6213D600F4C115 /* UploadInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadInfoViewController.swift; sourceTree = "<group>"; };
 		63603EFB2C64F77E00F4C115 /* StorageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewController.swift; sourceTree = "<group>"; };
 		63603EFD2C65EFF600F4C115 /* StorageVerticalUsageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageVerticalUsageView.swift; sourceTree = "<group>"; };
@@ -218,6 +228,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		631869C02C731CDD0026F389 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				631869C12C731D150026F389 /* SubmitFeedbackViewController.swift */,
+				631869C32C731D2B0026F389 /* YourFeedbackViewController.swift */,
+				631869C52C731D430026F389 /* ReplyFeedbackViewController.swift */,
+				631869C92C731F380026F389 /* FeedbackViewController.swift */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
 		63603EE42C6384DA00F4C115 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +306,7 @@
 		63C3E4D12C3C079D0060F257 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				631869C02C731CDD0026F389 /* Feedback */,
 				63603EE42C6384DA00F4C115 /* Storage */,
 				63C3E5522C5B69A10060F257 /* Files */,
 				63C3E53C2C5127CE0060F257 /* Setting */,
@@ -362,6 +384,7 @@
 				63603EFD2C65EFF600F4C115 /* StorageVerticalUsageView.swift */,
 				63603F012C674B4E00F4C115 /* StorageHorizontalUsageView.swift */,
 				63603EFF2C672E1D00F4C115 /* SideMenuView.swift */,
+				631869CB2C732FD50026F389 /* FeedbackSegmentedView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -708,11 +731,14 @@
 				63C3E5512C5907630060F257 /* CustomActionSheetViewController.swift in Sources */,
 				63603F0A2C6A1C8B00F4C115 /* ContactsViewController.swift in Sources */,
 				63603F002C672E1D00F4C115 /* SideMenuView.swift in Sources */,
+				631869CA2C731F380026F389 /* FeedbackViewController.swift in Sources */,
 				63C3E4F42C3E9B080060F257 /* LoginViewController.swift in Sources */,
+				631869C22C731D150026F389 /* SubmitFeedbackViewController.swift in Sources */,
 				63C3E4D32C3C07D20060F257 /* SplashViewController.swift in Sources */,
 				63C3E53E2C5127FF0060F257 /* SettingsViewController.swift in Sources */,
 				63603F082C67831E00F4C115 /* ContactsCollectionViewCell.swift in Sources */,
 				63C3E4EC2C3D60930060F257 /* CardView.swift in Sources */,
+				631869CC2C732FD60026F389 /* FeedbackSegmentedView.swift in Sources */,
 				63C3E4A12C3BFAEF0060F257 /* AppDelegate.swift in Sources */,
 				63C3E5492C57767E0060F257 /* RecentFilesViewController.swift in Sources */,
 				63C3E5292C4E45710060F257 /* OutOfStorageCollectionViewCell.swift in Sources */,
@@ -737,6 +763,7 @@
 				63C3E4EF2C3E90130060F257 /* CardPresentAnimationController.swift in Sources */,
 				63C3E4DA2C3C0A210060F257 /* OnboardingViewController.swift in Sources */,
 				63603EFC2C64F77E00F4C115 /* StorageViewController.swift in Sources */,
+				631869C62C731D430026F389 /* ReplyFeedbackViewController.swift in Sources */,
 				63C3E5162C49325A0060F257 /* EmojiViewController.swift in Sources */,
 				63C3E4E72C3CF30E0060F257 /* BaseViewController.swift in Sources */,
 				63C3E4F62C3FA8D40060F257 /* LoginNumberViewController.swift in Sources */,
@@ -744,6 +771,7 @@
 				63C3E4E52C3CF23C0060F257 /* UIConstants.swift in Sources */,
 				63C3E52D2C4F8D0A0060F257 /* ReviewsCollectionViewCell.swift in Sources */,
 				63C3E5072C4159F00060F257 /* OTPViewController.swift in Sources */,
+				631869C42C731D2B0026F389 /* YourFeedbackViewController.swift in Sources */,
 				63C3E5272C4E31B60060F257 /* DataBoxCollectionViewCell.swift in Sources */,
 				63C3E52B2C4F8BAA0060F257 /* AppFilesView.swift in Sources */,
 				63C3E5142C4514C80060F257 /* CustomRoundedView.swift in Sources */,

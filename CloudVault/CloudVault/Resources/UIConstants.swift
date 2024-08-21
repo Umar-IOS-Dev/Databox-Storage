@@ -152,35 +152,6 @@ extension UIFont {
     static let neuphoriaSubHeading = UIFont(name: "Lexend-Regular", size: 15)
     static let neuphoriaBody = UIFont(name: "Lexend-Regular", size: 14)
     static let neuphoriaCaption = UIFont(name: "Lexend-Regular", size: 10)
-    
-    static func cloudVaultRegularText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "SegoeUIThis", size: size) ?? UIFont.systemFont(ofSize: size)
-    }
-    
-    static func cloudVaultItalicText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "SegoeUIThis-Italic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
-    }
-    
-    static func cloudVaultBoldText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "SegoeUIThis-Bold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
-    }
-    
-    static func cloudVaultBoldItalicText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "SegoeUIThis-BoldItalic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
-    }
-    
-    static func cloudVaultSemiBoldText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "STIXTwoText_SemiBold", size: size) ?? UIFont.systemFont(ofSize: size, weight: .semibold)
-    }
-    
-    static func cloudVaultItalicSemiBoldText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "STIXTwoText-Italic_SemiBold-Italic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
-    }
-    
-    static func cloudVaultItalicSemiLightText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "SegoeUI-Semilight", size: size) ?? UIFont.italicSystemFont(ofSize: size)
-    }
-    
 }
 
 extension String {
@@ -213,19 +184,19 @@ extension String {
         
         // First part: Bold with black color
         attributedString.addAttributes([
-            .font: UIFont.cloudVaultBoldText(ofSize: 16),
+            .font: FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16),
             .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         ], range: firstPartRange)
         
         // Second part: Regular with grey color
         attributedString.addAttributes([
-            .font: UIFont.cloudVaultRegularText(ofSize: 16),
+            .font: FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 16),
             .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5412946429)
         ], range: secondPartRange)
         
         // Third part: Bold with black color
         attributedString.addAttributes([
-            .font: UIFont.cloudVaultBoldText(ofSize: 16),
+            .font: FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16),
             .foregroundColor: #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         ], range: thirdPartRange)
         
@@ -270,5 +241,43 @@ struct FontManager {
         static let title = FontManager.segoeUIFont(size: Sizes.title)
         static let body = FontManager.segoeUIFont(size: Sizes.body)
         static let caption = FontManager.segoeUIFont(size: Sizes.caption)
+    }
+}
+
+class FontManagerDatabox {
+    static let shared = FontManagerDatabox()
+    
+    private init() {}
+    
+    func customFont(ofSize size: CGFloat) -> UIFont? {
+        return UIFont(name: "YourCustomFontName", size: size)
+    }
+    
+    func cloudVaultRegularText(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "SegoeUIThis", size: size) ?? UIFont.systemFont(ofSize: size)
+    }
+    
+     func cloudVaultItalicText(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "SegoeUIThis-Italic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
+    }
+    
+     func cloudVaultBoldText(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "SegoeUIThis-Bold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
+    }
+    
+     func cloudVaultBoldItalicText(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "SegoeUIThis-BoldItalic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
+    }
+    
+     func cloudVaultSemiBoldText(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "STIXTwoText_SemiBold", size: size) ?? UIFont.systemFont(ofSize: size, weight: .semibold)
+    }
+    
+     func cloudVaultItalicSemiBoldText(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "STIXTwoText-Italic_SemiBold-Italic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
+    }
+    
+     func cloudVaultItalicSemiLightText(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "SegoeUI-Semilight", size: size) ?? UIFont.italicSystemFont(ofSize: size)
     }
 }

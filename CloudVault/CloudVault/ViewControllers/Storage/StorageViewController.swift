@@ -37,7 +37,7 @@ class StorageViewController: BaseViewController {
         currentStorageLabel.textAlignment = .right
         currentStorageLabel.textColor =  #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
        // currentStorageLabel.backgroundColor = .orange
-        currentStorageLabel.font = UIFont.cloudVaultBoldText(ofSize: 100)
+        currentStorageLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 100)
         currentStorageLabel.adjustsFontSizeToFitWidth = true
         return currentStorageLabel
     }()
@@ -47,7 +47,7 @@ class StorageViewController: BaseViewController {
         percentSignLabel.textColor =  #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
        // percentSignLabel.backgroundColor = .red
         percentSignLabel.text = "%"
-        percentSignLabel.font = UIFont.cloudVaultBoldText(ofSize: 56)
+        percentSignLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 56)
         percentSignLabel.adjustsFontSizeToFitWidth = true
         return percentSignLabel
     }()
@@ -57,7 +57,7 @@ class StorageViewController: BaseViewController {
         storageSubLabel.textColor =  #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
        // percentSignLabel.backgroundColor = .red
         storageSubLabel.text = "Storage are in your used"
-        storageSubLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        storageSubLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         return storageSubLabel
     }()
     
@@ -131,42 +131,42 @@ class StorageViewController: BaseViewController {
         imagesDataSizeLabel.text = "16GB"
         //imagesDataSizeLabel.backgroundColor = .black
         imagesDataSizeLabel.textAlignment = .center
-        imagesDataSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 10)
+        imagesDataSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 10)
         imagesDataSizeLabel.textColor = #colorLiteral(red: 1, green: 0.631372549, blue: 0.2941176471, alpha: 1)
         
         let audiosDataSizeLabel = UILabel()
         audiosDataSizeLabel.text = "10GB"
        // audiosDataSizeLabel.backgroundColor = .black
         audiosDataSizeLabel.textAlignment = .center
-        audiosDataSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 10)
+        audiosDataSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 10)
         audiosDataSizeLabel.textColor = #colorLiteral(red: 0.9098039216, green: 0.4196078431, blue: 0.9215686275, alpha: 1)
         
         let contactsDataSizeLabel = UILabel()
         contactsDataSizeLabel.text = "05GB"
        // contactsDataSizeLabel.backgroundColor = .black
         contactsDataSizeLabel.textAlignment = .center
-        contactsDataSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 10)
+        contactsDataSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 10)
         contactsDataSizeLabel.textColor = #colorLiteral(red: 0.2745098039, green: 0.8666666667, blue: 0.2980392157, alpha: 1)
         
         let filesDataSizeLabel = UILabel()
         filesDataSizeLabel.text = "14GB"
        // filesDataSizeLabel.backgroundColor = .black
         filesDataSizeLabel.textAlignment = .center
-        filesDataSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 10)
+        filesDataSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 10)
         filesDataSizeLabel.textColor = #colorLiteral(red: 1, green: 0.8156862745, blue: 0.3450980392, alpha: 1)
         
         let videosDataSizeLabel = UILabel()
         videosDataSizeLabel.text = "08GB"
       //  videosDataSizeLabel.backgroundColor = .black
         videosDataSizeLabel.textAlignment = .center
-        videosDataSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 10)
+        videosDataSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 10)
         videosDataSizeLabel.textColor = #colorLiteral(red: 0.3098039216, green: 0.768627451, blue: 0.9137254902, alpha: 1)
         
         let documentsDataSizeLabel = UILabel()
         documentsDataSizeLabel.text = "11GB"
        // documentsDataSizeLabel.backgroundColor = .black
         documentsDataSizeLabel.textAlignment = .center
-        documentsDataSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 10)
+        documentsDataSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 10)
         documentsDataSizeLabel.textColor = #colorLiteral(red: 0.9843137255, green: 0.4470588235, blue: 0.4470588235, alpha: 1)
         
         insightDataSizeHStackView.addArrangedSubview(imagesDataSizeLabel)
@@ -270,7 +270,7 @@ class StorageViewController: BaseViewController {
 //        documentsGraphView.widthAnchor == 24
         
         let imagesLabel = UILabel()
-        imagesLabel.font = UIFont.cloudVaultBoldText(ofSize: 11)
+        imagesLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 11)
         imagesLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         imagesLabel.textAlignment = .center
         imagesLabel.adjustsFontSizeToFitWidth = true
@@ -278,7 +278,7 @@ class StorageViewController: BaseViewController {
         imagesLabel.text = "Images"
         
         let audiosLabel = UILabel()
-        audiosLabel.font = UIFont.cloudVaultBoldText(ofSize: 11)
+        audiosLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 11)
         audiosLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         audiosLabel.textAlignment = .center
         audiosLabel.adjustsFontSizeToFitWidth = true
@@ -286,7 +286,7 @@ class StorageViewController: BaseViewController {
         audiosLabel.text = "Audio"
         
         let contactsLabel = UILabel()
-        contactsLabel.font = UIFont.cloudVaultBoldText(ofSize: 11)
+        contactsLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 11)
         contactsLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         contactsLabel.textAlignment = .center
         contactsLabel.adjustsFontSizeToFitWidth = true
@@ -294,7 +294,7 @@ class StorageViewController: BaseViewController {
         contactsLabel.text = "Contacts"
         
         let filesLabel = UILabel()
-        filesLabel.font = UIFont.cloudVaultBoldText(ofSize: 11)
+        filesLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 11)
         filesLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         filesLabel.textAlignment = .center
         filesLabel.adjustsFontSizeToFitWidth = true
@@ -302,7 +302,7 @@ class StorageViewController: BaseViewController {
         filesLabel.text = "Files"
         
         let videosLabel = UILabel()
-        videosLabel.font = UIFont.cloudVaultBoldText(ofSize: 11)
+        videosLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 11)
         videosLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         videosLabel.textAlignment = .center
         videosLabel.adjustsFontSizeToFitWidth = true
@@ -310,7 +310,7 @@ class StorageViewController: BaseViewController {
         videosLabel.text = "Videos"
         
         let documentsLabel = UILabel()
-        documentsLabel.font = UIFont.cloudVaultBoldText(ofSize: 11)
+        documentsLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 11)
         documentsLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         documentsLabel.textAlignment = .center
         documentsLabel.adjustsFontSizeToFitWidth = true
@@ -330,37 +330,37 @@ class StorageViewController: BaseViewController {
         insightDataLebelHStackView.addArrangedSubview(documentsLabel)
         
         let imagesCountLabel = UILabel()
-        imagesCountLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 8)
+        imagesCountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
         imagesCountLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5984534439)
         imagesCountLabel.textAlignment = .center
         imagesCountLabel.text = "10"
         
         let audiosCountLabel = UILabel()
-        audiosCountLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 8)
+        audiosCountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
         audiosCountLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5984534439)
         audiosCountLabel.textAlignment = .center
         audiosCountLabel.text = "08"
         
         let contactsCountLabel = UILabel()
-        contactsCountLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 8)
+        contactsCountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
         contactsCountLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5984534439)
         contactsCountLabel.textAlignment = .center
         contactsCountLabel.text = "09"
         
         let filesCountLabel = UILabel()
-        filesCountLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 8)
+        filesCountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
         filesCountLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5984534439)
         filesCountLabel.textAlignment = .center
         filesCountLabel.text = "06"
         
         let videosCountLabel = UILabel()
-        videosCountLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 8)
+        videosCountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
         videosCountLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5984534439)
         videosCountLabel.textAlignment = .center
         videosCountLabel.text = "11"
         
         let documentsCountLabel = UILabel()
-        documentsCountLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 8)
+        documentsCountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
         documentsCountLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5984534439)
         documentsCountLabel.textAlignment = .center
         documentsCountLabel.text = "07"

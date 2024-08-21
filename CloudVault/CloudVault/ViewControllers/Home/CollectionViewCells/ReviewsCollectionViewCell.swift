@@ -45,7 +45,7 @@ class ReviewsCollectionViewCell: UICollectionViewCell {
         userNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         userNameLabel.text = "Jorg Colan"
         userNameLabel.numberOfLines = 0
-        userNameLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        userNameLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         return userNameLabel
     }()
     
@@ -54,7 +54,7 @@ class ReviewsCollectionViewCell: UICollectionViewCell {
         dateLabel.textAlignment = .left
         dateLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         dateLabel.text = "(23 Jun 2024)"
-        dateLabel.font = UIFont.cloudVaultRegularText(ofSize: 10)
+        dateLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 10)
         return dateLabel
     }()
     
@@ -64,7 +64,7 @@ class ReviewsCollectionViewCell: UICollectionViewCell {
         descriptionLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         descriptionLabel.numberOfLines = 0
         descriptionLabel.text = "Dropbox has been an absolute game-changer for me! Its seamless integration across all devices"
-        descriptionLabel.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        descriptionLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         return descriptionLabel
     }()
     

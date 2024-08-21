@@ -48,13 +48,13 @@ class SettingsViewController: BaseViewController {
         let storageSizeLabel = UILabel()
         storageSizeLabel.textAlignment = .left
         storageSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        storageSizeLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        storageSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         storageSizeLabel.text = "32.8GB of 64.0GB"
         
         let dataBoxStorageLabel = UILabel()
         dataBoxStorageLabel.textAlignment = .right
         dataBoxStorageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        dataBoxStorageLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        dataBoxStorageLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         dataBoxStorageLabel.text = "Databox Storage"
         
         storageSizeInfoStackView.addArrangedSubview(storageSizeLabel)
@@ -78,7 +78,7 @@ class SettingsViewController: BaseViewController {
         manageStorageView.configureRoundedCorners(corners: [.bottomLeft, .bottomRight], radius: DesignMetrics.Padding.size8)
         
         let manageStorageBtn = UIButton()
-        manageStorageBtn.setFont(UIFont.cloudVaultBoldText(ofSize: 14), for: .normal)
+        manageStorageBtn.setFont(FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 14), for: .normal)
         manageStorageBtn.setTitleColor(.white, for: .normal)
         manageStorageBtn.setTitle("Manage Storage", for: .normal)
         manageStorageBtn.backgroundColor = .clear
@@ -135,7 +135,7 @@ class SettingsViewController: BaseViewController {
         let settingTitleLabel = UILabel()
         settingTitleLabel.textAlignment = .left
         settingTitleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        settingTitleLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        settingTitleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         settingTitleLabel.text = "System settings"
         
         settingTitleView.addSubview(settingTitleLabel)
@@ -245,7 +245,7 @@ class SettingsViewController: BaseViewController {
         let privacyAndTermsLabel = UILabel()
         privacyAndTermsLabel.textAlignment = .left
         privacyAndTermsLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        privacyAndTermsLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        privacyAndTermsLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         privacyAndTermsLabel.text = "Privacy & Terms"
         
         privacyAndTermsTitleView.addSubview(privacyAndTermsLabel)
@@ -308,6 +308,7 @@ class SettingsViewController: BaseViewController {
         feedBackMainView.addSubview(feedbackContainerView)
         feedbackContainerView.verticalAnchors == feedBackMainView.verticalAnchors
         feedbackContainerView.horizontalAnchors == feedBackMainView.horizontalAnchors + 12
+        addTapGesture(to: feedbackContainerView, tag: 6)
         appendViewToMainVStack(view: feedBackMainView, topPadding: 24)
     }
     
@@ -351,6 +352,8 @@ class SettingsViewController: BaseViewController {
             handleClearCacheContentTap()
         case 5:
             handleCacheSizeContentTap()
+        case 6:
+            giveFeedbackTap()
         default:
             break
         }
@@ -379,6 +382,16 @@ class SettingsViewController: BaseViewController {
     private func handleCacheSizeContentTap() {
         // Handle cache size content tap
         print("Cache Size Tapped")
+    }
+    
+    private func giveFeedbackTap() {
+        // Handle cache size content tap
+        print("feedback Tapped")
+        guard navigationController != nil else { print("not navigation")
+            return }
+        print("feedback Tapped")
+        let feedbackVC = FeedbackViewController()
+        self.navigationController?.pushViewController(feedbackVC, animated: true)
     }
     
 }

@@ -72,13 +72,13 @@ class SplashViewController: BaseViewController {
         
         let slogenLabel = UILabel()
         slogenLabel.text = "Secure Your Memories, Anytime, Anywhere"
-        slogenLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+        slogenLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         slogenLabel.textAlignment = .center
         
         let privacyPolicyLabel = UILabel()
         privacyPolicyLabel.textAlignment = .center
         privacyPolicyLabel.textColor = UIColor.link
-        privacyPolicyLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+        privacyPolicyLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         privacyPolicyLabel.attributedText = "Privacy Policy".underlined()
         
         privacyPolicyLabel.isUserInteractionEnabled = true

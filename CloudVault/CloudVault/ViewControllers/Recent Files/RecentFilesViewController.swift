@@ -21,7 +21,7 @@ class RecentFilesViewController: BaseViewController {
         let filterNameLabel = UILabel()
         filterNameLabel.textAlignment = .left
         filterNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        filterNameLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+        filterNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         filterNameLabel.text = "By Date"
         return filterNameLabel
     }()

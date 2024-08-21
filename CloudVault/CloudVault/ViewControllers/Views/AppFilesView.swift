@@ -20,7 +20,7 @@ class AppFilesView: CustomRoundedView {
         let fileTitleLabel = UILabel()
         fileTitleLabel.textAlignment = .center
         fileTitleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        fileTitleLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        fileTitleLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         return fileTitleLabel
     }()
     
@@ -28,14 +28,14 @@ class AppFilesView: CustomRoundedView {
         let fileCounterLabel = UILabel()
         fileCounterLabel.textAlignment = .center
         fileCounterLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        fileCounterLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 10)
+        fileCounterLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         return fileCounterLabel
     }()
     
     private let fileSizeLabel: UILabel = {
         let fileSizeLabel = UILabel()
         fileSizeLabel.textAlignment = .left
-        fileSizeLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        fileSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         fileSizeLabel.text = "00GB"
         return fileSizeLabel
     }()
@@ -66,7 +66,7 @@ class AppFilesView: CustomRoundedView {
         let fileSizeLabel = UILabel()
         fileSizeLabel.textAlignment = .right
         fileSizeLabel.textColor = labelColor
-        fileSizeLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        fileSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         fileSizeLabel.text = totalSize
         
         fileSizeView.addSubview(fileSizeLabel)

@@ -80,7 +80,7 @@ class ImagePreviewViewController: BaseViewController {
         let imageNameLabel = UILabel()
         imageNameLabel.textAlignment = .center
         imageNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        imageNameLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 24)
+        imageNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 24)
         imageNameLabel.text = imageName
         
         let separatorView = UIView()

@@ -60,10 +60,10 @@ class FeedbackAndContactView: UIView {
         // Sample data for testing
         titleLabel.text = "Title"
         titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        titleLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        titleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         
         subtitleLabel.text = "Subtitle"
-        subtitleLabel.font = UIFont.cloudVaultRegularText(ofSize: 10)
+        subtitleLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 10)
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textColor = .black
     }

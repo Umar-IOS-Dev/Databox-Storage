@@ -120,7 +120,7 @@ class BaseViewController: UIViewController {
         //titleLabel.font = .neuphoriaTitle
         titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
         titleLabel.text = title
-        titleLabel.font = UIFont.cloudVaultBoldText(ofSize: 22)
+        titleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 22)
         titleLabel.heightAnchor == DesignMetrics.Dimensions.height44
         stackView.addArrangedSubview(titleLabel)
         
@@ -244,11 +244,11 @@ class BaseViewController: UIViewController {
         
         let nameLabel = UILabel()
         nameLabel.text = "Nataliya Smith"
-        nameLabel.font = UIFont.cloudVaultBoldText(ofSize: 12)
+        nameLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 12)
         
         let emailLabel = UILabel()
         emailLabel.text = "Younasmughal122@gmail.com"
-        emailLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 12)
+        emailLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         emailLabel.numberOfLines = 0
         
         userInfoStackView.addArrangedSubview(nameLabel)

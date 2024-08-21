@@ -38,7 +38,7 @@ class UploadInfoViewController: BaseViewController {
         let currentPercentLabel = UILabel()
         currentPercentLabel.textAlignment = .center
         currentPercentLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        currentPercentLabel.font = UIFont.cloudVaultBoldText(ofSize: 80)
+        currentPercentLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 80)
         return currentPercentLabel
     }()
     private var timer: Timer?
@@ -70,14 +70,14 @@ class UploadInfoViewController: BaseViewController {
         let fileNameLabel = UILabel()
         fileNameLabel.textAlignment = .center
         fileNameLabel.textColor = #colorLiteral(red: 0.3176470588, green: 0.3607843137, blue: 0.4235294118, alpha: 1)
-        fileNameLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        fileNameLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         fileNameLabel.text = "File Name"
         fileNameLabel.heightAnchor == DesignMetrics.Dimensions.height24
         
         let fileNameSubLabel = UILabel()
         fileNameSubLabel.textAlignment = .center
         fileNameSubLabel.textColor = #colorLiteral(red: 0.3176470588, green: 0.3607843137, blue: 0.4235294118, alpha: 1)
-        fileNameSubLabel.font = UIFont.cloudVaultRegularText(ofSize: 16)
+        fileNameSubLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 16)
         fileNameSubLabel.text = "All images upload to databox"
         fileNameSubLabel.heightAnchor == DesignMetrics.Dimensions.height20
         
@@ -97,13 +97,13 @@ class UploadInfoViewController: BaseViewController {
         let totalPercentLabel = UILabel()
         totalPercentLabel.textAlignment = .left
         totalPercentLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        totalPercentLabel.font = UIFont.cloudVaultBoldText(ofSize: 36)
+        totalPercentLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 36)
         totalPercentLabel.text = "100%"
         
         let sizeInfoLabel = UILabel()
         sizeInfoLabel.textAlignment = .center
         sizeInfoLabel.textColor = #colorLiteral(red: 0.3176470588, green: 0.3607843137, blue: 0.4235294118, alpha: 1)
-        sizeInfoLabel.font = UIFont.cloudVaultSemiBoldText(ofSize: 14)
+        sizeInfoLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         sizeInfoLabel.text = "40MB Data remains from 45MB"
         sizeInfoLabel.heightAnchor == DesignMetrics.Dimensions.height16
         
@@ -114,7 +114,7 @@ class UploadInfoViewController: BaseViewController {
         let cancelButton = UIButton()
         cancelButton.backgroundColor = #colorLiteral(red: 1, green: 0.3882352941, blue: 0.3882352941, alpha: 0.08346619898)
         cancelButton.setTitle("Cancel Uploading", for: .normal)
-        cancelButton.setFont(UIFont.cloudVaultBoldText(ofSize: 14), for: .normal)
+        cancelButton.setFont(FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 14), for: .normal)
         let titleColorForButton = #colorLiteral(red: 1, green: 0.3882352941, blue: 0.3882352941, alpha: 1)
         cancelButton.setTitleColor(titleColorForButton, for: .normal)
         cancelButton.heightAnchor == DesignMetrics.Dimensions.height48

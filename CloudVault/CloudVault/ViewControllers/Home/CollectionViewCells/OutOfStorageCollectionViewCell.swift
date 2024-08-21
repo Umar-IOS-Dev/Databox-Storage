@@ -19,7 +19,7 @@ class OutOfStorageCollectionViewCell: UICollectionViewCell {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .left
         titleLabel.text = "Running Out of Storage"
-        titleLabel.font = UIFont.cloudVaultBoldText(ofSize: 16)
+        titleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         return titleLabel
     }()
     private let descriptionLabel: UILabel = {
@@ -27,7 +27,7 @@ class OutOfStorageCollectionViewCell: UICollectionViewCell {
         descriptionLabel.textAlignment = .left
         descriptionLabel.text = "Experience seamless navigation and top-notch services on our website"
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.font = UIFont.cloudVaultRegularText(ofSize: 12)
+        descriptionLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         return descriptionLabel
     }()
     private let storageImageView: UIImageView = {
