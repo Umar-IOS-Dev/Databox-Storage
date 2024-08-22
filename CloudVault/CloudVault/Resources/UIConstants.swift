@@ -34,6 +34,7 @@ struct DesignMetrics {
     
     // Must start with height/width and include the number at the end of the name, will be easy to use that way
     struct Dimensions {
+        static let height00:  CGFloat = 0.0
         static let height12:  CGFloat = 12.0
         static let height14:  CGFloat = 14.0
         static let height16:  CGFloat = 16.0

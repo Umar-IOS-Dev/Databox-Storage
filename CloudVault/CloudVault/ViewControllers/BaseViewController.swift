@@ -19,7 +19,7 @@ class BaseViewController: UIViewController {
     private let footerView = UIView()
     private let navBarContainer = UIView()
     private let focusbandButtonsStack = UIStackView()
-    private let checkBoxButton = UIButton()
+    let checkBoxButton = UIButton()
     private let imageActionButton = UIButton()
     
     override func viewDidLoad() {
@@ -28,7 +28,7 @@ class BaseViewController: UIViewController {
     
     
     /// ConfigureUI: Adds mainContentStack to view, ands sets up navbar on top.
-    func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true) {
+    func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true, showAsSubViewController: Bool = false) {
         //Basic functionality that you want to include in most of view controllers
         view.backgroundColor = UIColor(named: "appBackgroundColor")//.neuphoriaMainViewBG
         let backgroundImageView = UIImageView(image: .neuphoriaBackgroundImage)
@@ -81,68 +81,76 @@ class BaseViewController: UIViewController {
             setupNavBarNew(title: title, showBackButton: showBackButton, hideBackground: hideBackground)
         }
         else {
-            setupNavBar(title: title, showBackButton: showBackButton, hideBackground: hideBackground)
+            setupNavBar(title: title, showBackButton: showBackButton, hideBackground: hideBackground, showAsSubViewController: showAsSubViewController)
         }
     }
     
-    private func setupNavBar(title: String, showBackButton: Bool, hideBackground: Bool) {
-        navBarContainer.heightAnchor == DesignMetrics.Dimensions.height44
-        if (hideBackground) {
-            navBarContainer.backgroundColor = .white
-        }
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = DesignMetrics.Padding.size12
-        
-        let backButton = UIButton(type: .system)
-        backButton.sizeAnchors == CGSize(width: DesignMetrics.Dimensions.width44, height: DesignMetrics.Dimensions.height44)
-        backButton.isHidden = !showBackButton
-        if #available(iOS 14.0, *) {
-            backButton.addAction(UIAction(handler: { [weak self] _ in
-                self?.backButtonAction()
-            }), for: .touchUpInside)
-        } else {
-            // Fallback on earlier versions
-        }
-        backButton.setImage(.cloudVaultBackButton?.withRenderingMode(.alwaysOriginal), for: .normal)
-        
-        if showBackButton {
-            let backButtonView = UIView()
-            backButtonView.backgroundColor = .clear
-            stackView.addArrangedSubview(backButtonView)
-            backButtonView.widthAnchor == DesignMetrics.Dimensions.width50
-            backButtonView.addSubview(backButton)
-            backButton.topAnchor == backButtonView.topAnchor + 20
-            backButton.horizontalAnchors == backButtonView.horizontalAnchors
-//            stackView.addArrangedSubview(backButton)
-        }
-        
-        //titleLabel.font = .neuphoriaTitle
-        titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        titleLabel.text = title
-        titleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 22)
-        titleLabel.heightAnchor == DesignMetrics.Dimensions.height44
-        stackView.addArrangedSubview(titleLabel)
-        
-        let navBarStack = UIStackView()
-        navBarStack.axis = .horizontal
-        navBarStack.distribution = .fill
-        navBarStack.spacing = DesignMetrics.Padding.size16
-        navBarContainer.addSubview(navBarStack)
-        if(hideBackground) {
-            navBarStack.backgroundColor = .white
-            navBarStack.edgeAnchors == navBarContainer.edgeAnchors - 16
-            addButtonsToNavbar(addSpacerView: false)
+    private func setupNavBar(title: String, showBackButton: Bool, hideBackground: Bool, showAsSubViewController: Bool) {
+        if(showAsSubViewController) {
+            navBarContainer.heightAnchor == DesignMetrics.Dimensions.height00
+            navBarContainer.isHidden = true
         }
         else {
-            navBarStack.edgeAnchors == navBarContainer.edgeAnchors
-            addButtonsToNavbar(addSpacerView: true)
-        }
-        navBarStack.addArrangedSubview(stackView)
-        navBarStack.addArrangedSubview(UIView())
-        navBarStack.addArrangedSubview(focusbandButtonsStack)
-        // FocusbandButtons.shared.setButtonsInStack(stack: focusbandButtonsStack)
-        // FocusbandButtons.shared.focusBandNavigationDelegate = FocusBandViewController.shared
+            navBarContainer.heightAnchor == DesignMetrics.Dimensions.height44
+            navBarContainer.isHidden = false
+            if (hideBackground) {
+                navBarContainer.backgroundColor = .white
+            }
+            let stackView = UIStackView()
+            stackView.axis = .horizontal
+            stackView.spacing = DesignMetrics.Padding.size12
+            
+            let backButton = UIButton(type: .system)
+            backButton.sizeAnchors == CGSize(width: DesignMetrics.Dimensions.width44, height: DesignMetrics.Dimensions.height44)
+            backButton.isHidden = !showBackButton
+            if #available(iOS 14.0, *) {
+                backButton.addAction(UIAction(handler: { [weak self] _ in
+                    self?.backButtonAction()
+                }), for: .touchUpInside)
+            } else {
+                // Fallback on earlier versions
+            }
+            backButton.setImage(.cloudVaultBackButton?.withRenderingMode(.alwaysOriginal), for: .normal)
+            
+            if showBackButton {
+                let backButtonView = UIView()
+                backButtonView.backgroundColor = .clear
+                stackView.addArrangedSubview(backButtonView)
+                backButtonView.widthAnchor == DesignMetrics.Dimensions.width50
+                backButtonView.addSubview(backButton)
+                backButton.topAnchor == backButtonView.topAnchor + 20
+                backButton.horizontalAnchors == backButtonView.horizontalAnchors
+                //            stackView.addArrangedSubview(backButton)
+            }
+            
+            //titleLabel.font = .neuphoriaTitle
+            titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+            titleLabel.text = title
+            titleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 22)
+            titleLabel.heightAnchor == DesignMetrics.Dimensions.height44
+            stackView.addArrangedSubview(titleLabel)
+            
+            let navBarStack = UIStackView()
+            navBarStack.axis = .horizontal
+            navBarStack.distribution = .fill
+            navBarStack.spacing = DesignMetrics.Padding.size16
+            navBarContainer.addSubview(navBarStack)
+            if(hideBackground) {
+                navBarStack.backgroundColor = .white
+                navBarStack.edgeAnchors == navBarContainer.edgeAnchors - 16
+                addButtonsToNavbar(addSpacerView: false)
+            }
+            else {
+                navBarStack.edgeAnchors == navBarContainer.edgeAnchors
+                addButtonsToNavbar(addSpacerView: true)
+            }
+            navBarStack.addArrangedSubview(stackView)
+            navBarStack.addArrangedSubview(UIView())
+            navBarStack.addArrangedSubview(focusbandButtonsStack)
+            // FocusbandButtons.shared.setButtonsInStack(stack: focusbandButtonsStack)
+            // FocusbandButtons.shared.focusBandNavigationDelegate = FocusBandViewController.shared
+            
+        }// else
     }
     
     private func addButtonsToNavbar(addSpacerView: Bool) {

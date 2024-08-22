@@ -25,8 +25,8 @@ class FeedbackViewController: BaseViewController {
             hideFocusbandOptionFromNavBar()
         }
     
-    override func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true) {
-        super.configureUI(title: title, showNavBar: showNavBar, showBackButton: showBackButton, hideBackground: hideBackground, showMainNavigation: showMainNavigation, addHorizontalPadding: addHorizontalPadding)
+    override func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true, showAsSubViewController: Bool = false) {
+        super.configureUI(title: title, showNavBar: showNavBar, showBackButton: showBackButton, hideBackground: hideBackground, showMainNavigation: showMainNavigation, addHorizontalPadding: addHorizontalPadding, showAsSubViewController: showAsSubViewController)
         setupSegmentedView()
         setupPageViewController()
     }
@@ -57,7 +57,7 @@ class FeedbackViewController: BaseViewController {
             pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                // pageViewController.view.topAnchor.constraint(equalTo: segmentedView.bottomAnchor),
-                pageViewController.view.topAnchor.constraint(equalTo: segmentedView.bottomAnchor, constant: 24),
+                pageViewController.view.topAnchor.constraint(equalTo: segmentedView.bottomAnchor),
                 pageViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 pageViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 pageViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)

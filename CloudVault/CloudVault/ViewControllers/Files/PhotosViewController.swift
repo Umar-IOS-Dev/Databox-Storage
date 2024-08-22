@@ -96,7 +96,7 @@ class PhotosViewController: BaseViewController {
         collectionView.collectionViewLayout.register(SectionBackgroundDecorationView.self, forDecorationViewOfKind: "background")
         
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = true
         collectionView.allowsMultipleSelection = true
         return collectionView
     }()
@@ -224,8 +224,8 @@ class PhotosViewController: BaseViewController {
         
     }
     
-    override func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true) {
-        super.configureUI(title: title, showNavBar: showNavBar, showBackButton: showBackButton, hideBackground: hideBackground, showMainNavigation: showMainNavigation, addHorizontalPadding: addHorizontalPadding)
+    override func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true, showAsSubViewController: Bool = false) {
+        super.configureUI(title: title, showNavBar: showNavBar, showBackButton: showBackButton, hideBackground: hideBackground, showMainNavigation: showMainNavigation, addHorizontalPadding: addHorizontalPadding, showAsSubViewController: showAsSubViewController)
         filterView()
         setupCollectionView()
         configureFooterView()
@@ -419,6 +419,7 @@ class PhotosViewController: BaseViewController {
             switch status {
             case .authorized:
                 DispatchQueue.main.async {
+                    self.showProgress()
                     self.showPhotoGallery()
                 }
                 print("Authorized Gallery")
@@ -436,6 +437,7 @@ class PhotosViewController: BaseViewController {
     
     private func showPhotoGallery() {
         fetchFiles()
+        
     }
     
     private func fetchFiles() {
@@ -459,13 +461,15 @@ class PhotosViewController: BaseViewController {
         loadNextBatch()
     }
     
+
+    
     func getPhotoDetails(asset: PHAsset) {
         let imageManager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.isSynchronous = true
         
         imageManager.requestImageDataAndOrientation(for: asset, options: options) { [weak self] (data, dataUTI, orientation, info) in
-            guard let self = self, let data = data, let image = UIImage(data: data) else { return }
+            guard let self = self, let data = data else { return }
             
             let sizeInBytes = data.count // Size in bytes
             let sizeInMB = Double(sizeInBytes) / (1024 * 1024) // Convert bytes to MB
@@ -481,7 +485,7 @@ class PhotosViewController: BaseViewController {
             let dateCreatedString = dateFormatter.string(from: dateCreated ?? Date())
             
             let imageName = "\(asset.localIdentifier)"
-            let imageInfo = MediaData(icon: image, size: "\(formattedSizeInMB)", name: imageName, createdAt: dateCreatedString, type: .video, asset: asset, url: nil)
+            let imageInfo = MediaData(icon: UIImage(), size: "\(formattedSizeInMB)", name: imageName, createdAt: dateCreatedString, type: .video, asset: asset, url: nil)
             
             self.filesDataSource[dateCreatedString, default: []].append(imageInfo)
         }
@@ -500,9 +504,16 @@ class PhotosViewController: BaseViewController {
             }
             currentBatchIndex += 1
             self.applySnapshot()
-            
             sortSectionKeys()
+
+            // Check if there are more assets to load
+            if end < fetchResult.count {
+                // Trigger the next batch
+                loadNextBatch()
+            }
         }
+        
+        self.hideProgress()
     }
     
     private func getDocumentDetails(url: URL) {
@@ -610,14 +621,14 @@ class PhotosViewController: BaseViewController {
                 case .image, .video, .favourite, .shared:
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagesCollectionViewCell.reuseIdentifier, for: indexPath) as! ImagesCollectionViewCell
                     if let asset = imageData.asset {
-                        loadImage(for: asset, into: cell, ImageName: imageData.name, ImageSize: imageData.size)
+                        loadImage(for: asset, into: cell, ImageName: imageData.name, ImageSize: imageData.size, cellindexPath: indexPath)
                     }
                     //  cell.configure(with: imageData)
-                    let isSelected = self.selectedIndexPaths.contains(indexPath)
-                    cell.setSelected(isSelected)
-                    cell.button.tag = indexPath.item
-                    cell.button.params = (section: indexPath.section, item: indexPath.item)
-                    cell.button.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+//                    let isSelected = self.selectedIndexPaths.contains(indexPath)
+//                    cell.setSelected(isSelected)
+//                    cell.button.tag = indexPath.item
+//                    cell.button.params = (section: indexPath.section, item: indexPath.item)
+//                    cell.button.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                     return cell
                     
                 case .document:
@@ -634,7 +645,7 @@ class PhotosViewController: BaseViewController {
             case .list:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagesCollectionViewCell1.reuseIdentifier, for: indexPath) as! ImagesCollectionViewCell1
                 if let asset = imageData.asset {
-                    loadImage(for: asset, into: cell, ImageName: imageData.name, ImageSize: imageData.size)
+                    loadImage(for: asset, into: cell, ImageName: imageData.name, ImageSize: imageData.size, cellindexPath: indexPath)
                 }
                 // cell.configure(with: imageData)
                 let isSelected = self.selectedIndexPaths.contains(indexPath)
@@ -819,7 +830,7 @@ class PhotosViewController: BaseViewController {
         switch currentMediaType {
         case .image,.favourite,.shared:
             let imageName = filesDataSource[dateKey]?[indexPath.item].name ?? ""
-            let options = [
+            let optionsForImage = [
                 BottomSheetOption(icon: UIImage(named: "shareIcon")!, title: "Share"),
                 BottomSheetOption(icon: UIImage(named: "accessIcon")!, title: "Manage Access"),
                 BottomSheetOption(icon: UIImage(named: "favouriteIcon")!, title: "Add To Favourite"),
@@ -836,8 +847,27 @@ class PhotosViewController: BaseViewController {
             ]
             if let mediaData = filesDataSource[dateKey]?[indexPath.item] {
                 
-                let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: options, previewImage: mediaData.icon)
-                self.navigationController?.pushViewController(imagePreviewVC, animated: true)
+//                let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: optionsForImage, previewImage: mediaData.icon)
+//                self.navigationController?.pushViewController(imagePreviewVC, animated: true)
+                
+                let imageManager = PHImageManager.default()
+                    let options = PHImageRequestOptions()
+                    options.isSynchronous = true
+                    options.deliveryMode = .highQualityFormat
+
+                    // Set the target size based on your needs
+                    let targetSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+
+                imageManager.requestImage(for: mediaData.asset!, targetSize: targetSize, contentMode: .aspectFit, options: options) { [weak self] (image, info) in
+                        guard let self = self, let image = image else {
+                            print("Failed to get the image from the asset")
+                            return
+                        }
+
+                        // Initialize your ImagePreviewViewController with the fetched image
+                        let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: optionsForImage, previewImage: image)
+                        self.navigationController?.pushViewController(imagePreviewVC, animated: true)
+                    }
                 
             }
         case .video:
@@ -955,7 +985,7 @@ class PhotosViewController: BaseViewController {
     
 }
 
-extension PhotosViewController: UICollectionViewDelegate {
+extension PhotosViewController: UICollectionViewDelegate , UIScrollViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch self.currentViewType {
         case .grid:
@@ -1044,25 +1074,36 @@ extension PhotosViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print("willDisplay Called for indexPath = \(indexPath.item)")
         let section = sortedSectionKeys[indexPath.section]
         if let items = filesDataSource[section], indexPath.item < items.count {
             let mediaData = items[indexPath.item]
-            loadImage(for: mediaData.asset!, into: cell, ImageName: mediaData.name, ImageSize: mediaData.size)
+            loadImage(for: mediaData.asset!, into: cell, ImageName: mediaData.name, ImageSize: mediaData.size, cellindexPath: indexPath)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let section = sortedSectionKeys[indexPath.section]
-        if let items = filesDataSource[section], indexPath.item < items.count {
-            let mediaData = items[indexPath.item]
-            cancelImageLoad(for: mediaData.asset!)
-        }
-        if let cell = cell as? ImagesCollectionViewCell {
-            cell.button.removeTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
-        }
+        print("didEndDisplaying Called for indexPath = \(indexPath.item)")
+        // Handle cells that are no longer visible
+          let section = sortedSectionKeys[indexPath.section]
+          if let items = filesDataSource[section], indexPath.item < items.count {
+              let mediaData = items[indexPath.item]
+              cancelImageLoad(for: mediaData.asset!)
+          }
+          
+          // Remove button targets
+          if let imagesCell = cell as? ImagesCollectionViewCell {
+              imagesCell.button.removeTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+          } else if let imagesCell1 = cell as? ImagesCollectionViewCell1 {
+              imagesCell1.optionsButton.removeTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+          }
     }
     
-    private func loadImage(for asset: PHAsset, into cell: UICollectionViewCell, ImageName: String, ImageSize: String) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+    }
+    
+    private func loadImage(for asset: PHAsset, into cell: UICollectionViewCell, ImageName: String, ImageSize: String, cellindexPath: IndexPath) {
         let imageManager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.isSynchronous = false
@@ -1090,6 +1131,11 @@ extension PhotosViewController: UICollectionViewDelegate {
                         gridCell.imagesView.image = image
                         gridCell.imageNameLabel.text = ImageName
                         gridCell.sizeLabel.text = ImageSize
+                        let isSelected = self.selectedIndexPaths.contains(cellindexPath)
+                        gridCell.setSelected(isSelected)
+                        gridCell.button.tag = cellindexPath.item
+                        gridCell.button.params = (section: cellindexPath.section, item: cellindexPath.item)
+                        gridCell.button.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                     }
                 } else if let listCell = cell as? ImagesCollectionViewCell1 {
                     // Update image for list cell
@@ -1097,6 +1143,11 @@ extension PhotosViewController: UICollectionViewDelegate {
                         listCell.imagesView.image = image
                         listCell.imageNameLabel.text = ImageName
                         listCell.sizeLabel.text = ImageSize
+                        let isSelected = self.selectedIndexPaths.contains(cellindexPath)
+                        listCell.setSelected(isSelected)
+                        listCell.optionsButton.tag = cellindexPath.item
+                        listCell.optionsButton.params = (section: cellindexPath.section, item: cellindexPath.item)
+                        listCell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                     }
                 }
             }

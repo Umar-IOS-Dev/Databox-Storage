@@ -117,8 +117,8 @@ class ImagesCollectionViewCell: UICollectionViewCell {
         
         button.topAnchor == contentView.topAnchor + 4
         button.trailingAnchor == contentView.trailingAnchor - 4
-        button.widthAnchor == 14
-        button.heightAnchor == 14
+        button.widthAnchor == 30
+        button.heightAnchor == 30
         
         imageNameLabel.bottomAnchor == contentView.bottomAnchor - 4
         imageNameLabel.centerXAnchor == contentView.centerXAnchor
@@ -135,7 +135,7 @@ class ImagesCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with data: MediaData) {
-       // imagesView.image = data.icon
+        imagesView.image = data.icon
         sizeLabel.text = data.size
         imageNameLabel.text = data.name
     }
@@ -365,7 +365,7 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
     }
     
     func configure(with data: MediaData) {
-        //imagesView.image = data.icon
+        imagesView.image = data.icon
         sizeLabel.text = data.size
         imageNameLabel.text = data.name
     }
