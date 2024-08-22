@@ -314,8 +314,12 @@ class PhotosViewController: BaseViewController {
                 
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = spacing
+                
+                
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: "background")]
+                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
+                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
+                section.decorationItems = [backgroundItem]
                 section.boundarySupplementaryItems = [
                     NSCollectionLayoutBoundarySupplementaryItem(
                         layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
@@ -334,9 +338,12 @@ class PhotosViewController: BaseViewController {
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 10
+                section.interGroupSpacing = 5
+                
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                section.decorationItems = [NSCollectionLayoutDecorationItem.background(elementKind: "background")]
+                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
+                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
+                section.decorationItems = [backgroundItem]
                 section.boundarySupplementaryItems = [
                     NSCollectionLayoutBoundarySupplementaryItem(
                         layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
@@ -344,6 +351,7 @@ class PhotosViewController: BaseViewController {
                         alignment: .top
                     )
                 ]
+                
                 return section
             }
         }
