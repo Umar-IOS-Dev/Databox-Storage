@@ -24,6 +24,10 @@
 		63603F0A2C6A1C8B00F4C115 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603F092C6A1C8B00F4C115 /* ContactsViewController.swift */; };
 		638A4BAF2C60F035003B0DEC /* DocumentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A4BAE2C60F035003B0DEC /* DocumentsViewController.swift */; };
 		63ADF6452C60FE750017F5CC /* DocumentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ADF6442C60FE740017F5CC /* DocumentTableViewCell.swift */; };
+		63B19A432C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A422C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift */; };
+		63B19A452C7C459C00BB2CEC /* ImagePreviewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A442C7C459C00BB2CEC /* ImagePreviewAnimator.swift */; };
+		63B19A472C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A462C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift */; };
+		63B19A492C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A482C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift */; };
 		63C3E4A12C3BFAEF0060F257 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C3E4A02C3BFAEF0060F257 /* AppDelegate.swift */; };
 		63C3E4A32C3BFAEF0060F257 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C3E4A22C3BFAEF0060F257 /* SceneDelegate.swift */; };
 		63C3E4AA2C3BFAF00060F257 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63C3E4A92C3BFAF00060F257 /* Assets.xcassets */; };
@@ -126,6 +130,10 @@
 		63603F092C6A1C8B00F4C115 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		638A4BAE2C60F035003B0DEC /* DocumentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentsViewController.swift; sourceTree = "<group>"; };
 		63ADF6442C60FE740017F5CC /* DocumentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTableViewCell.swift; sourceTree = "<group>"; };
+		63B19A422C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackCollectionViewCell.swift; sourceTree = "<group>"; };
+		63B19A442C7C459C00BB2CEC /* ImagePreviewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewAnimator.swift; sourceTree = "<group>"; };
+		63B19A462C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackReplyCollectionViewCell.swift; sourceTree = "<group>"; };
+		63B19A482C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackReplyDetailViewController.swift; sourceTree = "<group>"; };
 		63C3E49D2C3BFAEF0060F257 /* CloudVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C3E4A02C3BFAEF0060F257 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63C3E4A22C3BFAEF0060F257 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -235,6 +243,8 @@
 				631869C32C731D2B0026F389 /* YourFeedbackViewController.swift */,
 				631869C52C731D430026F389 /* ReplyFeedbackViewController.swift */,
 				631869C92C731F380026F389 /* FeedbackViewController.swift */,
+				63B19A482C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift */,
+				63B19A412C79EB5300BB2CEC /* cells */,
 			);
 			path = Feedback;
 			sourceTree = "<group>";
@@ -245,6 +255,15 @@
 				63603EFB2C64F77E00F4C115 /* StorageViewController.swift */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		63B19A412C79EB5300BB2CEC /* cells */ = {
+			isa = PBXGroup;
+			children = (
+				63B19A422C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift */,
+				63B19A462C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift */,
+			);
+			path = cells;
 			sourceTree = "<group>";
 		};
 		63C3E4942C3BFAEF0060F257 = {
@@ -374,6 +393,7 @@
 				63C3E5132C4514C80060F257 /* CustomRoundedView.swift */,
 				63C3E4EB2C3D60930060F257 /* CardView.swift */,
 				63C3E5082C4294040060F257 /* OtpSuccessView.swift */,
+				63B19A442C7C459C00BB2CEC /* ImagePreviewAnimator.swift */,
 				63C3E50A2C429EC20060F257 /* OtpSuccessViewController.swift */,
 				63C3E4F02C3E944B0060F257 /* AppIconView.swift */,
 				63C3E52A2C4F8BAA0060F257 /* AppFilesView.swift */,
@@ -742,6 +762,7 @@
 				63C3E4A12C3BFAEF0060F257 /* AppDelegate.swift in Sources */,
 				63C3E5492C57767E0060F257 /* RecentFilesViewController.swift in Sources */,
 				63C3E5292C4E45710060F257 /* OutOfStorageCollectionViewCell.swift in Sources */,
+				63B19A452C7C459C00BB2CEC /* ImagePreviewAnimator.swift in Sources */,
 				63603EFE2C65EFF600F4C115 /* StorageVerticalUsageView.swift in Sources */,
 				63C3E51E2C4A70350060F257 /* CustomTabBar.swift in Sources */,
 				63603EE32C6213D700F4C115 /* UploadInfoViewController.swift in Sources */,
@@ -751,10 +772,12 @@
 				63C3E4DC2C3C0A8A0060F257 /* OnboardingPageViewController.swift in Sources */,
 				63C3E51B2C4A4FB30060F257 /* HomeViewController.swift in Sources */,
 				63C3E5092C4294040060F257 /* OtpSuccessView.swift in Sources */,
+				63B19A492C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift in Sources */,
 				63C3E4A32C3BFAEF0060F257 /* SceneDelegate.swift in Sources */,
 				63ADF6452C60FE750017F5CC /* DocumentTableViewCell.swift in Sources */,
 				63C3E50F2C44EBB70060F257 /* LoginWithEmailPasswordViewController.swift in Sources */,
 				63C3E5402C523E650060F257 /* SystemSettingView.swift in Sources */,
+				63B19A472C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift in Sources */,
 				63603F022C674B4E00F4C115 /* StorageHorizontalUsageView.swift in Sources */,
 				63C3E4EA2C3D60390060F257 /* CardViewController.swift in Sources */,
 				63C3E5202C4A70EE0060F257 /* CustomTabBarController.swift in Sources */,
@@ -766,6 +789,7 @@
 				631869C62C731D430026F389 /* ReplyFeedbackViewController.swift in Sources */,
 				63C3E5162C49325A0060F257 /* EmojiViewController.swift in Sources */,
 				63C3E4E72C3CF30E0060F257 /* BaseViewController.swift in Sources */,
+				63B19A432C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift in Sources */,
 				63C3E4F62C3FA8D40060F257 /* LoginNumberViewController.swift in Sources */,
 				63C3E5122C4505800060F257 /* CreateProfileViewController.swift in Sources */,
 				63C3E4E52C3CF23C0060F257 /* UIConstants.swift in Sources */,
@@ -963,7 +987,9 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/CloudVault/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudVault/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "CloudVault want to access your Contact List to save your data to our Server";
+				INFOPLIST_KEY_NSContactsUsageDescription = "This app requires access to your Contacts to upload them to your account.";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "This app requires access to your documents to upload them to your account.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to your Photos to upload them to your account.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -1001,7 +1027,9 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/CloudVault/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudVault/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "CloudVault want to access your Contact List to save your data to our Server";
+				INFOPLIST_KEY_NSContactsUsageDescription = "This app requires access to your Contacts to upload them to your account.";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "This app requires access to your documents to upload them to your account.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to your Photos to upload them to your account.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";

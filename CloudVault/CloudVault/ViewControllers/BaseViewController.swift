@@ -24,7 +24,55 @@ class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        let keyboardHeight = keyboardFrame.height
+
+        // Find the scroll view in the stack view
+        if let scrollView = findScrollView(in: self.view) {
+            UIView.animate(withDuration: 0.3) {
+                scrollView.contentInset.bottom = keyboardHeight
+                scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
+            }
+        }
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        UIView.animate(withDuration: 0.3) {
+            if let scrollView = self.findScrollView(in: self.view) {
+                scrollView.contentInset.bottom = 0
+                scrollView.verticalScrollIndicatorInsets.bottom = 0
+            }
+        }
+    }
+
+    private func findScrollView(in view: UIView) -> UIScrollView? {
+        if let scrollView = view as? UIScrollView {
+            return scrollView
+        }
+        for subview in view.subviews {
+            if let foundScrollView = findScrollView(in: subview) {
+                return foundScrollView
+            }
+        }
+        return nil
+    }
+
     
     
     /// ConfigureUI: Adds mainContentStack to view, ands sets up navbar on top.
@@ -466,6 +514,8 @@ class BaseViewController: UIViewController {
     /// For button created in child controller only
     func backButtonAction() {
         navigationController?.popViewController(animated: true)
+        
+        
     }
     
     /// backButtonAction: Basically dismisses the ViewController
@@ -503,5 +553,12 @@ class BaseViewController: UIViewController {
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+extension BaseViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Ensure that the gesture recognizer should begin when there are more than one view controllers in the stack
+        return self.navigationController?.viewControllers.count ?? 0 > 1
     }
 }

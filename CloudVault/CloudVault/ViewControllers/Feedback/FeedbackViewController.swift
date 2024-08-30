@@ -43,7 +43,8 @@ class FeedbackViewController: BaseViewController {
             appendViewToMainVStack(view: segmentContainerView, topPadding: 24)
             
             segmentedView.didSelectSegment = { [weak self] index in
-                self?.setViewController(index: index)
+                guard let self = self else { return }
+                self.setViewController(index: index)
             }
         }
         

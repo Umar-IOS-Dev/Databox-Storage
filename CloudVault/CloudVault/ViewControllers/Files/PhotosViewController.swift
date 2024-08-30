@@ -10,16 +10,11 @@ import Anchorage
 import Photos
 import AVKit
 import SDWebImage
+import FirebaseAuth
 
 class PhotosViewController: BaseViewController {
     
-    private let filterContainerView: UIView = {
-        let filterContainerView = UIView()
-        filterContainerView.backgroundColor = .white
-        filterContainerView.layer.cornerRadius = DesignMetrics.Padding.size8
-        filterContainerView.heightAnchor == DesignMetrics.Dimensions.height51
-        return filterContainerView
-    }()
+    private let filterContainerView = UIView()
     private let filterNameLabel: UILabel = {
         let filterNameLabel = UILabel()
         filterNameLabel.textAlignment = .left
@@ -50,7 +45,7 @@ class PhotosViewController: BaseViewController {
         button.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
         return button
     }()
-    private let filterButton : UIButton = {
+    private let filterButton: UIButton = {
         let filterButton = UIButton()
         filterButton.setImage(UIImage(named: "filterIcon"), for: .normal)
         return filterButton
@@ -71,6 +66,20 @@ class PhotosViewController: BaseViewController {
         uploadSubHeadingLabel.text = "selected to upload on databox"
         return uploadSubHeadingLabel
     }()
+    static let sharedFavorite: PhotosViewController = {
+           let instance = PhotosViewController(currentMediaType: .favourite)
+           // Configure instance if needed
+           return instance
+       }()
+    static let sharedShared: PhotosViewController = {
+           let instance = PhotosViewController(currentMediaType: .shared)
+           // Configure instance if needed
+           return instance
+       }()
+    
+    private var imagePreviewTransitioningDelegate: ImagePreviewTransitioningDelegate?
+    private var isSelectionModeActive = false
+    private var currentZoomScale: CGFloat = 1.0
     private var currentViewType: ViewType = .grid
     private var currentMediaType: MediaType = .image
     private var filesDataSource: [String: [MediaData]] = [:]
@@ -112,13 +121,13 @@ class PhotosViewController: BaseViewController {
             _selectedItemSize = newValue.rounded(toPlaces: 2)
             // Optional: Perform additional actions when the section is updated
             self.uploadSizeLabel.text = "\(_selectedItemSize) MB"
-            print("Selected item size has been updated to \(_selectedItemSize)")
         }
     }
     
     
     
-    init(currentMediaType: MediaType) {
+     init(currentMediaType: MediaType) {
+        print("comes in init deallocated")
         self.currentMediaType = currentMediaType
         super.init(nibName: nil, bundle: nil)
     }
@@ -149,17 +158,23 @@ class PhotosViewController: BaseViewController {
         filesDataSource.removeAll()
         
         // Release collection view data source and delegate
-        // collectionView.dataSource = nil
-        //  collectionView.delegate = nil
+//         collectionView.dataSource = nil
+          collectionView.delegate = nil
         
         // Unload the collection view if possible
-        // collectionView.removeFromSuperview()
-        //  dataSource = nil
+        collectionView.removeFromSuperview()
+        dataSource = nil
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "appBackgroundColor")
+        print("comes in viewDidLoad deallocated")
+        // Add the pinch gesture recognizer to the collection view
+        self.showProgress()
+               let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        pinchGesture.delegate = self
+               collectionView.addGestureRecognizer(pinchGesture)
         configureDataSource()
         // setupData() // Moved setupData here to ensure dataSource is initialized before applying snapshot
         collectionView.delegate = self
@@ -183,13 +198,27 @@ class PhotosViewController: BaseViewController {
         
         hideFocusbandOptionFromNavBar()
         showHideFooterView(isShowFooterView: false)
+        // Add long press gesture recognizer to the collection view
+            let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+            longPressGesture.delegate = self
+            collectionView.addGestureRecognizer(longPressGesture)
     }
+    
+    // Allow both gestures to be recognized simultaneously
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            return true
+        }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("comes in viewDidAppear deallocated")
         switch currentMediaType {
         case .image, .video, .favourite, .shared:
-            break
+            if(filesDataSource.count == 0) {
+                showProgress()
+                 collectionView.delegate = self
+               
+            }
         case .document:
             if(filesDataSource.count == 0) {
                 presentDocumentPicker()
@@ -198,12 +227,41 @@ class PhotosViewController: BaseViewController {
         
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("comes in viewDidDisappear deallocated")
+        imagePreviewTransitioningDelegate = nil
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("comes in viewWillAppear deallocated")
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
         SDImageCache.shared.clearDisk(onCompletion: nil)
         SDImageCache.shared.clearMemory()
+    }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return }
+        
+        let location = gesture.location(in: collectionView)
+        
+        if let indexPath = collectionView.indexPathForItem(at: location) {
+            isSelectionModeActive = true // Enable selection mode
+            let isSelected = selectedIndexPaths.contains(indexPath)
+            
+            if isSelected {
+                collectionView(collectionView, didDeselectItemAt: indexPath)
+            } else {
+                collectionView(collectionView, didSelectItemAt: indexPath)
+            }
+        }
     }
     
     private func presentDocumentPicker() {
@@ -246,8 +304,16 @@ class PhotosViewController: BaseViewController {
         uploadSizeStackView.axis = .vertical
         uploadSizeStackView.spacing = DesignMetrics.Padding.size4
         
+        uploadSizeLabel.textAlignment = .left
+        uploadSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        uploadSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 28)
+        uploadSizeLabel.text = "0.0 MB"
         uploadSizeStackView.addArrangedSubview(uploadSizeLabel)
         uploadSizeStackView.addArrangedSubview(uploadSubHeadingLabel)
+        uploadSubHeadingLabel.textAlignment = .left
+        uploadSubHeadingLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        uploadSubHeadingLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
+        uploadSubHeadingLabel.text = "selected to upload on databox"
         
         uploadSizeViewForLabel.addSubview(uploadSizeStackView)
         uploadSizeStackView.edgeAnchors == uploadSizeViewForLabel.edgeAnchors + DesignMetrics.Padding.size16
@@ -257,6 +323,14 @@ class PhotosViewController: BaseViewController {
         
         uploadButtonView.addSubview(uploadButton)
         uploadButton.edgeAnchors == uploadButtonView.edgeAnchors + DesignMetrics.Padding.size16
+        let titleColorForNormalState: UIColor = #colorLiteral(red: 0.9999999404, green: 1, blue: 1, alpha: 1)
+        uploadButton.isEnabled = true//false
+        uploadButton.setTitle("Upload Photos", for: .normal)
+        uploadButton.setTitleColor(titleColorForNormalState, for: .normal)
+        uploadButton.layer.cornerRadius = DesignMetrics.Padding.size8
+        uploadButton.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
+        
+        
         
         switch currentMediaType {
         case .image:
@@ -281,84 +355,91 @@ class PhotosViewController: BaseViewController {
         addFooterView(footerView: footerView, height: 88)
     }
     
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            guard let self = self else { return nil } // Safely unwrap self
-            
-            switch self.currentViewType {
-            case .grid:
-                // Grid layout
-                let itemHeight: CGFloat = 82
-                let spacing: CGFloat = 5
-                let itemsPerRow: CGFloat = 3
-                
-                let availableWidth = environment.container.effectiveContentSize.width
-                // Calculate the width for each item to fit exactly 3 items per row
-                let itemWidth = (availableWidth - 30) / itemsPerRow
-                
-                // Define item size with the calculated width
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .absolute(itemWidth),
-                    heightDimension: .absolute(itemHeight)
-                )
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                
-                // Define group size with full width and item height
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(itemHeight)
-                )
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                group.interItemSpacing = .fixed(spacing)
-                
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = spacing
-                
-                
-                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
-                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
-                section.decorationItems = [backgroundItem]
-                section.boundarySupplementaryItems = [
-                    NSCollectionLayoutBoundarySupplementaryItem(
-                        layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
-                        elementKind: UICollectionView.elementKindSectionHeader,
-                        alignment: .top
-                    )
-                ]
-                
-                return section
-                
-            case .list:
-                // List layout
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
-                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 5
-                
-                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
-                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
-                section.decorationItems = [backgroundItem]
-                section.boundarySupplementaryItems = [
-                    NSCollectionLayoutBoundarySupplementaryItem(
-                        layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
-                        elementKind: UICollectionView.elementKindSectionHeader,
-                        alignment: .top
-                    )
-                ]
-                
-                return section
-            }
-        }
+    @objc private func handlePinchGesture(_ gesture: UIPinchGestureRecognizer) {
+        switch gesture.state {
+                case .began:
+                    collectionView.isScrollEnabled = false
+                case .changed:
+            // Handle zooming logic
+            // Calculate the new zoom scale
+            let scale = gesture.scale
+            currentZoomScale = max(0.5, min(currentZoomScale * scale, 2.3)) // Constrain zoom scale between 0.5 and 3.0
+
+            // Set the new layout with the updated zoom scale
+            collectionView.setCollectionViewLayout(createLayout(zoomScale: currentZoomScale), animated: true)
+
+            // Reset the gesture scale to 1.0 for incremental scaling
+            gesture.scale = 1.0
+                case .ended, .cancelled, .failed:
+                    collectionView.isScrollEnabled = true
+                default:
+                    break
+                }
         
-        layout.register(SectionBackgroundDecorationView.self, forDecorationViewOfKind: "background")
-        return layout
-    }
+        
+        }
+    
+    private func createLayout(zoomScale: CGFloat = 1.0) -> UICollectionViewCompositionalLayout {
+          let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+              switch self.currentViewType {
+              case .grid:
+                  // Grid layout with zoom adjustment
+                  let baseItemWidth: CGFloat = 82
+                  let baseItemHeight: CGFloat = 82
+                  let maxItemsPerRow: CGFloat = 3
+                  let totalSpacing: CGFloat = 5 * (maxItemsPerRow - 1)
+                  let availableWidth = environment.container.effectiveContentSize.width
+                  let numberOfItemsPerRow = min(maxItemsPerRow, floor((availableWidth + 5) / (baseItemWidth * zoomScale + 5)))
+                  let adjustedItemWidth = (availableWidth - (numberOfItemsPerRow - 1) * 5) / numberOfItemsPerRow
+                  let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(adjustedItemWidth - 10), heightDimension: .absolute(baseItemHeight * zoomScale))
+                  let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                  item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+                  let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(baseItemHeight * zoomScale))
+                  let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                  group.interItemSpacing = .fixed(5)
+                  let section = NSCollectionLayoutSection(group: group)
+                  section.interGroupSpacing = 5
+                  section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                  let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
+                  backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
+                  section.decorationItems = [backgroundItem]
+                  section.boundarySupplementaryItems = [
+                      NSCollectionLayoutBoundarySupplementaryItem(
+                          layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+                          elementKind: UICollectionView.elementKindSectionHeader,
+                          alignment: .top
+                      )
+                  ]
+                  return section
+
+              case .list:
+                  // List layout remains unaffected by zoom
+                  let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+                  let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                  item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                  let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
+                  let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                  let section = NSCollectionLayoutSection(group: group)
+                  section.interGroupSpacing = 10
+                  section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                  let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
+                  backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
+                  section.decorationItems = [backgroundItem]
+                  section.boundarySupplementaryItems = [
+                      NSCollectionLayoutBoundarySupplementaryItem(
+                          layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+                          elementKind: UICollectionView.elementKindSectionHeader,
+                          alignment: .top
+                      )
+                  ]
+                  return section
+              }
+          }
+
+          layout.register(SectionBackgroundDecorationView.self, forDecorationViewOfKind: "background")
+          return layout
+      }
+  
     
     @objc private func listViewButtonTapped(_ sender: UIButton) {
         currentViewType = .list
@@ -402,7 +483,7 @@ class PhotosViewController: BaseViewController {
                 self.configureDataSource()
                 
                 // Optional: Log or debug here
-                print("Layout updated and data source configured.")
+                // Layout updated and data source configured.
                 
                 // Explicitly release the work item
                 self.layoutUpdateWorkItem = nil
@@ -427,13 +508,10 @@ class PhotosViewController: BaseViewController {
             switch status {
             case .authorized:
                 DispatchQueue.main.async {
-                    self.showProgress()
                     self.showPhotoGallery()
                 }
-                print("Authorized Gallery")
             case .denied, .restricted, .notDetermined:
                 // Handle permission denial
-                print("Denied")
                 DispatchQueue.main.async {
                     self.handlePermissionDenied()
                 }
@@ -444,8 +522,9 @@ class PhotosViewController: BaseViewController {
     }
     
     private func showPhotoGallery() {
-        fetchFiles()
-        
+       DispatchQueue.global(qos: .userInitiated).async {
+            self.fetchFiles()
+        }
     }
     
     private func fetchFiles() {
@@ -458,15 +537,21 @@ class PhotosViewController: BaseViewController {
         case .video:
             fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions)
         case .document:
-            for url in selectedDocumentURLs {
-                self.getDocumentDetails(url: url)
+            DispatchQueue.global(qos: .userInitiated).async {
+                for url in self.selectedDocumentURLs {
+                    self.getDocumentDetails(url: url)
+                }
+                DispatchQueue.main.async {
+                    self.applySnapshot()
+                }
             }
-            self.applySnapshot()
-            
             return
         }
-        
-        loadNextBatch()
+
+        // Load the first batch on a background thread
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.loadNextBatch()
+        }
     }
     
 
@@ -488,7 +573,8 @@ class PhotosViewController: BaseViewController {
             
             let dateCreated = asset.creationDate
             let dateFormatter = DateFormatter()
-            dateFormatter.dateStyle = .short
+            dateFormatter.locale = Locale.current // Use the device's current locale
+            dateFormatter.dateStyle = .medium     // You can choose between .short, .medium, .long, and .full
             dateFormatter.timeStyle = .none
             let dateCreatedString = dateFormatter.string(from: dateCreated ?? Date())
             
@@ -510,18 +596,25 @@ class PhotosViewController: BaseViewController {
                 let asset = fetchResult.object(at: index)
                 self.getPhotoDetails(asset: asset)
             }
-            currentBatchIndex += 1
-            self.applySnapshot()
-            sortSectionKeys()
-
-            // Check if there are more assets to load
-            if end < fetchResult.count {
-                // Trigger the next batch
-                loadNextBatch()
+            
+            // Update the UI on the main thread
+            DispatchQueue.main.async {
+                
+                
+                
+                // Check if there are more assets to load
+                if end < fetchResult.count {
+                    // Trigger the next batch
+                    self.loadNextBatch()
+                } else {
+                    self.sortSectionKeys()
+                    self.applySnapshot()
+                    self.hideProgress()
+                }
             }
+            
+            currentBatchIndex += 1
         }
-        
-        self.hideProgress()
     }
     
     private func getDocumentDetails(url: URL) {
@@ -535,7 +628,8 @@ class PhotosViewController: BaseViewController {
         
         let dateCreated = attributes?[.creationDate] as? Date ?? Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
+        dateFormatter.locale = Locale.current // Use the device's current locale
+        dateFormatter.dateStyle = .medium     // You can choose between .short, .medium, .long, and .full
         dateFormatter.timeStyle = .none
         let dateCreatedString = dateFormatter.string(from: dateCreated)
         
@@ -590,14 +684,14 @@ class PhotosViewController: BaseViewController {
             if let error = info?[PHImageErrorKey] as? Error {
                 DispatchQueue.main.async {
                     // Optionally show an alert or error message to the user
-                    print("Error retrieving video asset: \(error.localizedDescription)")
+                   // print("Error retrieving video asset: \(error.localizedDescription)")
                 }
                 return
             }
             
             guard let avAsset = avAsset else {
                 DispatchQueue.main.async {
-                    print("No AVAsset retrieved")
+                   // print("No AVAsset retrieved")
                 }
                 return
             }
@@ -656,10 +750,10 @@ class PhotosViewController: BaseViewController {
                     loadImage(for: asset, into: cell, ImageName: imageData.name, ImageSize: imageData.size, cellindexPath: indexPath)
                 }
                 // cell.configure(with: imageData)
-                let isSelected = self.selectedIndexPaths.contains(indexPath)
-                cell.setSelected(isSelected)
-                cell.optionsButton.params = (section: indexPath.section, item: indexPath.item)
-                cell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+//                let isSelected = self.selectedIndexPaths.contains(indexPath)
+//                cell.setSelected(isSelected)
+//                cell.optionsButton.params = (section: indexPath.section, item: indexPath.item)
+//                cell.optionsButton.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
                 return cell
             }
         }
@@ -670,10 +764,14 @@ class PhotosViewController: BaseViewController {
             if kind == UICollectionView.elementKindSectionHeader {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DateHeaderView.reuseIdentifier, for: indexPath) as! DateHeaderView
                 let dateKey = self.sortedSectionKeys[indexPath.section]
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd"
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale.current // Use the device's current locale
+                dateFormatter.dateStyle = .medium     // You can choose between .short, .medium, .long, and .full
+                dateFormatter.timeStyle = .none       // Set this if you don't want to display the time
+
+               
                 
-                if let sectionDate = formatter.date(from: dateKey), Calendar.current.isDateInToday(sectionDate) {
+                if let sectionDate = dateFormatter.date(from: dateKey), Calendar.current.isDateInToday(sectionDate) {
                     headerView.label.text = "Today"
                 } else {
                     headerView.label.text = dateKey
@@ -699,21 +797,27 @@ class PhotosViewController: BaseViewController {
                 }
             }
             self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences) {
-                // self.configureDataSource()
+                // Any additional completion logic
             }
         }
     }
     
     
     private func sortSectionKeys() {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        sortedSectionKeys = filesDataSource.keys.sorted { [weak self] in
-            guard let _ = self else { return false }
-            return formatter.date(from: $0) ?? Date() > formatter.date(from: $1) ?? Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.current // Use the device's current locale
+        dateFormatter.dateStyle = .medium     // You can choose between .short, .medium, .long, and .full
+        dateFormatter.timeStyle = .none
+
+        sortedSectionKeys = filesDataSource.keys.sorted { dateString1, dateString2 in
+            guard let date1 = dateFormatter.date(from: dateString1),
+                  let date2 = dateFormatter.date(from: dateString2) else {
+                // If either date fails to parse, consider them equal to avoid misordering
+                return false
+            }
+            return date1 > date2
         }
     }
-    
     private func filterView() {
         let filterContainerStackView = UIStackView()
         filterContainerStackView.axis = .horizontal
@@ -730,11 +834,19 @@ class PhotosViewController: BaseViewController {
         
         filterButton.widthAnchor == DesignMetrics.Dimensions.width18
         filterButton.addTarget(self, action: #selector(filterButtonTapped(_:)), for: .touchUpInside)
+        filterButton.setImage(UIImage(named: "filterIcon"), for: .normal)
         
         filterView.addSubview(filterStackView)
         filterStackView.addArrangedSubview(filterButton)
         filterStackView.addArrangedSubview(filterNameLabel)
         filterStackView.edgeAnchors == filterView.edgeAnchors
+        
+        
+        
+        filterNameLabel.textAlignment = .left
+        filterNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        filterNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
+        filterNameLabel.text = "By Date"
         
         let gridAndListView = UIView()
         gridAndListView.backgroundColor = .clear
@@ -752,6 +864,11 @@ class PhotosViewController: BaseViewController {
         gridAndListStackView.addArrangedSubview(gridViewButton)
         gridAndListStackView.edgeAnchors == gridAndListView.edgeAnchors
         
+        listViewButton.setTitle("", for: .normal)
+        listViewButton.setImage(UIImage(named: "listViewDeselectedIcon"), for: .normal)
+        gridViewButton.setTitle("", for: .normal)
+        gridViewButton.setImage(UIImage(named: "gridViewSelectedIcon"), for: .normal)
+        
         listViewButton.addTarget(self, action: #selector(listViewButtonTapped(_:)), for: .touchUpInside)
         gridViewButton.addTarget(self, action: #selector(gridViewButtonTapped(_:)), for: .touchUpInside)
         
@@ -762,6 +879,9 @@ class PhotosViewController: BaseViewController {
         filterContainerStackView.addArrangedSubview(filterView)
         filterContainerStackView.addArrangedSubview(gridAndListView)
         
+        filterContainerView.backgroundColor = .white
+        filterContainerView.layer.cornerRadius = DesignMetrics.Padding.size8
+        filterContainerView.heightAnchor == DesignMetrics.Dimensions.height51
         filterContainerStackView.verticalAnchors == filterContainerView.verticalAnchors
         filterContainerStackView.horizontalAnchors == filterContainerView.horizontalAnchors + DesignMetrics.Padding.size12
         appendViewToMainVStack(view: filterContainerView, topPadding: 24)
@@ -778,7 +898,7 @@ class PhotosViewController: BaseViewController {
         
         // Ensure the target directory exists
         guard fileManager.fileExists(atPath: directory) else {
-            print("Directory does not exist: \(directory)")
+            
             return
         }
         
@@ -790,7 +910,7 @@ class PhotosViewController: BaseViewController {
             }
             
             guard !imageFiles.isEmpty else {
-                print("No images found in the directory.")
+               // print("No images found in the directory.")
                 return
             }
             
@@ -805,10 +925,10 @@ class PhotosViewController: BaseViewController {
                 try fileManager.copyItem(atPath: sourcePath, toPath: destinationPath)
             }
             
-            print("\(count) images duplicated successfully.")
+           // print("\(count) images duplicated successfully.")
             
         } catch {
-            print("Error duplicating images: \(error)")
+          //  print("Error duplicating images: \(error)")
         }
     }
     
@@ -826,7 +946,7 @@ class PhotosViewController: BaseViewController {
     
     @objc private func verticalDotTapped(_ sender: UIButton) {
         guard let params = sender.params else {
-            print("No parameters found")
+           // print("No parameters found")
             return
         }
         
@@ -853,7 +973,7 @@ class PhotosViewController: BaseViewController {
                 BottomSheetOption(icon: UIImage(named: "deleteIcon")!, title: "Delete"),
                 // Add more options here
             ]
-            if let mediaData = filesDataSource[dateKey]?[indexPath.item] {
+            if let mediaData = filesDataSource[dateKey]?[indexPath.item], let imageName = filesDataSource[dateKey]?[indexPath.item].name {
                 
 //                let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: optionsForImage, previewImage: mediaData.icon)
 //                self.navigationController?.pushViewController(imagePreviewVC, animated: true)
@@ -868,13 +988,14 @@ class PhotosViewController: BaseViewController {
 
                 imageManager.requestImage(for: mediaData.asset!, targetSize: targetSize, contentMode: .aspectFit, options: options) { [weak self] (image, info) in
                         guard let self = self, let image = image else {
-                            print("Failed to get the image from the asset")
+                          //  print("Failed to get the image from the asset")
                             return
                         }
 
                         // Initialize your ImagePreviewViewController with the fetched image
                         let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: optionsForImage, previewImage: image)
-                        self.navigationController?.pushViewController(imagePreviewVC, animated: true)
+                    self.present(imagePreviewVC, animated: true)
+                       // self.navigationController?.pushViewController(imagePreviewVC, animated: true)
                     }
                 
             }
@@ -893,6 +1014,68 @@ class PhotosViewController: BaseViewController {
         }
     }
     
+    @objc private func getDetailOfSelectedItem(indexPath: IndexPath) {
+        let section = indexPath.section
+        let item = indexPath.item
+
+        let dateKey = sortedSectionKeys[section]
+        switch currentMediaType {
+        case .image, .favourite, .shared:
+            let imageName = filesDataSource[dateKey]?[item].name ?? ""
+            let optionsForImage = [
+                BottomSheetOption(icon: UIImage(named: "shareIcon")!, title: "Share"),
+                BottomSheetOption(icon: UIImage(named: "accessIcon")!, title: "Manage Access"),
+                BottomSheetOption(icon: UIImage(named: "favouriteIcon")!, title: "Add To Favourite"),
+                BottomSheetOption(icon: UIImage(named: "offlineIcon")!, title: "Make Available Offline"),
+                BottomSheetOption(icon: UIImage(named: "linkCopyIcon")!, title: "Copy Link"),
+                BottomSheetOption(icon: UIImage(named: "copyIcon")!, title: "Make a Copy"),
+                BottomSheetOption(icon: UIImage(named: "sendIcon")!, title: "Send a Copy"),
+                BottomSheetOption(icon: UIImage(named: "openWithIcon")!, title: "Open With"),
+                BottomSheetOption(icon: UIImage(named: "downloadIcon")!, title: "Download in Device"),
+                BottomSheetOption(icon: UIImage(named: "renameIcon")!, title: "Rename"),
+                BottomSheetOption(icon: UIImage(named: "moveIcon")!, title: "Move"),
+                BottomSheetOption(icon: UIImage(named: "deleteIcon")!, title: "Delete"),
+                // Add more options here
+            ]
+            if let mediaData = filesDataSource[dateKey]?[item], let imageName = filesDataSource[dateKey]?[item].name {
+                let imageManager = PHImageManager.default()
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                options.deliveryMode = .highQualityFormat
+                let targetSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+
+                imageManager.requestImage(for: mediaData.asset!, targetSize: targetSize, contentMode: .aspectFit, options: options) { [weak self] (image, info) in
+                    guard let self = self, let image = image else {
+                     //   print("Failed to get the image from the asset")
+                        return
+                    }
+                    
+                        let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: optionsForImage, previewImage: image)
+                    imagePreviewVC.modalPresentationStyle = .fullScreen
+                    self.imagePreviewTransitioningDelegate = ImagePreviewTransitioningDelegate()
+                    imagePreviewVC.transitioningDelegate = self.imagePreviewTransitioningDelegate
+                        present(imagePreviewVC, animated: true, completion: nil)
+               
+
+//                    let imagePreviewVC = ImagePreviewViewController(tittleOfSheet: imageName, bottomSheetOptions: optionsForImage, previewImage: image)
+//                    self.present(imagePreviewVC, animated: true)
+                }
+            }
+        case .video:
+            if let mediaData = filesDataSource[dateKey]?[item] {
+                if let asset = mediaData.asset {
+                    playVideo(asset: asset)
+                }
+            }
+        case .document:
+            if let mediaData = filesDataSource[dateKey]?[item] {
+                if let documentUrl = mediaData.url {
+                    previewDocument(at: documentUrl)
+                }
+            }
+        }
+    }
+    
     private func previewDocument(at url: URL) {
         documentInteractionController = UIDocumentInteractionController(url: url)
         documentInteractionController?.delegate = self
@@ -900,7 +1083,7 @@ class PhotosViewController: BaseViewController {
     }
     
     private func handleFilterSelection(_ selectedOption: String) {
-        print("Selected filter option: \(selectedOption)")
+       // print("Selected filter option: \(selectedOption)")
         // Handle the selected option as needed
         filterNameLabel.text = selectedOption
     }
@@ -922,7 +1105,7 @@ class PhotosViewController: BaseViewController {
             showHideFooterView(isShowFooterView: false)
             hideFocusbandOptionFromNavBar()
             selectedItemSize = 0.0
-            
+            isSelectionModeActive = false
             let defaultTitles: [MediaType: String] = [
                 .image: "Photos",
                 .video: "Videos",
@@ -971,6 +1154,7 @@ class PhotosViewController: BaseViewController {
     }
     
     func removeAllItems() {
+        isSelectionModeActive = false
         selectedIndexPaths.removeAll()
         
         updateSelectionState()
@@ -987,102 +1171,139 @@ class PhotosViewController: BaseViewController {
     }
     
     private func gotoUploadInfoViewController() {
-        let uploadVC = UploadInfoViewController()
-        self.navigationController?.pushViewController(uploadVC, animated: true)
+        if let user = Auth.auth().currentUser {
+            DispatchQueue.main.async {
+                let uploadVC = UploadInfoViewController()
+                self.navigationController?.pushViewController(uploadVC, animated: true)
+            }
+            
+        }
+        else {
+            DispatchQueue.main.async {
+                self.showLoginViewController()
+            }
+        }
+        
+        
+    }
+    
+    private func showLoginViewController() {
+        print("Creating LoginViewController")
+        let loginVC = LoginViewController()
+        let navigationController = UINavigationController(rootViewController: loginVC)
+        
+        // Check that the navigationController is initialized properly
+        print("NavigationController created: \(navigationController)")
+        
+        if let window = UIApplication.shared.windows.first {
+            // Check that the window is accessible
+            print("Window found: \(window)")
+            window.rootViewController = navigationController
+        } else {
+            print("No window found")
+        }
     }
     
 }
 
 extension PhotosViewController: UICollectionViewDelegate , UIScrollViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch self.currentViewType {
-        case .grid:
-            switch self.currentMediaType {
-            case .image, .video, .favourite, .shared:
-                let cell = collectionView.cellForItem(at: indexPath)
-                let isSelected = selectedIndexPaths.contains(indexPath)
-                
-                if isSelected {
-                    selectedIndexPaths.remove(indexPath)
-                    (cell as? ImagesCollectionViewCell)?.setSelected(false)
-                } else {
-                    selectedIndexPaths.insert(indexPath)
-                    (cell as? ImagesCollectionViewCell)?.setSelected(true)
+        if isSelectionModeActive {
+            switch self.currentViewType {
+            case .grid:
+                switch self.currentMediaType {
+                case .image, .video, .favourite, .shared:
+                    let cell = collectionView.cellForItem(at: indexPath)
+                    let isSelected = selectedIndexPaths.contains(indexPath)
+                    
+                    if isSelected {
+                        selectedIndexPaths.remove(indexPath)
+                        (cell as? ImagesCollectionViewCell)?.setSelected(false)
+                    } else {
+                        selectedIndexPaths.insert(indexPath)
+                        (cell as? ImagesCollectionViewCell)?.setSelected(true)
+                    }
+                case .document:
+                    let cell = collectionView.cellForItem(at: indexPath)
+                    let isSelected = selectedIndexPaths.contains(indexPath)
+                    
+                    if isSelected {
+                        selectedIndexPaths.remove(indexPath)
+                        (cell as? DocumentTableViewCell)?.setSelected(false)
+                    } else {
+                        selectedIndexPaths.insert(indexPath)
+                        (cell as? DocumentTableViewCell)?.setSelected(true)
+                    }
                 }
-            case .document:
+            case .list:
                 let cell = collectionView.cellForItem(at: indexPath)
                 let isSelected = selectedIndexPaths.contains(indexPath)
                 
                 if isSelected {
                     selectedIndexPaths.remove(indexPath)
-                    (cell as? DocumentTableViewCell)?.setSelected(false)
+                    (cell as? ImagesCollectionViewCell1)?.setSelected(false)
                 } else {
                     selectedIndexPaths.insert(indexPath)
-                    (cell as? DocumentTableViewCell)?.setSelected(true)
+                    (cell as? ImagesCollectionViewCell1)?.setSelected(true)
                 }
             }
-        case .list:
-            let cell = collectionView.cellForItem(at: indexPath)
-            let isSelected = selectedIndexPaths.contains(indexPath)
             
-            if isSelected {
-                selectedIndexPaths.remove(indexPath)
-                (cell as? ImagesCollectionViewCell1)?.setSelected(false)
-            } else {
-                selectedIndexPaths.insert(indexPath)
-                (cell as? ImagesCollectionViewCell1)?.setSelected(true)
-            }
+            updateSelectionState()
         }
-        
-        updateSelectionState()
+        else {
+            getDetailOfSelectedItem(indexPath: indexPath)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
-        switch self.currentViewType {
-        case .grid:
-            switch self.currentMediaType {
-            case .image, .video, .favourite, .shared:
-                let cell = collectionView.cellForItem(at: indexPath)
-                let isSelected = selectedIndexPaths.contains(indexPath)
-                
-                if isSelected {
-                    selectedIndexPaths.remove(indexPath)
-                    (cell as? ImagesCollectionViewCell)?.setSelected(false)
-                } else {
-                    selectedIndexPaths.insert(indexPath)
-                    (cell as? ImagesCollectionViewCell)?.setSelected(true)
+        if isSelectionModeActive {
+            switch self.currentViewType {
+            case .grid:
+                switch self.currentMediaType {
+                case .image, .video, .favourite, .shared:
+                    let cell = collectionView.cellForItem(at: indexPath)
+                    let isSelected = selectedIndexPaths.contains(indexPath)
+                    
+                    if isSelected {
+                        selectedIndexPaths.remove(indexPath)
+                        (cell as? ImagesCollectionViewCell)?.setSelected(false)
+                    } else {
+                        selectedIndexPaths.insert(indexPath)
+                        (cell as? ImagesCollectionViewCell)?.setSelected(true)
+                    }
+                case .document:
+                    let cell = collectionView.cellForItem(at: indexPath)
+                    let isSelected = selectedIndexPaths.contains(indexPath)
+                    
+                    if isSelected {
+                        selectedIndexPaths.remove(indexPath)
+                        (cell as? DocumentTableViewCell)?.setSelected(false)
+                    } else {
+                        selectedIndexPaths.insert(indexPath)
+                        (cell as? DocumentTableViewCell)?.setSelected(true)
+                    }
                 }
-            case .document:
+            case .list:
                 let cell = collectionView.cellForItem(at: indexPath)
                 let isSelected = selectedIndexPaths.contains(indexPath)
                 
                 if isSelected {
                     selectedIndexPaths.remove(indexPath)
-                    (cell as? DocumentTableViewCell)?.setSelected(false)
+                    (cell as? ImagesCollectionViewCell1)?.setSelected(false)
                 } else {
                     selectedIndexPaths.insert(indexPath)
-                    (cell as? DocumentTableViewCell)?.setSelected(true)
+                    (cell as? ImagesCollectionViewCell1)?.setSelected(true)
                 }
             }
-        case .list:
-            let cell = collectionView.cellForItem(at: indexPath)
-            let isSelected = selectedIndexPaths.contains(indexPath)
             
-            if isSelected {
-                selectedIndexPaths.remove(indexPath)
-                (cell as? ImagesCollectionViewCell1)?.setSelected(false)
-            } else {
-                selectedIndexPaths.insert(indexPath)
-                (cell as? ImagesCollectionViewCell1)?.setSelected(true)
-            }
+            updateSelectionState()
         }
-        
-        updateSelectionState()
+        else {
+            getDetailOfSelectedItem(indexPath: indexPath)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("willDisplay Called for indexPath = \(indexPath.item)")
         let section = sortedSectionKeys[indexPath.section]
         if let items = filesDataSource[section], indexPath.item < items.count {
             let mediaData = items[indexPath.item]
@@ -1091,7 +1312,6 @@ extension PhotosViewController: UICollectionViewDelegate , UIScrollViewDelegate{
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("didEndDisplaying Called for indexPath = \(indexPath.item)")
         // Handle cells that are no longer visible
           let section = sortedSectionKeys[indexPath.section]
           if let items = filesDataSource[section], indexPath.item < items.count {
@@ -1144,6 +1364,7 @@ extension PhotosViewController: UICollectionViewDelegate , UIScrollViewDelegate{
                         gridCell.button.tag = cellindexPath.item
                         gridCell.button.params = (section: cellindexPath.section, item: cellindexPath.item)
                         gridCell.button.addTarget(self, action: #selector(self.verticalDotTapped(_:)), for: .touchUpInside)
+                        
                     }
                 } else if let listCell = cell as? ImagesCollectionViewCell1 {
                     // Update image for list cell

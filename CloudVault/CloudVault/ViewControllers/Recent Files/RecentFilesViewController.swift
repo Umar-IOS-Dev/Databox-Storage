@@ -37,6 +37,7 @@ class RecentFilesViewController: BaseViewController {
         button.setImage(UIImage(named: "gridViewSelectedIcon"), for: .normal)
         return button
     }()
+    private var currentZoomScale: CGFloat = 1.0
     private var currentViewType: ViewType = .grid
     private var imagesDataSource: [String: [ImagesData]] = [:]
     private var sortedSectionKeys: [String] = []
@@ -60,10 +61,27 @@ class RecentFilesViewController: BaseViewController {
         view.backgroundColor = UIColor(named: "appBackgroundColor")
         configureUI(title: "Recent Files", showBackButton: true, hideBackground: true, showMainNavigation: false)
         hideFocusbandOptionFromNavBar()
+        // Add the pinch gesture recognizer to the collection view
+                let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+                collectionView.addGestureRecognizer(pinchGesture)
         configureDataSource()
         setupData() // Moved setupData here to ensure dataSource is initialized before applying snapshot
         collectionView.delegate = self
     }
+    
+    @objc private func handlePinchGesture(_ gesture: UIPinchGestureRecognizer) {
+            if gesture.state == .changed {
+                // Calculate the new zoom scale
+                let scale = gesture.scale
+                currentZoomScale = max(0.5, min(currentZoomScale * scale, 3.0)) // Constrain zoom scale between 0.5 and 3.0
+
+                // Set the new layout with the updated zoom scale
+                collectionView.setCollectionViewLayout(createLayout(zoomScale: currentZoomScale), animated: true)
+
+                // Reset the gesture scale to 1.0 for incremental scaling
+                gesture.scale = 1.0
+            }
+        }
     
     override func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true, showAsSubViewController: Bool = false) {
         super.configureUI(title: title, showNavBar: showNavBar, showBackButton: showBackButton, hideBackground: hideBackground, showMainNavigation: showMainNavigation, addHorizontalPadding: addHorizontalPadding, showAsSubViewController: showAsSubViewController)
@@ -114,66 +132,66 @@ class RecentFilesViewController: BaseViewController {
         }
     }
     
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            switch self.currentViewType {
-            case .grid:
-                // Grid layout
-                let itemWidth: CGFloat = 82
-                let itemHeight: CGFloat = 82
-                let maxItemsPerRow: CGFloat = 3
-                let totalSpacing: CGFloat = 5 * (maxItemsPerRow - 1)
-                let availableWidth = environment.container.effectiveContentSize.width
-                let numberOfItemsPerRow = min(maxItemsPerRow, floor((availableWidth + 5) / (itemWidth + 5)))
-                let adjustedItemWidth = (availableWidth - (numberOfItemsPerRow - 1) * 5) / numberOfItemsPerRow
-                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(adjustedItemWidth - 10), heightDimension: .absolute(itemHeight))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(itemHeight))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                group.interItemSpacing = .fixed(5)
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 5
-                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
-                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
-                section.decorationItems = [backgroundItem]
-                section.boundarySupplementaryItems = [
-                    NSCollectionLayoutBoundarySupplementaryItem(
-                        layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
-                        elementKind: UICollectionView.elementKindSectionHeader,
-                        alignment: .top
-                    )
-                ]
-                return section
-                
-            case .list:
-                // List layout
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
-                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 10
-                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
-                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
-                section.decorationItems = [backgroundItem]
-                section.boundarySupplementaryItems = [
-                    NSCollectionLayoutBoundarySupplementaryItem(
-                        layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
-                        elementKind: UICollectionView.elementKindSectionHeader,
-                        alignment: .top
-                    )
-                ]
-                return section
-            }
-        }
-        
-        layout.register(SectionBackgroundDecorationView.self, forDecorationViewOfKind: "background")
-        return layout
-    }
+    private func createLayout(zoomScale: CGFloat = 1.0) -> UICollectionViewCompositionalLayout {
+           let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+               switch self.currentViewType {
+               case .grid:
+                   // Grid layout with zoom adjustment
+                   let baseItemWidth: CGFloat = 82
+                   let baseItemHeight: CGFloat = 82
+                   let maxItemsPerRow: CGFloat = 3
+                   let totalSpacing: CGFloat = 5 * (maxItemsPerRow - 1)
+                   let availableWidth = environment.container.effectiveContentSize.width
+                   let numberOfItemsPerRow = min(maxItemsPerRow, floor((availableWidth + 5) / (baseItemWidth * zoomScale + 5)))
+                   let adjustedItemWidth = (availableWidth - (numberOfItemsPerRow - 1) * 5) / numberOfItemsPerRow
+                   let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(adjustedItemWidth - 10), heightDimension: .absolute(baseItemHeight * zoomScale))
+                   let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                   item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+                   let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(baseItemHeight * zoomScale))
+                   let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                   group.interItemSpacing = .fixed(5)
+                   let section = NSCollectionLayoutSection(group: group)
+                   section.interGroupSpacing = 5
+                   section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                   let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
+                   backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
+                   section.decorationItems = [backgroundItem]
+                   section.boundarySupplementaryItems = [
+                       NSCollectionLayoutBoundarySupplementaryItem(
+                           layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+                           elementKind: UICollectionView.elementKindSectionHeader,
+                           alignment: .top
+                       )
+                   ]
+                   return section
+
+               case .list:
+                   // List layout remains unaffected by zoom
+                   let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+                   let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                   item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                   let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
+                   let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                   let section = NSCollectionLayoutSection(group: group)
+                   section.interGroupSpacing = 10
+                   section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                   let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")
+                   backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 44, leading: 0, bottom: 0, trailing: 0)
+                   section.decorationItems = [backgroundItem]
+                   section.boundarySupplementaryItems = [
+                       NSCollectionLayoutBoundarySupplementaryItem(
+                           layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+                           elementKind: UICollectionView.elementKindSectionHeader,
+                           alignment: .top
+                       )
+                   ]
+                   return section
+               }
+           }
+
+           layout.register(SectionBackgroundDecorationView.self, forDecorationViewOfKind: "background")
+           return layout
+       }
     
     private func applySnapshot(animatingDifferences: Bool = true) {
         guard !sortedSectionKeys.isEmpty else { return }
@@ -534,3 +552,7 @@ enum MediaType {
     case shared
     case document
 }
+
+
+
+

@@ -30,6 +30,11 @@ class SplashViewController: BaseViewController {
     }()
     let activityIndicator = UIActivityIndicatorView(style: .large)
     
+    deinit {
+        print("SplashViewController is being deallocated")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,8 +111,13 @@ class SplashViewController: BaseViewController {
                 print("User is signed in with uid: \(user.uid)")
                 // Navigate to the main app screen or perform any other actions needed.
            // activityIndicator.stopAnimating()
-            hideProgress()
-            self.showHomeViewController()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                hideProgress()
+                self.transitionToMainApp()
+            }
+          //  self.showHomeViewController()
 //            let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 //            onboardingPageVC.modalTransitionStyle = .crossDissolve
 //            onboardingPageVC.modalPresentationStyle = .fullScreen
@@ -138,6 +148,36 @@ class SplashViewController: BaseViewController {
                               completion: nil)
         }
     }
+    
+    private func transitionToMainApp() {
+            let tabBarController = CustomTabBarController()
+            let navigationController = UINavigationController(rootViewController: tabBarController)
+            
+            // Set this navigation controller as the root view controller
+            if let window = UIApplication.shared.windows.first {
+                UIView.transition(with: window,
+                                  duration: 0.5,
+                                  options: .transitionCrossDissolve,
+                                  animations: {
+                                      window.rootViewController = navigationController
+                                  },
+                                  completion: nil)
+            }
+        }
+    
+//    private func showHomeViewController() {
+//        let customTabBarController = CustomTabBarController()
+//        let navigationController = UINavigationController(rootViewController: customTabBarController)
+//        navigationController.modalPresentationStyle = .fullScreen // if needed
+//        if let window = UIApplication.shared.windows.first {
+//            window.rootViewController = navigationController
+//            UIView.transition(with: window,
+//                              duration: 0.5,
+//                              options: .transitionCrossDissolve,
+//                              animations: nil,
+//                              completion: nil)
+//        }
+//    }
     
    
 }

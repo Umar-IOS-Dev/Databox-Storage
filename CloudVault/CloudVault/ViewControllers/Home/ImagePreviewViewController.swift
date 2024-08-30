@@ -32,7 +32,9 @@ class ImagePreviewViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        configureUI(title: imageName, showBackButton: true, addHorizontalPadding: false)
+        self.view.backgroundColor = .black
+       configureUI(title: "", showBackButton: true, addHorizontalPadding: false)
+    //    configureUI(title: imageName, showBackButton: false, hideBackground: true, showMainNavigation: false, addHorizontalPadding: false)
         hideCheckBoxInNavigation()
     }
     
@@ -43,12 +45,17 @@ class ImagePreviewViewController: BaseViewController {
         setupBottomSheet()
     }
     
+    override func backButtonAction() {
+        dismiss(animated: true)
+    }
+    
     private func configureImageView() {
         let currentImageView = UIImageView()
-        currentImageView.contentMode = .scaleAspectFill
+        currentImageView.contentMode = .scaleAspectFit
         currentImageView.image = previewImage//UIImage(named: imageName) //recentImage2Copy
         currentImageView.backgroundColor = .clear
-        currentImageView.heightAnchor ==  UIScreen.main.bounds.height - 60
+        currentImageView.heightAnchor ==  UIScreen.main.bounds.height /*- 60*/
+        currentImageView.backgroundColor = .black
         
         let scrollView = UIScrollView()
         scrollView.delegate = self
@@ -58,7 +65,7 @@ class ImagePreviewViewController: BaseViewController {
         scrollView.addSubview(currentImageView)
         
         currentImageView.centerXAnchor == scrollView.centerXAnchor
-        currentImageView.centerYAnchor == scrollView.centerYAnchor - 80
+        currentImageView.centerYAnchor == scrollView.centerYAnchor - 100
         currentImageView.widthAnchor == scrollView.widthAnchor
         currentImageView.heightAnchor == scrollView.heightAnchor
         appendViewToMainVStack(view: scrollView)

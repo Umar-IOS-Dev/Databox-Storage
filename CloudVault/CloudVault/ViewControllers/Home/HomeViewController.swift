@@ -9,39 +9,39 @@ import UIKit
 import Anchorage
 
 class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    private let profileImageView: UIImageView = {
+    private lazy var profileImageView: UIImageView = {
         let profileImageView = UIImageView()
         profileImageView.backgroundColor = .clear
         profileImageView.contentMode = .scaleAspectFit
         profileImageView.image = UIImage(named: "emoji1")
         return profileImageView
     }()
-    private let storageView: UIView = {
+    private lazy var storageView: UIView = {
         let containerView = UIView()
         containerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         containerView.layer.cornerRadius = DesignMetrics.Padding.size12
         containerView.heightAnchor == 250
         return containerView
     }()
-    private let filesContainerView: UIView = {
+    private lazy var filesContainerView: UIView = {
         let filesContainerView = UIView()
         filesContainerView.backgroundColor = .clear//#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         filesContainerView.layer.cornerRadius = DesignMetrics.Padding.size12
         filesContainerView.heightAnchor == 233
         return filesContainerView
     }()
-    private let storageGraphView: StorageUsageView = {
+    private lazy var storageGraphView: StorageUsageView = {
         let storageView = StorageUsageView(images: 2, videos: 2, documents: 2, audio: 2, files: 2, contacts: 2, free: 88)
         return storageView
     }()
-    private let sliderView: UIView = {
+    private lazy var sliderView: UIView = {
         let sliderView = UIView()
         sliderView.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.968627451, blue: 0.9882352941, alpha: 1)
         sliderView.heightAnchor == 98
         sliderView.layer.cornerRadius = 8
         return sliderView
     }()
-    private let gotoAllButton: UIButton = {
+    private lazy var gotoAllButton: UIButton = {
         let seeAllBtn = UIButton()
         seeAllBtn.setFont(FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12), for: .normal)
         seeAllBtn.setTitleColor(#colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1), for: .normal)
@@ -49,7 +49,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         seeAllBtn.backgroundColor = .clear
         return seeAllBtn
     }()
-    private let storageLabel: UILabel = {
+    private lazy var storageLabel: UILabel = {
         let storageLabel = UILabel()
         storageLabel.textAlignment = .left
         storageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
@@ -57,7 +57,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         storageLabel.text = "Storage Overview"
         return storageLabel
     }()
-    private let usedStorageLabel: UILabel = {
+    private lazy var usedStorageLabel: UILabel = {
         let usedStorageLabel = UILabel()
         usedStorageLabel.textAlignment = .left
         usedStorageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5409491922)
@@ -65,13 +65,13 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         usedStorageLabel.text = "01GB used from out of 100GB"
         return usedStorageLabel
     }()
-    private let arrowButton: UIButton = {
+    private lazy var arrowButton: UIButton = {
         let arrowButton = UIButton()
         arrowButton.contentMode = .scaleAspectFit
         arrowButton.setImage(UIImage(named: "forwardArrow"), for: .normal)
         return arrowButton
     }()
-    private let sliderCollectionView: UICollectionView = {
+    private lazy var sliderCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
@@ -81,7 +81,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-    private let recentCollectionView: UICollectionView = {
+    private lazy var recentCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 12
@@ -90,7 +90,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
-    private let pageControl: UIPageControl = {
+    private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .gray
@@ -98,42 +98,45 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         pageControl.alpha = 0.1
         return pageControl
     }()
-    private let imagesViewContainer: AppFilesView = {
+    private lazy var imagesViewContainer: AppFilesView = {
         let imagesViewContainer = AppFilesView(fileImage: UIImage(named: "imagesIcon") ?? UIImage.appIcon, titleOfFile: "Images", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 1, green: 0.3607843137, blue: 0.2196078431, alpha: 1))
         imagesViewContainer.configureRoundedCorners(corners: [.topLeft], radius: DesignMetrics.Padding.size8)
         return imagesViewContainer
     }()
-    private let videosViewContainer: AppFilesView = {
+    private lazy var videosViewContainer: AppFilesView = {
         let videosViewContainer = AppFilesView(fileImage: UIImage(named: "videosIconHome") ?? UIImage.appIcon, titleOfFile: "Videos", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0.04705882353, green: 0.6549019608, blue: 1, alpha: 1))
         return videosViewContainer
     }()
-    private let documentsViewContainer: AppFilesView = {
+    private lazy var documentsViewContainer: AppFilesView = {
         let documentsViewContainer = AppFilesView(fileImage: UIImage(named: "documentsIconHome") ?? UIImage.appIcon, titleOfFile: "Documents", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0, green: 0.8588235294, blue: 0.6509803922, alpha: 1))
         documentsViewContainer.configureRoundedCorners(corners: [.topRight], radius: DesignMetrics.Padding.size8)
         return documentsViewContainer
     }()
-    private let audioViewContainer: AppFilesView = {
+    private lazy var audioViewContainer: AppFilesView = {
         let audioViewContainer = AppFilesView(fileImage: UIImage(named: "audiosIconHome") ?? UIImage.appIcon, titleOfFile: "Audio", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0.8039215686, green: 0, blue: 0.8745098039, alpha: 1))
         audioViewContainer.configureRoundedCorners(corners: [.bottomLeft], radius: DesignMetrics.Padding.size8)
         return audioViewContainer
     }()
-    private let filesViewContainer: AppFilesView = {
+    private lazy var filesViewContainer: AppFilesView = {
         let filesViewContainer = AppFilesView(fileImage: UIImage(named: "filesIcon") ?? UIImage.appIcon, titleOfFile: "Files", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 1, green: 0.768627451, blue: 0.1294117647, alpha: 1))
         return filesViewContainer
     }()
-    private let contactsViewContainer: AppFilesView = {
+    private lazy var contactsViewContainer: AppFilesView = {
         let contactsViewContainer = AppFilesView(fileImage: UIImage(named: "contactIcon") ?? UIImage.appIcon, titleOfFile: "Contacts", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0.2352941176, green: 0.8549019608, blue: 0.01960784314, alpha: 1))
         contactsViewContainer.configureRoundedCorners(corners: [.bottomRight], radius: DesignMetrics.Padding.size8)
         return contactsViewContainer
     }()
     private let numberOfSlides = 7
     private var timer: Timer?
-    private let recentFilesArray: [RecentImageData] = [RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage1", imageName: "Lilly", imageSize: "Size: 2.5 MB"), RecentImageData(recentImage: "recentImage2", imageName: "Hair Girl", imageSize: "Size: 891 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB")]
+    private lazy var recentFilesArray: [RecentImageData] = [RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage1", imageName: "Lilly", imageSize: "Size: 2.5 MB"), RecentImageData(recentImage: "recentImage2", imageName: "Hair Girl", imageSize: "Size: 891 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB")]
     
     private var sideMenuView: SideMenuView!
     private var sideMenuLeadingConstraint: NSLayoutConstraint!
-    private let overlayView = UIView()
+    private lazy var overlayView = UIView()
     
+    deinit {
+        print("HomeViewController is being deallocated")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

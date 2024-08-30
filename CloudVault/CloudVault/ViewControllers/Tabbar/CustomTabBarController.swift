@@ -16,24 +16,28 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     private var bottomSheetView: UIView?
     private var bottomSheetHeightConstraint: NSLayoutConstraint?
     private var dimmingView: UIView? // Added dimming view
-    private var bottomSheetOptions: [BottomSheetOption] = []
+    
+    private lazy var bottomSheetOptions: [BottomSheetOption] = {
+        guard let uploadIcon = UIImage(named: "uploadIcon"),
+              let folderIcon = UIImage(named: "folderIcon"),let photosIcon = UIImage(named: "photosIcon"),let videosIcon = UIImage(named: "videosIcon"),let documentsIcon = UIImage(named: "documentsIcon"),let audioIcon = UIImage(named: "audioIcon"),let contactsIcon = UIImage(named: "contactsIcon") else {
+            return []
+        }
+        return [
+            BottomSheetOption(icon: uploadIcon, title: "Uploads"),
+            BottomSheetOption(icon: folderIcon, title: "Create Folder"),
+            BottomSheetOption(icon: uploadIcon, title: "Photos"),
+            BottomSheetOption(icon: folderIcon, title: "Videos"),
+            BottomSheetOption(icon: uploadIcon, title: "Documents"),
+            BottomSheetOption(icon: folderIcon, title: "Audio"),
+            BottomSheetOption(icon: uploadIcon, title: "Contacts")
+        ]
+    }()
     private let selectedTintColor: UIColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
     private let deselectedTintColor: UIColor = #colorLiteral(red: 0.8509803922, green: 0.8509803922, blue: 0.8509803922, alpha: 1)
     private let notchView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Create and configure the bottom sheet
-        bottomSheetOptions = [
-                    BottomSheetOption(icon: UIImage(named: "uploadIcon")!, title: "Uploads"),
-                    BottomSheetOption(icon: UIImage(named: "folderIcon")!, title: "Create Folder"),
-                    BottomSheetOption(icon: UIImage(named: "photosIcon")!, title: "Photos"),
-                    BottomSheetOption(icon: UIImage(named: "videosIcon")!, title: "Videos"),
-                    BottomSheetOption(icon: UIImage(named: "documentsIcon")!, title: "Documents"),
-                    BottomSheetOption(icon: UIImage(named: "audioIcon")!, title: "Audio"),
-                    BottomSheetOption(icon: UIImage(named: "contactsIcon")!, title: "Contacts"),
-                ]
         
         self.delegate = self // Set the delegate
 
@@ -41,16 +45,16 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         let homeVC = HomeViewController()
         homeVC.tabBarItem.tag = 0
 
-        let favoriteVC = PhotosViewController(currentMediaType: .favourite)
-        self.navigationController?.pushViewController(favoriteVC, animated: true)
+        let favoriteVC = PhotosViewController.sharedFavorite
+//        self.navigationController?.pushViewController(favoriteVC, animated: true)
         favoriteVC.tabBarItem.tag = 1
 
         let centerPlaceholderVC = UIViewController()
         centerPlaceholderVC.tabBarItem.isEnabled = false // Prevent selection
         centerPlaceholderVC.tabBarItem.tag = 2
 
-        let sharedVC = PhotosViewController(currentMediaType: .shared)
-        self.navigationController?.pushViewController(sharedVC, animated: true)
+        let sharedVC = PhotosViewController.sharedShared
+//        self.navigationController?.pushViewController(sharedVC, animated: true)
         sharedVC.tabBarItem.tag = 3
 
         let settingsVC = SettingsViewController()

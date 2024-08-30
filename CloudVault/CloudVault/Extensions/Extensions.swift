@@ -40,6 +40,28 @@ extension UIViewController {
     }
 }
 
+extension UIView {
+    func setDottedBorder(color: UIColor, lineWidth: CGFloat) {
+            // Remove any existing shape layers to avoid multiple layers being added
+            self.layer.sublayers?.removeAll(where: { $0 is CAShapeLayer })
+            
+            // Create the dotted border layer
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.strokeColor = color.cgColor
+            shapeLayer.lineDashPattern = [4, 2]
+            shapeLayer.frame = self.bounds
+            shapeLayer.fillColor = nil
+            shapeLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.layer.cornerRadius).cgPath
+            shapeLayer.lineWidth = lineWidth
+            
+            // Add the shape layer to the view's layer
+            self.layer.addSublayer(shapeLayer)
+        }
+    
+        
+    
+}
+
 // Conform to UINavigationControllerDelegate
 //extension UIViewController: UINavigationControllerDelegate {
 //    public func navigationController(_ navigationController: UINavigationController,

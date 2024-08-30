@@ -19,14 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                   if granted {
-                       print("Permission granted")
-                       UNUserNotificationCenter.current().delegate = self
-                   } else if let error = error {
-                       print("Permission denied: \(error)")
-                   }
-               }
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
+            guard let self = self else { return }
+            if granted {
+                print("Permission granted")
+                UNUserNotificationCenter.current().delegate = self
+            } else if let error = error {
+                print("Permission denied: \(error)")
+            }
+        }
         
         return true
     }
