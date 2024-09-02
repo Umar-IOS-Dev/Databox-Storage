@@ -95,7 +95,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .gray
         pageControl.currentPageIndicatorTintColor = .black
-        pageControl.alpha = 0.1
+        pageControl.alpha = 0.0
         return pageControl
     }()
     private lazy var imagesViewContainer: AppFilesView = {
@@ -316,7 +316,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         storageLabelStackView.addArrangedSubview(storageLabelStackArrowView)
         
         storageLabelView.addSubview(storageLabelStackView)
-        storageLabelStackView.edgeAnchors == storageLabelView.edgeAnchors + 8
+        storageLabelStackView.edgeAnchors == storageLabelView.edgeAnchors //+ 8
         
         storageGraphView.heightAnchor == 20
         storageGraphView.layer.cornerRadius = 8
@@ -326,7 +326,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         storageStackView.addArrangedSubview(sliderView)
         
         storageView.addSubview(storageStackView)
-        storageStackView.edgeAnchors == storageView.edgeAnchors + 8
+        storageStackView.edgeAnchors == storageView.edgeAnchors + 16
         
         let forwardArrowView = UIView()
         forwardArrowView.backgroundColor = .green

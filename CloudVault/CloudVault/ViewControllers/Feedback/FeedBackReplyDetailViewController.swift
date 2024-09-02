@@ -31,6 +31,24 @@ class FeedBackReplyDetailViewController: BaseViewController {
             textView.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
             return textView
         }()
+    
+    private let firstLabel: UILabel = {
+        let firstLabel = UILabel()
+        firstLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        firstLabel.textAlignment = .left
+        firstLabel.text = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical"
+        firstLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
+        return firstLabel
+    }()
+    
+    private let secondLabel: UILabel = {
+        let secondLabel = UILabel()
+        secondLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        secondLabel.textAlignment = .left
+        secondLabel.text = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical"
+        secondLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
+        return secondLabel
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,6 +131,13 @@ class FeedBackReplyDetailViewController: BaseViewController {
         replyMainstack.edgeAnchors == replyContainerView.edgeAnchors + 16
         
         appendViewToMainVStack(view: replyContainerView, topPadding: 24)
+    }
+    
+    private func configureFeedbackFirstLabel() {
+        let firstAndSecondLabelVstack = UIStackView()
+        firstAndSecondLabelVstack.axis = .vertical
+        firstAndSecondLabelVstack.spacing = 10
+        
     }
     
 

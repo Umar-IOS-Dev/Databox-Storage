@@ -101,9 +101,8 @@ class SettingsViewController: BaseViewController {
         guard navigationController != nil else { print("not navigation")
             return }
         print("manageStorageBtn Tapped")
-        //        let emojiVC = EmojiViewController(allEmojiArray: personalityAllImagesArray)
-        //        emojiVC.emojiSelectionDelegate = self
-        //        self.navigationController?.pushViewController(emojiVC, animated: true)
+        let storageVC = StorageViewController()
+        self.navigationController?.pushViewController(storageVC, animated: true)
     }
     
     @objc private func privacyPolicyBtnTapped(_ sender: UIButton) {

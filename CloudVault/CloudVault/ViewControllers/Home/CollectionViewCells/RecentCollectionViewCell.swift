@@ -34,7 +34,7 @@ class RecentCollectionViewCell: UICollectionViewCell {
         let imageSizeLabel = UILabel()
         imageSizeLabel.textAlignment = .left
         imageSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        imageSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 8)
+        imageSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 6)
         return imageSizeLabel
     }()
     var recentImageName: String = "" {

@@ -238,8 +238,8 @@
             filePath = "CloudVault/ViewControllers/BaseViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "523"
-            endingLineNumber = "523"
+            startingLineNumber = "525"
+            endingLineNumber = "525"
             landmarkName = "crossButtonActionToDismiss()"
             landmarkType = "7">
          </BreakpointContent>
@@ -497,6 +497,22 @@
             startingLineNumber = "1201"
             endingLineNumber = "1201"
             landmarkName = "showLoginViewController()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BF250360-3F4D-4AD1-97ED-4D063418819C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudVault/ViewControllers/Splash/SplashViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

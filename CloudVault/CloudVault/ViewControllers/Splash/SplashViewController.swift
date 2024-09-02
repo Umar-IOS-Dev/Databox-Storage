@@ -39,12 +39,12 @@ class SplashViewController: BaseViewController {
         super.viewDidLoad()
         
         
-//                for family in UIFont.familyNames {
-//                    print("Family: \(family)")
-//                    for name in UIFont.fontNames(forFamilyName: family) {
-//                        print("Font: \(name) \n")
-//                    }
-//                }
+                for family in UIFont.familyNames {
+                    print("Family: \(family)")
+                    for name in UIFont.fontNames(forFamilyName: family) {
+                        print("Font: \(name) \n")
+                    }
+                }
         view.backgroundColor = UIColor(named: "appBackgroundColor")
         configureAppIcon()
         configureFooterView()

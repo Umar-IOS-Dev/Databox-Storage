@@ -300,11 +300,13 @@ class BaseViewController: UIViewController {
         
         let nameLabel = UILabel()
         nameLabel.text = "Nataliya Smith"
-        nameLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 12)
+        nameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        nameLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 18)
         
         let emailLabel = UILabel()
         emailLabel.text = "Younasmughal122@gmail.com"
-        emailLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
+        emailLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        emailLabel.font = FontManagerDatabox.shared.cloudVaultSemiLightText(ofSize: 10)
         emailLabel.numberOfLines = 0
         
         userInfoStackView.addArrangedSubview(nameLabel)

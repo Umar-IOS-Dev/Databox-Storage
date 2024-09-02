@@ -28,6 +28,9 @@
 		63B19A452C7C459C00BB2CEC /* ImagePreviewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A442C7C459C00BB2CEC /* ImagePreviewAnimator.swift */; };
 		63B19A472C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A462C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift */; };
 		63B19A492C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A482C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift */; };
+		63B19A4B2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A4A2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf */; };
+		63B19A4F2C81F42E00BB2CEC /* Segoe UI.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A4E2C81F42E00BB2CEC /* Segoe UI.ttf */; };
+		63B19A512C81F56000BB2CEC /* Segoe UI Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A502C81F56000BB2CEC /* Segoe UI Bold.ttf */; };
 		63C3E4A12C3BFAEF0060F257 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C3E4A02C3BFAEF0060F257 /* AppDelegate.swift */; };
 		63C3E4A32C3BFAEF0060F257 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C3E4A22C3BFAEF0060F257 /* SceneDelegate.swift */; };
 		63C3E4AA2C3BFAF00060F257 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63C3E4A92C3BFAF00060F257 /* Assets.xcassets */; };
@@ -134,6 +137,9 @@
 		63B19A442C7C459C00BB2CEC /* ImagePreviewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewAnimator.swift; sourceTree = "<group>"; };
 		63B19A462C7F35D600BB2CEC /* FeedBackReplyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackReplyCollectionViewCell.swift; sourceTree = "<group>"; };
 		63B19A482C7F43D800BB2CEC /* FeedBackReplyDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackReplyDetailViewController.swift; sourceTree = "<group>"; };
+		63B19A4A2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "segoe-ui-semibold.ttf"; sourceTree = "<group>"; };
+		63B19A4E2C81F42E00BB2CEC /* Segoe UI.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Segoe UI.ttf"; sourceTree = "<group>"; };
+		63B19A502C81F56000BB2CEC /* Segoe UI Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Segoe UI Bold.ttf"; sourceTree = "<group>"; };
 		63C3E49D2C3BFAEF0060F257 /* CloudVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C3E4A02C3BFAEF0060F257 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63C3E4A22C3BFAEF0060F257 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -437,6 +443,9 @@
 				63C3E4F92C40F1C00060F257 /* segoeuithisi.ttf */,
 				63C3E4FA2C40F1C00060F257 /* segoeuithisz.ttf */,
 				63C3E5002C410F510060F257 /* segoeuisl.ttf */,
+				63B19A4A2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf */,
+				63B19A4E2C81F42E00BB2CEC /* Segoe UI.ttf */,
+				63B19A502C81F56000BB2CEC /* Segoe UI Bold.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -676,6 +685,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63C3E4FE2C40F1C10060F257 /* segoeuithisz.ttf in Resources */,
+				63B19A512C81F56000BB2CEC /* Segoe UI Bold.ttf in Resources */,
+				63B19A4B2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf in Resources */,
 				63C3E53B2C5121180060F257 /* OnBoarding2.gif in Resources */,
 				63C3E4AA2C3BFAF00060F257 /* Assets.xcassets in Resources */,
 				63C3E5052C4137780060F257 /* download-4974_256.gif in Resources */,
@@ -683,6 +694,7 @@
 				63C3E5612C5C998D0060F257 /* GoogleService-Info.plist in Resources */,
 				63C3E4FD2C40F1C10060F257 /* segoeuithisi.ttf in Resources */,
 				63C3E53A2C5121180060F257 /* OnBoarding1.gif in Resources */,
+				63B19A4F2C81F42E00BB2CEC /* Segoe UI.ttf in Resources */,
 				63C3E5012C410F510060F257 /* segoeuisl.ttf in Resources */,
 				63C3E4FF2C40F1C10060F257 /* segoeuithibd.ttf in Resources */,
 				63C3E4AD2C3BFAF00060F257 /* Base in Resources */,

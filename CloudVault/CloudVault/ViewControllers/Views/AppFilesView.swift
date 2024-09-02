@@ -20,7 +20,7 @@ class AppFilesView: CustomRoundedView {
         let fileTitleLabel = UILabel()
         fileTitleLabel.textAlignment = .center
         fileTitleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        fileTitleLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
+        fileTitleLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 15)
         return fileTitleLabel
     }()
     
@@ -35,7 +35,7 @@ class AppFilesView: CustomRoundedView {
     private let fileSizeLabel: UILabel = {
         let fileSizeLabel = UILabel()
         fileSizeLabel.textAlignment = .left
-        fileSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
+        fileSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 11.38)
         fileSizeLabel.text = "00GB"
         return fileSizeLabel
     }()
@@ -93,7 +93,7 @@ class AppFilesView: CustomRoundedView {
         
         fileView.addSubview(fileStackView)
         fileStackView.horizontalAnchors == fileView.horizontalAnchors
-        fileStackView.verticalAnchors == fileView.verticalAnchors + 12
+        fileStackView.verticalAnchors == fileView.verticalAnchors + 8
 //        fileStackView.edgeAnchors == fileView.edgeAnchors
         
         mainStackView.addArrangedSubview(fileView)

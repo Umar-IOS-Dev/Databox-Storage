@@ -255,7 +255,7 @@ class FontManagerDatabox {
     }
     
     func cloudVaultRegularText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "SegoeUIThis", size: size) ?? UIFont.systemFont(ofSize: size)
+        return UIFont(name: "SegoeUI", size: size) ?? UIFont.systemFont(ofSize: size)
     }
     
      func cloudVaultItalicText(ofSize size: CGFloat) -> UIFont {
@@ -263,7 +263,7 @@ class FontManagerDatabox {
     }
     
      func cloudVaultBoldText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "SegoeUIThis-Bold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
+        return UIFont(name: "SegoeUI-Bold", size: size) ?? UIFont.boldSystemFont(ofSize: size)
     }
     
      func cloudVaultBoldItalicText(ofSize size: CGFloat) -> UIFont {
@@ -271,8 +271,12 @@ class FontManagerDatabox {
     }
     
      func cloudVaultSemiBoldText(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "STIXTwoText_SemiBold", size: size) ?? UIFont.systemFont(ofSize: size, weight: .semibold)
+        return UIFont(name: "SegoeUI-Semibold", size: size) ?? UIFont.systemFont(ofSize: size, weight: .semibold)
     }
+    
+    func cloudVaultSemiLightText(ofSize size: CGFloat) -> UIFont {
+       return UIFont(name: "SegoeUI-Semilight", size: size) ?? UIFont.systemFont(ofSize: size, weight: .semibold)
+   }
     
      func cloudVaultItalicSemiBoldText(ofSize size: CGFloat) -> UIFont {
         return UIFont(name: "STIXTwoText-Italic_SemiBold-Italic", size: size) ?? UIFont.italicSystemFont(ofSize: size)
