@@ -29,7 +29,7 @@ class SettingsViewController: BaseViewController {
     
     private func setupStorageView() {
         let storageView = UIView()
-        storageView.backgroundColor = .white
+        storageView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         storageView.layer.cornerRadius = DesignMetrics.Padding.size8
         storageView.heightAnchor == DesignMetrics.Dimensions.height135
         
@@ -47,13 +47,13 @@ class SettingsViewController: BaseViewController {
         
         let storageSizeLabel = UILabel()
         storageSizeLabel.textAlignment = .left
-        storageSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        storageSizeLabel.textColor = UIColor(named: "appPrimaryTextColor")
         storageSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         storageSizeLabel.text = "32.8GB of 64.0GB"
         
         let dataBoxStorageLabel = UILabel()
         dataBoxStorageLabel.textAlignment = .right
-        dataBoxStorageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        dataBoxStorageLabel.textColor = UIColor(named: "appPrimaryTextColor")
         dataBoxStorageLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12)
         dataBoxStorageLabel.text = "Databox Storage"
         
@@ -120,7 +120,7 @@ class SettingsViewController: BaseViewController {
     
     private func setupSystemSettingView() {
         let systemSettingContainerView = UIView()
-        systemSettingContainerView.backgroundColor = .white
+        systemSettingContainerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         systemSettingContainerView.layer.cornerRadius = DesignMetrics.Padding.size8
         systemSettingContainerView.heightAnchor == DesignMetrics.Dimensions.height372
         
@@ -133,7 +133,7 @@ class SettingsViewController: BaseViewController {
         
         let settingTitleLabel = UILabel()
         settingTitleLabel.textAlignment = .left
-        settingTitleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        settingTitleLabel.textColor = UIColor(named: "appPrimaryTextColor")
         settingTitleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         settingTitleLabel.text = "System settings"
         
@@ -152,6 +152,7 @@ class SettingsViewController: BaseViewController {
         let autoBackUpContentView = SystemSettingView()
         autoBackUpContentView.leftImageView.image = UIImage(named: "autoBackUpIcon")
         autoBackUpContentView.titleLabel.text = "Auto Backup"
+        
         autoBackUpContentView.rightImageView.image = UIImage(named: "forwardArrow")
         
         autoBackUpView.addSubview(autoBackUpContentView)
@@ -230,7 +231,7 @@ class SettingsViewController: BaseViewController {
     
     private func setupPrivacyAndTermsView() {
         let privacyAndtermsContainerView = UIView()
-        privacyAndtermsContainerView.backgroundColor = .white
+        privacyAndtermsContainerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         privacyAndtermsContainerView.layer.cornerRadius = DesignMetrics.Padding.size8
         privacyAndtermsContainerView.heightAnchor == DesignMetrics.Dimensions.height197
         
@@ -243,7 +244,7 @@ class SettingsViewController: BaseViewController {
         
         let privacyAndTermsLabel = UILabel()
         privacyAndTermsLabel.textAlignment = .left
-        privacyAndTermsLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        privacyAndTermsLabel.textColor = UIColor(named: "appPrimaryTextColor")
         privacyAndTermsLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         privacyAndTermsLabel.text = "Privacy & Terms"
         
@@ -294,7 +295,7 @@ class SettingsViewController: BaseViewController {
     
     private func setupFeedbackView() {
         let feedBackMainView = UIView()
-        feedBackMainView.backgroundColor = .white
+        feedBackMainView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         
         feedBackMainView.layer.cornerRadius = DesignMetrics.Padding.size8
         feedBackMainView.heightAnchor == DesignMetrics.Dimensions.height78
@@ -313,7 +314,7 @@ class SettingsViewController: BaseViewController {
     
     private func setupContactUsView() {
         let contactUsMainView = UIView()
-        contactUsMainView.backgroundColor = .white
+        contactUsMainView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         contactUsMainView.layer.cornerRadius = DesignMetrics.Padding.size8
         contactUsMainView.heightAnchor == DesignMetrics.Dimensions.height78
         

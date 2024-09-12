@@ -32,8 +32,8 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             BottomSheetOption(icon: uploadIcon, title: "Contacts")
         ]
     }()
-    private let selectedTintColor: UIColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-    private let deselectedTintColor: UIColor = #colorLiteral(red: 0.8509803922, green: 0.8509803922, blue: 0.8509803922, alpha: 1)
+    private let selectedTintColor: UIColor = UIColor(named: "appPrimaryTextColor") ?? .gray
+    private let deselectedTintColor: UIColor = UIColor(named: "appDeselectedTabbarColor") ?? .gray
     private let notchView = UIView()
 
     override func viewDidLoad() {
@@ -58,6 +58,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         sharedVC.tabBarItem.tag = 3
 
         let settingsVC = SettingsViewController()
+//        self.navigationController?.pushViewController(settingsVC, animated: true)
         settingsVC.tabBarItem.tag = 4
 
         // Set view controllers for the tab bar controller
@@ -74,6 +75,24 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     private func setupCustomTabBarButtons() {
         let buttons = ["home", "favorite", "personal", "settings"]
         let buttonTags = [0, 1, 3, 4]
+        
+        // Add a custom center button
+        centerButton = UIButton()
+        centerButton.setImage(UIImage(named: "centerTabbar"), for: .normal)
+        centerButton.layer.cornerRadius = 35
+        centerButton.layer.shadowColor = UIColor.link.cgColor
+        centerButton.layer.shadowOpacity = 0.3
+        centerButton.layer.shadowOffset = CGSize(width: 0, height: 5)
+        centerButton.layer.shadowRadius = 5
+        centerButton.translatesAutoresizingMaskIntoConstraints = false
+        customTabBar.addSubview(centerButton)
+
+        centerButton.centerXAnchor == customTabBar.centerXAnchor
+        centerButton.centerYAnchor == customTabBar.centerYAnchor - 8
+        centerButton.widthAnchor == 80
+        centerButton.heightAnchor == 80
+        
+        centerButton.addTarget(self, action: #selector(centerButtonTapped), for: .touchUpInside)
 
         for (index, imageName) in buttons.enumerated() {
             let button = UIButton()
@@ -81,14 +100,14 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             button.tintColor = deselectedTintColor
             button.tag = buttonTags[index]
             button.addTarget(self, action: #selector(tabBarButtonTapped(_:)), for: .touchUpInside)
-            customTabBar.backgroundColor = .white //for curvy tabbar comment this
+            customTabBar.backgroundColor =  UIColor(named: "appBackgroundViewColor") //for curvy tabbar comment this
             customTabBar.addSubview(button)
             tabButtons.append(button)
 
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.centerYAnchor == customTabBar.centerYAnchor
-            button.widthAnchor == 42
-            button.heightAnchor == 42
+            button.centerYAnchor == centerButton.centerYAnchor
+            button.widthAnchor == 60
+            button.heightAnchor == 60
 
             switch button.tag {
             case 0:
@@ -104,23 +123,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             }
         }
 
-        // Add a custom center button
-        centerButton = UIButton()
-        centerButton.setImage(UIImage(named: "centerTabbar"), for: .normal)
-        centerButton.layer.cornerRadius = 35
-        centerButton.layer.shadowColor = UIColor.black.cgColor
-        centerButton.layer.shadowOpacity = 0.3
-        centerButton.layer.shadowOffset = CGSize(width: 0, height: 5)
-        centerButton.layer.shadowRadius = 5
-        centerButton.translatesAutoresizingMaskIntoConstraints = false
-        customTabBar.addSubview(centerButton)
-
-        centerButton.centerXAnchor == customTabBar.centerXAnchor
-        centerButton.centerYAnchor == customTabBar.centerYAnchor - 8
-        centerButton.widthAnchor == 70
-        centerButton.heightAnchor == 70
         
-        centerButton.addTarget(self, action: #selector(centerButtonTapped), for: .touchUpInside)
 
         // Set the initial selected button
         tabBarButtonTapped(tabButtons[0])
@@ -132,7 +135,9 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
         sender.tintColor = selectedTintColor
         // Adjust the selectedIndex based on the presence of the dummyVC
+        print("selected index = \(sender.tag)")
         selectedIndex = sender.tag < 2 ? sender.tag : sender.tag + 1
+        
     }
 
     @objc private func centerButtonTapped() {
@@ -142,10 +147,12 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
         showBottomSheet()
     }
-
+    
+    
     private func showBottomSheet() {
         guard let selectedVC = selectedViewController else { return }
-        
+
+        // Create dimming view if needed
         if dimmingView == nil {
             dimmingView = UIView(frame: selectedVC.view.bounds)
             dimmingView?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -155,10 +162,11 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissBottomSheet))
             dimmingView?.addGestureRecognizer(tapGesture)
         }
-        
+
+        // Create bottom sheet view if it doesn't exist
         if bottomSheetView == nil {
             bottomSheetView = UIView()
-            bottomSheetView?.backgroundColor = .white
+            bottomSheetView?.backgroundColor = UIColor(named: "appBackgroundViewColor")
             bottomSheetView?.layer.cornerRadius = 16
             bottomSheetView?.clipsToBounds = true
             selectedVC.view.addSubview(bottomSheetView!)
@@ -166,46 +174,61 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             
             bottomSheetHeightConstraint = bottomSheetView?.heightAnchor.constraint(equalToConstant: 400)
             bottomSheetHeightConstraint?.isActive = true
-            
+
+            // Set bottom constraint initially off-screen
+            bottomSheetHeightConstraint = bottomSheetView!.bottomAnchor.constraint(equalTo: selectedVC.view.bottomAnchor, constant: 400)
+            bottomSheetHeightConstraint?.isActive = true
+
             NSLayoutConstraint.activate([
                 bottomSheetView!.leadingAnchor.constraint(equalTo: selectedVC.view.leadingAnchor),
                 bottomSheetView!.trailingAnchor.constraint(equalTo: selectedVC.view.trailingAnchor),
-                bottomSheetView!.bottomAnchor.constraint(equalTo: selectedVC.view.bottomAnchor),
                 bottomSheetHeightConstraint!
             ])
             
             // Add content to the bottom sheet
             setupBottomSheetContent()
             setupNotchView()
+        } else {
+            // If the bottom sheet view already exists, make sure it's not hidden
+            bottomSheetView?.isHidden = false
         }
+
+        // Ensure layout is updated
+        selectedVC.view.layoutIfNeeded()
         
-        bottomSheetView?.isHidden = false
-        UIView.animate(withDuration: 0.3) {
+        // Animate the appearance of the bottom sheet from the bottom
+        UIView.animate(withDuration: 0.3, animations: {
             self.dimmingView?.alpha = 1.0
-            self.bottomSheetHeightConstraint?.constant = 400
+            self.bottomSheetHeightConstraint?.constant = 0 // Bring it back on-screen
             selectedVC.view.layoutIfNeeded()
-        }
+        })
     }
+
+
 
     @objc private func dismissBottomSheet() {
         guard let selectedVC = selectedViewController else { return }
         
+        // Animate the hiding of the bottom sheet
         UIView.animate(withDuration: 0.3, animations: {
             self.dimmingView?.alpha = 0.0
-            self.bottomSheetHeightConstraint?.constant = 0
+            self.bottomSheetHeightConstraint?.constant = 400 // Move it off-screen
             selectedVC.view.layoutIfNeeded()
         }) { _ in
             self.bottomSheetView?.isHidden = true
         }
     }
 
+
+
+
     private func setupBottomSheetContent() {
         guard let bottomSheetView = bottomSheetView else { return }
         
         let imageNameLabel = UILabel()
         imageNameLabel.textAlignment = .center
-        imageNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-        imageNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        imageNameLabel.textColor =  UIColor(named: "appPrimaryTextColor")
+        imageNameLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         imageNameLabel.text = "Add to Databox"
         
         let separatorView = UIView()
@@ -233,7 +256,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         tableView.dataSource = self
         tableView.register(BottomSheetOptionCell.self, forCellReuseIdentifier: "BottomSheetOptionCell")
         tableView.separatorStyle = .none
-        
+        tableView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         bottomSheetView.addSubview(tableView)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -246,7 +269,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     private func setupNotchView() {
-        notchView.backgroundColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        notchView.backgroundColor =  UIColor(named: "appPrimaryTextColor")
         notchView.layer.cornerRadius = 2.5
         bottomSheetView?.addSubview(notchView)
         
@@ -299,7 +322,7 @@ extension CustomTabBarController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BottomSheetOptionCell", for: indexPath) as! BottomSheetOptionCell
         cell.titleLabel.text = bottomSheetOptions[indexPath.row].title
-        cell.titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        cell.titleLabel.textColor =  UIColor(named: "appPrimaryTextColor")
         cell.iconImageView.image = bottomSheetOptions[indexPath.row].icon
         cell.selectionStyle = .none
         cell.backgroundColor = .clear

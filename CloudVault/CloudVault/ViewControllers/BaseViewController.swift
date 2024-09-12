@@ -8,6 +8,7 @@
 import UIKit
 import Anchorage
 import SVProgressHUD
+import Lottie
 
 class BaseViewController: UIViewController {
 
@@ -142,8 +143,9 @@ class BaseViewController: UIViewController {
             navBarContainer.heightAnchor == DesignMetrics.Dimensions.height44
             navBarContainer.isHidden = false
             if (hideBackground) {
-                navBarContainer.backgroundColor = .white
+                navBarContainer.backgroundColor = UIColor(named: "appBackgroundViewColor")
             }
+            
             let stackView = UIStackView()
             stackView.axis = .horizontal
             stackView.spacing = DesignMetrics.Padding.size12
@@ -172,7 +174,7 @@ class BaseViewController: UIViewController {
             }
             
             //titleLabel.font = .neuphoriaTitle
-            titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+            titleLabel.textColor =  UIColor(named: "appPrimaryTextColor")
             titleLabel.text = title
             titleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 22)
             titleLabel.heightAnchor == DesignMetrics.Dimensions.height44
@@ -184,7 +186,7 @@ class BaseViewController: UIViewController {
             navBarStack.spacing = DesignMetrics.Padding.size16
             navBarContainer.addSubview(navBarStack)
             if(hideBackground) {
-                navBarStack.backgroundColor = .white
+                navBarStack.backgroundColor = UIColor(named: "appBackgroundViewColor")
                 navBarStack.edgeAnchors == navBarContainer.edgeAnchors - 16
                 addButtonsToNavbar(addSpacerView: false)
             }
@@ -252,7 +254,7 @@ class BaseViewController: UIViewController {
     
     
     private func setupNavBarNew(title: String, showBackButton: Bool, hideBackground: Bool) {
-        navBarContainer.heightAnchor == DesignMetrics.Dimensions.height80
+        navBarContainer.heightAnchor == DesignMetrics.Dimensions.height60
         if hideBackground {
             navBarContainer.backgroundColor = .clear
         }
@@ -270,9 +272,9 @@ class BaseViewController: UIViewController {
         
         let profilePicView = UIView()
         profilePicView.backgroundColor = .white
-        profilePicView.widthAnchor == 70
-        profilePicView.heightAnchor == 70
-        profilePicView.layer.cornerRadius = 35
+        profilePicView.widthAnchor == 60
+        profilePicView.heightAnchor == DesignMetrics.Dimensions.height60
+        profilePicView.layer.cornerRadius = 30
         
         let userImageView = UIImageView()
         userImageView.contentMode = .scaleAspectFit
@@ -292,7 +294,7 @@ class BaseViewController: UIViewController {
         
         let userInfoView = UIView()
         userInfoView.backgroundColor = .clear
-        userInfoView.heightAnchor == 70
+        userInfoView.heightAnchor == DesignMetrics.Dimensions.height60
         
         let userInfoStackView = UIStackView()
         userInfoStackView.axis = .vertical
@@ -300,12 +302,12 @@ class BaseViewController: UIViewController {
         
         let nameLabel = UILabel()
         nameLabel.text = "Nataliya Smith"
-        nameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        nameLabel.textColor =  UIColor(named: "appPrimaryTextColor")
         nameLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 18)
         
         let emailLabel = UILabel()
         emailLabel.text = "Younasmughal122@gmail.com"
-        emailLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        emailLabel.textColor =  UIColor(named: "appPrimaryTextColor")
         emailLabel.font = FontManagerDatabox.shared.cloudVaultSemiLightText(ofSize: 10)
         emailLabel.numberOfLines = 0
         
@@ -319,7 +321,7 @@ class BaseViewController: UIViewController {
         profileStackView.addArrangedSubview(userInfoView)
         
         profileView.addSubview(profileStackView)
-        profileStackView.heightAnchor == 70
+        profileStackView.heightAnchor == DesignMetrics.Dimensions.height60
         profileStackView.leadingAnchor == profileView.leadingAnchor + 8
         profileStackView.trailingAnchor == profileView.trailingAnchor - 8
         profileStackView.topAnchor == profileView.topAnchor + 4
@@ -336,19 +338,27 @@ class BaseViewController: UIViewController {
         navigationButtonsStackView.distribution = .equalSpacing
         
         let getProView = UIView()
-        getProView.backgroundColor = .white
+        getProView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         getProView.widthAnchor == 42
         getProView.heightAnchor == 42
         getProView.layer.cornerRadius = 21
         
+        let animationView = LottieAnimationView(name: "proIcon")
+        // Set up the animation properties
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop  // You can change this to .playOnce if you don't want a loop
+        animationView.play()
+    
+        
         let searchView = UIView()
-        searchView.backgroundColor = .white
+        searchView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         searchView.widthAnchor == 42
         searchView.heightAnchor == 42
         searchView.layer.cornerRadius = 21
         
+        
         let hamburgerView = UIView()
-        hamburgerView.backgroundColor = .white
+        hamburgerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         hamburgerView.widthAnchor == 42
         hamburgerView.heightAnchor == 42
         hamburgerView.layer.cornerRadius = 21
@@ -369,11 +379,11 @@ class BaseViewController: UIViewController {
         hamburgerImageView.contentMode = .scaleAspectFit
         hamburgerImageView.image = UIImage(named: "hamburgerIcon")
         
-        getProView.addSubview(getProImageView)
+        getProView.addSubview(animationView)
         searchView.addSubview(searchImageView)
         hamburgerView.addSubview(hamburgerImageView)
         
-        getProImageView.edgeAnchors == getProView.edgeAnchors
+        animationView.edgeAnchors == getProView.edgeAnchors
         searchImageView.edgeAnchors == searchView.edgeAnchors
         hamburgerImageView.edgeAnchors == hamburgerView.edgeAnchors + 8
         
@@ -449,8 +459,8 @@ class BaseViewController: UIViewController {
             // SVProgressHUD.showProgress(0.5) // 50% progress
             SVProgressHUD.setDefaultStyle(.dark)
             SVProgressHUD.setDefaultMaskType(.black)
-            SVProgressHUD.setForegroundColor(UIColor(named: "appBackgroundColor") ?? .white)
-            SVProgressHUD.setBackgroundColor(#colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1))
+            SVProgressHUD.setForegroundColor(UIColor(named: "appPrimaryTextColor") ?? .white)
+            SVProgressHUD.setBackgroundColor(UIColor(named: "appBackgroundViewColor") ?? .gray)
             SVProgressHUD.setRingThickness(2)
         }
         
@@ -560,7 +570,30 @@ class BaseViewController: UIViewController {
 
 extension BaseViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        // Ensure that the gesture recognizer should begin when there are more than one view controllers in the stack
-        return self.navigationController?.viewControllers.count ?? 0 > 1
-    }
+            // Allow gestures to begin when there is more than one view controller in the navigation stack
+            return self.navigationController?.viewControllers.count ?? 0 >= 1
+        }
+
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            // Allow pinch and long press gestures to be recognized simultaneously
+            if (gestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer is UIPinchGestureRecognizer) ||
+                (gestureRecognizer is UIPinchGestureRecognizer && otherGestureRecognizer is UILongPressGestureRecognizer) {
+                return true
+            }
+            
+            // Allow simultaneous recognition for other gestures as well, if needed
+            return true
+        }
+
+//        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//            // Ensure pinch gesture takes precedence over long press if both are triggered
+//            if gestureRecognizer is UIPinchGestureRecognizer && otherGestureRecognizer is UILongPressGestureRecognizer {
+//                return true // Pinch should not fail because of long press
+//            }
+//            
+//            return false
+//        }
 }
+
+
+

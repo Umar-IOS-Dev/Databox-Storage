@@ -12,16 +12,23 @@ import FirebaseAuth
 
 class SplashViewController: BaseViewController {
     
+//    let gifImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.contentMode = .scaleAspectFit
+//        // Set up the gifImageView
+//        if let gif = try? UIImage(gifName: "OnBoarding1") {
+//            imageView.setGifImage(gif)
+//        }
+//        
+//        return imageView
+//    }()
+    
     let gifImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        // Set up the gifImageView
-        if let gif = try? UIImage(gifName: "OnBoarding1") {
-            imageView.setGifImage(gif)
-        }
-        
-        return imageView
-    }()
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFill
+            return imageView
+        }()
+    
     let footerStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -34,6 +41,15 @@ class SplashViewController: BaseViewController {
         print("SplashViewController is being deallocated")
     }
     
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+           super.traitCollectionDidChange(previousTraitCollection)
+           
+           if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+               // Update the GIF when the theme changes
+               updateGifImage()
+           }
+       }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +64,8 @@ class SplashViewController: BaseViewController {
         view.backgroundColor = UIColor(named: "appBackgroundColor")
         configureAppIcon()
         configureFooterView()
-        showProgress()
+//        showProgress()
+        updateGifImage()
        // setupActivityIndicator()
        // activityIndicator.startAnimating()
        // self.view.bringSubviewToFront(activityIndicator)
@@ -60,6 +77,20 @@ class SplashViewController: BaseViewController {
 //        activityIndicator.color = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
 //            view.addSubview(activityIndicator)
 //        }
+    
+    // Method to update the GIF image based on the current interface style (light/dark mode)
+       private func updateGifImage() {
+           let gifName: String
+           if traitCollection.userInterfaceStyle == .dark {
+               gifName = "OnBoarding1Dark"  // Use the dark mode GIF
+           } else {
+               gifName = "splashLight"  // Use the light mode GIF
+           }
+           
+           if let gif = try? UIImage(gifName: gifName) {
+               gifImageView.setGifImage(gif)
+           }
+       }
     
     private func configureAppIcon() {
         view.addSubview(gifImageView)
@@ -112,10 +143,11 @@ class SplashViewController: BaseViewController {
                 // Navigate to the main app screen or perform any other actions needed.
            // activityIndicator.stopAnimating()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
                 guard let self = self else { return }
-                hideProgress()
+               // hideProgress()
                 self.transitionToMainApp()
+               // logoutUser()
             }
           //  self.showHomeViewController()
 //            let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -125,7 +157,7 @@ class SplashViewController: BaseViewController {
             } else {
                 // No user is signed in.
                 print("No user is signed in.")
-                hideProgress()
+               // hideProgress()
               //  activityIndicator.stopAnimating()
                 // Show the login screen or perform any other actions needed.
                 let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -178,6 +210,21 @@ class SplashViewController: BaseViewController {
 //                              completion: nil)
 //        }
 //    }
+    
+    
+    func logoutUser() {
+        do {
+            try Auth.auth().signOut()
+            print("User logged out successfully.")
+            
+            // Navigate to the login screen or take necessary action
+            // For example, if you are using a navigation controller:
+            // self.navigationController?.popToRootViewController(animated: true)
+            
+        } catch let signOutError as NSError {
+            print("Error signing out: %@", signOutError)
+        }
+    }
     
    
 }

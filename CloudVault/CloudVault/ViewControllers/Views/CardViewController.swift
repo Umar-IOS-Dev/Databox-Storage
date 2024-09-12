@@ -31,7 +31,7 @@ class CardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        view.backgroundColor = UIColor(named: "cardVcBgColor")
         
         cardView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(cardView)
@@ -39,17 +39,25 @@ class CardViewController: UIViewController {
         cardView.centerXAnchor == view.centerXAnchor
         cardView.centerYAnchor == view.centerYAnchor
         cardView.widthAnchor == view.widthAnchor * 0.84
-        cardView.heightAnchor == 450//view.heightAnchor * 0.68
+        cardView.heightAnchor == 500//view.heightAnchor * 0.58
         
         cardView.cardDelegate = self
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissCard))
         view.addGestureRecognizer(tapGestureRecognizer)
+        
     }
     
-    @objc private func dismissCard() {
-        self.delegate?.showContent()
-        dismiss(animated: true, completion: nil)
+    @objc private func dismissCard(_ sender: UITapGestureRecognizer) {
+        // Get the location of the tap
+            let location = sender.location(in: view)
+            
+            // Check if the tap is outside the cardView
+            if !cardView.frame.contains(location) {
+                self.delegate?.showContent()
+                dismiss(animated: true, completion: nil) // Dismiss the view controller if tapped outside cardView
+            }
+        
     }
     
     private func showLoginViewController() {

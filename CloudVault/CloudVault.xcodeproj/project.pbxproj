@@ -14,6 +14,10 @@
 		631869C62C731D430026F389 /* ReplyFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C52C731D430026F389 /* ReplyFeedbackViewController.swift */; };
 		631869CA2C731F380026F389 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C92C731F380026F389 /* FeedbackViewController.swift */; };
 		631869CC2C732FD60026F389 /* FeedbackSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869CB2C732FD50026F389 /* FeedbackSegmentedView.swift */; };
+		6339919A2C918B3300EF3D02 /* sliderDataBox.gif in Resources */ = {isa = PBXBuildFile; fileRef = 633991992C918B3300EF3D02 /* sliderDataBox.gif */; };
+		6339919C2C91C74700EF3D02 /* ProgressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6339919B2C91C74600EF3D02 /* ProgressButton.swift */; };
+		6339919F2C92F54500EF3D02 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6339919E2C92F54500EF3D02 /* Lottie */; };
+		633991A12C92F57E00EF3D02 /* proIcon.json in Resources */ = {isa = PBXBuildFile; fileRef = 633991A02C92F57D00EF3D02 /* proIcon.json */; };
 		63603EE32C6213D700F4C115 /* UploadInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603EE22C6213D600F4C115 /* UploadInfoViewController.swift */; };
 		63603EF62C64B9F300F4C115 /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 63603EF52C64B9F300F4C115 /* SVProgressHUD */; };
 		63603EFC2C64F77E00F4C115 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603EFB2C64F77E00F4C115 /* StorageViewController.swift */; };
@@ -31,6 +35,11 @@
 		63B19A4B2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A4A2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf */; };
 		63B19A4F2C81F42E00BB2CEC /* Segoe UI.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A4E2C81F42E00BB2CEC /* Segoe UI.ttf */; };
 		63B19A512C81F56000BB2CEC /* Segoe UI Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A502C81F56000BB2CEC /* Segoe UI Bold.ttf */; };
+		63B19A532C8F0FDD00BB2CEC /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 63B19A522C8F0FDD00BB2CEC /* FirebaseMessaging */; };
+		63B19A562C905B1000BB2CEC /* OnBoarding1Dark.gif in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A552C905B1000BB2CEC /* OnBoarding1Dark.gif */; };
+		63B19A582C905B5D00BB2CEC /* OnBoarding2Dark.gif in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A572C905B5D00BB2CEC /* OnBoarding2Dark.gif */; };
+		63B19A5A2C905B8300BB2CEC /* OnBoarding3Dark.gif in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A592C905B8300BB2CEC /* OnBoarding3Dark.gif */; };
+		63B19A5C2C9178BD00BB2CEC /* splashLight.gif in Resources */ = {isa = PBXBuildFile; fileRef = 63B19A5B2C9178BD00BB2CEC /* splashLight.gif */; };
 		63C3E4A12C3BFAEF0060F257 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C3E4A02C3BFAEF0060F257 /* AppDelegate.swift */; };
 		63C3E4A32C3BFAEF0060F257 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C3E4A22C3BFAEF0060F257 /* SceneDelegate.swift */; };
 		63C3E4AA2C3BFAF00060F257 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63C3E4A92C3BFAF00060F257 /* Assets.xcassets */; };
@@ -99,6 +108,8 @@
 		63C3E5662C5CEAA20060F257 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 63C3E5652C5CEAA20060F257 /* GoogleSignIn */; };
 		63C3E5682C5CEAA20060F257 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 63C3E5672C5CEAA20060F257 /* GoogleSignInSwift */; };
 		63C3E5702C60D9200060F257 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C3E56F2C60D9200060F257 /* Extensions.swift */; };
+		8AC737CED4A89841229E6241 /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 846A79C95A985AA3D3CC5AAA /* awsconfiguration.json */; };
+		F510F6BE2A1D9AC8BCC5075F /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = CDC42B1F04FFF684CA830230 /* amplifyconfiguration.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +135,9 @@
 		631869C52C731D430026F389 /* ReplyFeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyFeedbackViewController.swift; sourceTree = "<group>"; };
 		631869C92C731F380026F389 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		631869CB2C732FD50026F389 /* FeedbackSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackSegmentedView.swift; sourceTree = "<group>"; };
+		633991992C918B3300EF3D02 /* sliderDataBox.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = sliderDataBox.gif; sourceTree = "<group>"; };
+		6339919B2C91C74600EF3D02 /* ProgressButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressButton.swift; sourceTree = "<group>"; };
+		633991A02C92F57D00EF3D02 /* proIcon.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = proIcon.json; sourceTree = "<group>"; };
 		63603EE22C6213D600F4C115 /* UploadInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadInfoViewController.swift; sourceTree = "<group>"; };
 		63603EFB2C64F77E00F4C115 /* StorageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewController.swift; sourceTree = "<group>"; };
 		63603EFD2C65EFF600F4C115 /* StorageVerticalUsageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageVerticalUsageView.swift; sourceTree = "<group>"; };
@@ -140,6 +154,11 @@
 		63B19A4A2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "segoe-ui-semibold.ttf"; sourceTree = "<group>"; };
 		63B19A4E2C81F42E00BB2CEC /* Segoe UI.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Segoe UI.ttf"; sourceTree = "<group>"; };
 		63B19A502C81F56000BB2CEC /* Segoe UI Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Segoe UI Bold.ttf"; sourceTree = "<group>"; };
+		63B19A542C8F11F500BB2CEC /* CloudVault.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CloudVault.entitlements; sourceTree = "<group>"; };
+		63B19A552C905B1000BB2CEC /* OnBoarding1Dark.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = OnBoarding1Dark.gif; sourceTree = "<group>"; };
+		63B19A572C905B5D00BB2CEC /* OnBoarding2Dark.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = OnBoarding2Dark.gif; sourceTree = "<group>"; };
+		63B19A592C905B8300BB2CEC /* OnBoarding3Dark.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = OnBoarding3Dark.gif; sourceTree = "<group>"; };
+		63B19A5B2C9178BD00BB2CEC /* splashLight.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = splashLight.gif; sourceTree = "<group>"; };
 		63C3E49D2C3BFAEF0060F257 /* CloudVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C3E4A02C3BFAEF0060F257 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63C3E4A22C3BFAEF0060F257 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -202,6 +221,8 @@
 		63C3E5532C5B69CE0060F257 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		63C3E5602C5C998D0060F257 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63C3E56F2C60D9200060F257 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		846A79C95A985AA3D3CC5AAA /* awsconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
+		CDC42B1F04FFF684CA830230 /* amplifyconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,8 +232,10 @@
 			files = (
 				63603EF62C64B9F300F4C115 /* SVProgressHUD in Frameworks */,
 				63C3E55F2C5BB9E80060F257 /* FirebaseAppDistribution-Beta in Frameworks */,
+				63B19A532C8F0FDD00BB2CEC /* FirebaseMessaging in Frameworks */,
 				631869BF2C6F83850026F389 /* SDWebImageMapKit in Frameworks */,
 				63C3E4D62C3C081C0060F257 /* Anchorage in Frameworks */,
+				6339919F2C92F54500EF3D02 /* Lottie in Frameworks */,
 				63C3E55B2C5BB9E80060F257 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				63C3E4DF2C3C0EE10060F257 /* SwiftyGif in Frameworks */,
 				63C3E5572C5BB9E80060F257 /* FirebaseAnalytics in Frameworks */,
@@ -280,6 +303,7 @@
 				63C3E4C02C3BFAF00060F257 /* CloudVaultUITests */,
 				63C3E49E2C3BFAEF0060F257 /* Products */,
 				63C3E4D42C3C081C0060F257 /* Frameworks */,
+				902B7093BEA6ED6ECB701C03 /* AmplifyConfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -296,6 +320,7 @@
 		63C3E49F2C3BFAEF0060F257 /* CloudVault */ = {
 			isa = PBXGroup;
 			children = (
+				63B19A542C8F11F500BB2CEC /* CloudVault.entitlements */,
 				63C3E4E02C3CF1AE0060F257 /* App */,
 				63C3E4D12C3C079D0060F257 /* ViewControllers */,
 				63C3E5352C5120F70060F257 /* GIFs */,
@@ -406,6 +431,7 @@
 				63C3E5172C4A20FD0060F257 /* StorageUsageView.swift */,
 				63C3E53F2C523E650060F257 /* SystemSettingView.swift */,
 				63C3E5412C5253F90060F257 /* PrivacyAndTermsView.swift */,
+				6339919B2C91C74600EF3D02 /* ProgressButton.swift */,
 				63C3E5432C52668E0060F257 /* FeedbackAndContactView.swift */,
 				63603EFD2C65EFF600F4C115 /* StorageVerticalUsageView.swift */,
 				63603F012C674B4E00F4C115 /* StorageHorizontalUsageView.swift */,
@@ -501,9 +527,15 @@
 		63C3E5352C5120F70060F257 /* GIFs */ = {
 			isa = PBXGroup;
 			children = (
+				633991A02C92F57D00EF3D02 /* proIcon.json */,
 				63C3E5372C5121180060F257 /* OnBoarding1.gif */,
+				63B19A552C905B1000BB2CEC /* OnBoarding1Dark.gif */,
+				63B19A572C905B5D00BB2CEC /* OnBoarding2Dark.gif */,
+				63B19A592C905B8300BB2CEC /* OnBoarding3Dark.gif */,
 				63C3E5382C5121180060F257 /* OnBoarding2.gif */,
 				63C3E5362C5121180060F257 /* OnBoarding3.gif */,
+				633991992C918B3300EF3D02 /* sliderDataBox.gif */,
+				63B19A5B2C9178BD00BB2CEC /* splashLight.gif */,
 			);
 			path = GIFs;
 			sourceTree = "<group>";
@@ -555,6 +587,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		902B7093BEA6ED6ECB701C03 /* AmplifyConfig */ = {
+			isa = PBXGroup;
+			children = (
+				846A79C95A985AA3D3CC5AAA /* awsconfiguration.json */,
+				CDC42B1F04FFF684CA830230 /* amplifyconfiguration.json */,
+			);
+			name = AmplifyConfig;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -587,6 +628,8 @@
 				63603EF52C64B9F300F4C115 /* SVProgressHUD */,
 				631869BC2C6F83850026F389 /* SDWebImage */,
 				631869BE2C6F83850026F389 /* SDWebImageMapKit */,
+				63B19A522C8F0FDD00BB2CEC /* FirebaseMessaging */,
+				6339919E2C92F54500EF3D02 /* Lottie */,
 			);
 			productName = CloudVault;
 			productReference = 63C3E49D2C3BFAEF0060F257 /* CloudVault.app */;
@@ -667,6 +710,7 @@
 				63C3E5642C5CEAA20060F257 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */,
 				631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				6339919D2C92F54500EF3D02 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 63C3E49E2C3BFAEF0060F257 /* Products */;
 			projectDirPath = "";
@@ -684,21 +728,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63B19A5C2C9178BD00BB2CEC /* splashLight.gif in Resources */,
 				63C3E4FE2C40F1C10060F257 /* segoeuithisz.ttf in Resources */,
 				63B19A512C81F56000BB2CEC /* Segoe UI Bold.ttf in Resources */,
 				63B19A4B2C81F0BD00BB2CEC /* segoe-ui-semibold.ttf in Resources */,
 				63C3E53B2C5121180060F257 /* OnBoarding2.gif in Resources */,
+				633991A12C92F57E00EF3D02 /* proIcon.json in Resources */,
 				63C3E4AA2C3BFAF00060F257 /* Assets.xcassets in Resources */,
+				63B19A5A2C905B8300BB2CEC /* OnBoarding3Dark.gif in Resources */,
 				63C3E5052C4137780060F257 /* download-4974_256.gif in Resources */,
 				63C3E4FC2C40F1C10060F257 /* segoeuithis.ttf in Resources */,
 				63C3E5612C5C998D0060F257 /* GoogleService-Info.plist in Resources */,
 				63C3E4FD2C40F1C10060F257 /* segoeuithisi.ttf in Resources */,
 				63C3E53A2C5121180060F257 /* OnBoarding1.gif in Resources */,
 				63B19A4F2C81F42E00BB2CEC /* Segoe UI.ttf in Resources */,
+				63B19A562C905B1000BB2CEC /* OnBoarding1Dark.gif in Resources */,
 				63C3E5012C410F510060F257 /* segoeuisl.ttf in Resources */,
 				63C3E4FF2C40F1C10060F257 /* segoeuithibd.ttf in Resources */,
+				63B19A582C905B5D00BB2CEC /* OnBoarding2Dark.gif in Resources */,
 				63C3E4AD2C3BFAF00060F257 /* Base in Resources */,
+				6339919A2C918B3300EF3D02 /* sliderDataBox.gif in Resources */,
 				63C3E5392C5121180060F257 /* OnBoarding3.gif in Resources */,
+				8AC737CED4A89841229E6241 /* awsconfiguration.json in Resources */,
+				F510F6BE2A1D9AC8BCC5075F /* amplifyconfiguration.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -794,6 +846,7 @@
 				63C3E4EA2C3D60390060F257 /* CardViewController.swift in Sources */,
 				63C3E5202C4A70EE0060F257 /* CustomTabBarController.swift in Sources */,
 				63C3E5702C60D9200060F257 /* Extensions.swift in Sources */,
+				6339919C2C91C74700EF3D02 /* ProgressButton.swift in Sources */,
 				63C3E5182C4A20FD0060F257 /* StorageUsageView.swift in Sources */,
 				63C3E4EF2C3E90130060F257 /* CardPresentAnimationController.swift in Sources */,
 				63C3E4DA2C3C0A210060F257 /* OnboardingViewController.swift in Sources */,
@@ -992,6 +1045,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CloudVault/CloudVault.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1014,7 +1068,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appinator.CloudVault;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appinator.databox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1032,6 +1086,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CloudVault/CloudVault.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1054,7 +1109,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appinator.CloudVault;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appinator.databox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1197,6 +1252,14 @@
 				minimumVersion = 5.19.6;
 			};
 		};
+		6339919D2C92F54500EF3D02 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.0;
+			};
+		};
 		63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SVProgressHUD/SVProgressHUD.git";
@@ -1250,10 +1313,20 @@
 			package = 631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImageMapKit;
 		};
+		6339919E2C92F54500EF3D02 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6339919D2C92F54500EF3D02 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		63603EF52C64B9F300F4C115 /* SVProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */;
 			productName = SVProgressHUD;
+		};
+		63B19A522C8F0FDD00BB2CEC /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63C3E5552C5BB9E70060F257 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		63C3E4D52C3C081C0060F257 /* Anchorage */ = {
 			isa = XCSwiftPackageProductDependency;

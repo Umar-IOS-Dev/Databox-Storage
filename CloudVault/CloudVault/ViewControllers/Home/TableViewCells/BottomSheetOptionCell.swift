@@ -53,7 +53,7 @@ class BottomSheetOptionCell: UITableViewCell {
             backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.3019607843, blue: 0.3019607843, alpha: 0.1850818452)
         }
         else {
-            titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+            titleLabel.textColor =  UIColor(named: "appPrimaryTextColor")
             backgroundColor = .white
         }
     }

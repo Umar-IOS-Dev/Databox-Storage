@@ -13,7 +13,7 @@ class StorageViewController: BaseViewController {
         let topView = UIView()
         topView.backgroundColor =  #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         topView.layer.cornerRadius = DesignMetrics.Padding.size12
-        topView.heightAnchor == 600
+        topView.heightAnchor == 580
         return topView
     }()
     
@@ -196,16 +196,22 @@ class StorageViewController: BaseViewController {
         let documentsGraphContainerView = UIView()
         
         let imagesGraphView = StorageVerticalUsageView(filledPercentage: 54, graphViewColor: #colorLiteral(red: 1, green: 0.3176470588, blue: 0.09803921569, alpha: 0.09970238095), filledColor: #colorLiteral(red: 1, green: 0.631372549, blue: 0.2941176471, alpha: 1))
+        imagesGraphView.animateFill(to: 54, duration: 1.5)
         
         let audiosGraphView = StorageVerticalUsageView(filledPercentage: 34, graphViewColor: #colorLiteral(red: 0.9098039216, green: 0.4196078431, blue: 0.9215686275, alpha: 0.1031834609), filledColor: #colorLiteral(red: 0.9098039216, green: 0.4196078431, blue: 0.9215686275, alpha: 1))
+        audiosGraphView.animateFill(to: 34, duration: 1.5)
         
         let contactsGraphView = StorageVerticalUsageView(filledPercentage: 10, graphViewColor: #colorLiteral(red: 0.2745098039, green: 0.8666666667, blue: 0.2980392157, alpha: 0.1), filledColor: #colorLiteral(red: 0.2745098039, green: 0.8666666667, blue: 0.2980392157, alpha: 1))
+        contactsGraphView.animateFill(to: 10, duration: 1.5)
         
         let filesGraphView = StorageVerticalUsageView(filledPercentage: 70, graphViewColor: #colorLiteral(red: 1, green: 0.8156862745, blue: 0.3450980392, alpha: 0.1), filledColor: #colorLiteral(red: 1, green: 0.8156862745, blue: 0.3450980392, alpha: 1))
+        filesGraphView.animateFill(to: 70, duration: 1.5)
         
         let videosGraphView = StorageVerticalUsageView(filledPercentage: 30, graphViewColor: #colorLiteral(red: 0.3098039216, green: 0.768627451, blue: 0.9137254902, alpha: 0.1), filledColor: #colorLiteral(red: 0.3098039216, green: 0.768627451, blue: 0.9137254902, alpha: 1))
+        videosGraphView.animateFill(to: 30, duration: 1.5)
         
         let documentsGraphView = StorageVerticalUsageView(filledPercentage: 47, graphViewColor: #colorLiteral(red: 0.9843137255, green: 0.4470588235, blue: 0.4470588235, alpha: 0.1), filledColor: #colorLiteral(red: 0.9843137255, green: 0.4470588235, blue: 0.4470588235, alpha: 1))
+        documentsGraphView.animateFill(to: 47, duration: 1.5)
         
         
         imagesGraphContainerView.addSubview(imagesGraphView)

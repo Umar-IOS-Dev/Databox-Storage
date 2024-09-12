@@ -8,13 +8,13 @@
 import UIKit
 
 class CustomTabBar: UITabBar {
-    
+
     private var shapeLayer: CALayer?
-    
+
     override func draw(_ rect: CGRect) {
-        //  self.addShape() // for add curve
+        // self.addShape() // for add curve
     }
-    
+
     private func addShape() {
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = createPath()
@@ -28,7 +28,7 @@ class CustomTabBar: UITabBar {
         }
         self.shapeLayer = shapeLayer
     }
-    
+
     private func createPath() -> CGPath {
         let height: CGFloat = 37.0
         let path = UIBezierPath()
@@ -44,7 +44,13 @@ class CustomTabBar: UITabBar {
         path.close()
         return path.cgPath
     }
-    
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var sizeThatFits = super.sizeThatFits(size)
+        sizeThatFits.height = 100 // Custom height for the tab bar
+        return sizeThatFits
+    }
+
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let pointInSubView = self.convert(point, to: self)
         if self.bounds.contains(pointInSubView) {
@@ -60,3 +66,5 @@ class CustomTabBar: UITabBar {
         return nil
     }
 }
+
+

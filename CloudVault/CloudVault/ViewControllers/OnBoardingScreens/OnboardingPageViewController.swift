@@ -20,6 +20,7 @@ class OnboardingPageViewController: UIPageViewController {
         page1.titleText = "Backup & Restore Data"
         page1.pageIndexImageName = "OnBoardings/onBoardingPageControlImage1"
         page1.progressButtonImageName = "OnBoardings/onBoardingProgress1"
+        page1.progressButtonPercentage = 0.33
         page1.gifImageName = "OnBoarding3"
         
         let page2 = OnboardingViewController()
@@ -27,6 +28,7 @@ class OnboardingPageViewController: UIPageViewController {
         page2.titleText = "Everyday Data Strorage"
         page2.pageIndexImageName = "OnBoardings/onBoardingPageControlImage2"
         page2.progressButtonImageName = "OnBoardings/onBoardingProgress2"
+        page2.progressButtonPercentage = 0.66
         page2.gifImageName = "OnBoarding2"
         
         let page3 = OnboardingViewController()
@@ -34,6 +36,7 @@ class OnboardingPageViewController: UIPageViewController {
         page3.titleText = "End-to-End Encrypted"
         page3.pageIndexImageName = "OnBoardings/onBoardingPageControlImage3"
         page3.progressButtonImageName = "OnBoardings/onBoardingProgress3"
+        page3.progressButtonPercentage = 1.0
         page3.gifImageName = "OnBoarding1"
         
         return [page1, page2, page3]
@@ -47,16 +50,37 @@ class OnboardingPageViewController: UIPageViewController {
         return pc
     }()
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+            super.traitCollectionDidChange(previousTraitCollection)
+            updateGifNameForCurrentMode()
+        }
+        
+        private func updateGifNameForCurrentMode() {
+            let isDarkMode = traitCollection.userInterfaceStyle == .dark
+            
+            pages[0].gifImageName = isDarkMode ? "OnBoarding3Dark" : "OnBoarding3"
+            pages[1].gifImageName = isDarkMode ? "OnBoarding2Dark" : "OnBoarding2"
+            pages[2].gifImageName = isDarkMode ? "OnBoarding1Dark" : "OnBoarding1"
+            
+            // Ensure the current page reflects the new GIF
+            if let currentVC = viewControllers?.first as? OnboardingViewController {
+                currentVC.updateGifImage()
+            }
+        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSource = self
         delegate = self
+        updateGifNameForCurrentMode()
         if let firstVC = pages.first {
             setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)
         }
+        
         setupPageControl()
         setupDelegateForPages()
     }
+    
     
     private func setupPageControl() {
         view.addSubview(pageControl)

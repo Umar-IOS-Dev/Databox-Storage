@@ -14,7 +14,7 @@ class DateHeaderView: UICollectionReusableView {
         let label: UILabel = {
            let label = UILabel()
             label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 16)
-           label.textColor = .black
+           label.textColor = UIColor(named: "appPrimaryTextColor")
            return label
        }()
        

@@ -18,7 +18,7 @@ class PhotosViewController: BaseViewController {
     private let filterNameLabel: UILabel = {
         let filterNameLabel = UILabel()
         filterNameLabel.textAlignment = .left
-        filterNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        filterNameLabel.textColor = UIColor(named: "appPrimaryTextColor")
         filterNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         filterNameLabel.text = "By Date"
         return filterNameLabel
@@ -53,7 +53,7 @@ class PhotosViewController: BaseViewController {
     private let uploadSizeLabel: UILabel = {
         let uploadSizeLabel = UILabel()
         uploadSizeLabel.textAlignment = .left
-        uploadSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        uploadSizeLabel.textColor = UIColor(named: "appPrimaryTextColor")
         uploadSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 28)
         uploadSizeLabel.text = "0.0 MB"
         return uploadSizeLabel
@@ -61,7 +61,7 @@ class PhotosViewController: BaseViewController {
     private let uploadSubHeadingLabel: UILabel = {
         let uploadSubHeadingLabel = UILabel()
         uploadSubHeadingLabel.textAlignment = .left
-        uploadSubHeadingLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        uploadSubHeadingLabel.textColor = UIColor(named: "appPrimaryTextColor")
         uploadSubHeadingLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         uploadSubHeadingLabel.text = "selected to upload on databox"
         return uploadSubHeadingLabel
@@ -77,6 +77,8 @@ class PhotosViewController: BaseViewController {
            return instance
        }()
     
+    private var pinchGesture: UIPinchGestureRecognizer?
+    private var longPressGesture: UILongPressGestureRecognizer?
     private var imagePreviewTransitioningDelegate: ImagePreviewTransitioningDelegate?
     private var isSelectionModeActive = false
     private var currentZoomScale: CGFloat = 1.0
@@ -172,9 +174,6 @@ class PhotosViewController: BaseViewController {
         print("comes in viewDidLoad deallocated")
         // Add the pinch gesture recognizer to the collection view
         self.showProgress()
-               let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
-        pinchGesture.delegate = self
-               collectionView.addGestureRecognizer(pinchGesture)
         configureDataSource()
         // setupData() // Moved setupData here to ensure dataSource is initialized before applying snapshot
         collectionView.delegate = self
@@ -198,24 +197,20 @@ class PhotosViewController: BaseViewController {
         
         hideFocusbandOptionFromNavBar()
         showHideFooterView(isShowFooterView: false)
-        // Add long press gesture recognizer to the collection view
-            let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-            longPressGesture.delegate = self
-            collectionView.addGestureRecognizer(longPressGesture)
-    }
-    
-    // Allow both gestures to be recognized simultaneously
-        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-            return true
+        if longPressGesture == nil || pinchGesture == nil {
+            addGestures() // Make sure gestures are added here
         }
+    }
+ 
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("comes in viewDidAppear deallocated")
+        
         switch currentMediaType {
         case .image, .video, .favourite, .shared:
             if(filesDataSource.count == 0) {
-                showProgress()
+               // showProgress()
                  collectionView.delegate = self
                
             }
@@ -236,8 +231,11 @@ class PhotosViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("comes in viewWillAppear deallocated")
+        print("comes in viewWillAppear")
+        
     }
+    
+    
     
     
     override func didReceiveMemoryWarning() {
@@ -246,6 +244,23 @@ class PhotosViewController: BaseViewController {
         SDImageCache.shared.clearDisk(onCompletion: nil)
         SDImageCache.shared.clearMemory()
     }
+    
+    private func addGestures() {
+        pinchGesture = nil
+        longPressGesture = nil
+        pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        pinchGesture?.delegate = self
+        pinchGesture?.delaysTouchesBegan = true
+       collectionView.addGestureRecognizer(pinchGesture!)
+        // Add long press gesture recognizer to the collection view
+            longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        longPressGesture?.delegate = self
+        longPressGesture?.delaysTouchesBegan = true
+        collectionView.addGestureRecognizer(longPressGesture!)
+        print("Gesture Recognizers: \(collectionView.gestureRecognizers ?? [])")
+    }
+    
+  
     
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .began else { return }
@@ -295,7 +310,7 @@ class PhotosViewController: BaseViewController {
         let footerStackView = UIStackView()
         footerStackView.axis = .horizontal
         footerStackView.distribution = .fillEqually
-        footerStackView.backgroundColor = .white
+        footerStackView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         
         let uploadSizeViewForLabel = UIView()
         uploadSizeViewForLabel.backgroundColor = .clear//.brown
@@ -305,13 +320,13 @@ class PhotosViewController: BaseViewController {
         uploadSizeStackView.spacing = DesignMetrics.Padding.size4
         
         uploadSizeLabel.textAlignment = .left
-        uploadSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        uploadSizeLabel.textColor = UIColor(named: "appPrimaryTextColor")
         uploadSizeLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 28)
         uploadSizeLabel.text = "0.0 MB"
         uploadSizeStackView.addArrangedSubview(uploadSizeLabel)
         uploadSizeStackView.addArrangedSubview(uploadSubHeadingLabel)
         uploadSubHeadingLabel.textAlignment = .left
-        uploadSubHeadingLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        uploadSubHeadingLabel.textColor = UIColor(named: "appPrimaryTextColor")
         uploadSubHeadingLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
         uploadSubHeadingLabel.text = "selected to upload on databox"
         
@@ -439,7 +454,10 @@ class PhotosViewController: BaseViewController {
           layout.register(SectionBackgroundDecorationView.self, forDecorationViewOfKind: "background")
           return layout
       }
-  
+    
+   
+
+
     
     @objc private func listViewButtonTapped(_ sender: UIButton) {
         currentViewType = .list
@@ -460,36 +478,109 @@ class PhotosViewController: BaseViewController {
         }
     }
     
+//    func updateLayout(to layout: UICollectionViewLayout, animated: Bool = true) {
+//        // Guard against redundant updates
+//        guard !collectionView.collectionViewLayout.isEqual(layout) else { return }
+//
+//        // Cancel any existing layout update work item
+//        layoutUpdateWorkItem?.cancel()
+//        
+//        // Save the current scroll position
+//        let previousContentOffset = collectionView.contentOffset
+//        
+//        // Create a new work item to perform the layout update
+//        let workItem = DispatchWorkItem { [weak self] in
+//            guard let self = self else { return }
+//            
+//            // Ensure layout update is not in progress
+//            if self.isUpdatingLayout {
+//                self.updateLayout(to: layout, animated: animated)
+//                return
+//            }
+//            
+//            self.isUpdatingLayout = true
+//            
+//            // Update layout with or without animation
+//            self.collectionView.setCollectionViewLayout(layout, animated: animated) { [weak self] _ in
+//                guard let self = self else { return }
+//                
+//                // Configure the data source
+//                self.configureDataSource()
+//                
+//                // Apply snapshot
+//                self.collectionView.performBatchUpdates({
+//                    self.applySnapshot()
+//                }, completion: { [weak self] _ in
+//                    guard let self = self else { return }
+//                    
+//                    // Restore the scroll position
+//                    self.collectionView.setContentOffset(previousContentOffset, animated: false)
+//
+//                    self.isUpdatingLayout = false
+//                    self.layoutUpdateWorkItem = nil
+//                })
+//            }
+//        }
+//        
+//        // Schedule the work item
+//        layoutUpdateWorkItem = workItem
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
+//    }
+    
     func updateLayout(to layout: UICollectionViewLayout, animated: Bool = true) {
+        // Guard against redundant updates
+        guard !collectionView.collectionViewLayout.isEqual(layout) else { return }
+
         // Cancel any existing layout update work item
         layoutUpdateWorkItem?.cancel()
-        
+
+        // Save the current indexPath and scroll position
+        guard let currentIndexPath = collectionView.indexPathsForVisibleItems.first else { return }
+        let previousContentOffset = collectionView.contentOffset
+
         // Create a new work item to perform the layout update
         let workItem = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
-            
+
+            // Ensure layout update is not in progress
             if self.isUpdatingLayout {
-                // If a layout update is in progress, delay the new layout change
                 self.updateLayout(to: layout, animated: animated)
                 return
             }
-            
+
             self.isUpdatingLayout = true
+
+            // Update layout with or without animation
             self.collectionView.setCollectionViewLayout(layout, animated: animated) { [weak self] _ in
                 guard let self = self else { return }
-                
-                self.isUpdatingLayout = false
-                self.applySnapshot()
-                self.configureDataSource()
-                
-                // Optional: Log or debug here
-                // Layout updated and data source configured.
-                
-                // Explicitly release the work item
-                self.layoutUpdateWorkItem = nil
+
+                // Introduce a slight delay for smoother transition
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { // Adjust the delay as needed
+                    // Configure the data source
+                    self.configureDataSource()
+
+                    // Apply snapshot
+                    self.collectionView.performBatchUpdates({
+                        self.applySnapshot()
+                    }, completion: { [weak self] _ in
+                        guard let self = self else { return }
+
+                        // Restore the scroll position to the saved indexPath
+                        if let cell = self.collectionView.cellForItem(at: currentIndexPath) {
+                            let cellRect = self.collectionView.convert(cell.frame, to: self.collectionView.superview)
+                            self.collectionView.scrollRectToVisible(cellRect, animated: false)
+                        } else {
+                            // Fallback in case the cell is not visible
+                            self.collectionView.setContentOffset(previousContentOffset, animated: false)
+                        }
+
+                        self.isUpdatingLayout = false
+                        self.layoutUpdateWorkItem = nil
+                    })
+                }
             }
         }
-        
+
         // Schedule the work item
         layoutUpdateWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
@@ -542,7 +633,9 @@ class PhotosViewController: BaseViewController {
                     self.getDocumentDetails(url: url)
                 }
                 DispatchQueue.main.async {
+                    self.sortSectionKeys()
                     self.applySnapshot()
+                    self.hideProgress()
                 }
             }
             return
@@ -615,6 +708,11 @@ class PhotosViewController: BaseViewController {
             
             currentBatchIndex += 1
         }
+        else{
+            DispatchQueue.main.async {
+                self.hideProgress()
+            }
+        }
     }
     
     private func getDocumentDetails(url: URL) {
@@ -641,7 +739,8 @@ class PhotosViewController: BaseViewController {
         self.filesDataSource[dateCreatedString, default: []].append(documentInfo)
         
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+           // self.collectionView.reloadData()
+            self.configureDataSource()
         }
     }
     
@@ -650,6 +749,7 @@ class PhotosViewController: BaseViewController {
         // Code to handle permission denial
         // Show an alert to the user explaining why the permission is needed
         DispatchQueue.main.async {
+            self.hideProgress()
             self.showSettingsAlert()
         }
     }
@@ -660,7 +760,9 @@ class PhotosViewController: BaseViewController {
             message: "Please allow access to your photos in Settings.",
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            self.navigationController?.popViewController(animated: true)
+        })
         alert.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
                 return
@@ -844,7 +946,7 @@ class PhotosViewController: BaseViewController {
         
         
         filterNameLabel.textAlignment = .left
-        filterNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        filterNameLabel.textColor = UIColor(named: "appPrimaryTextColor")
         filterNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
         filterNameLabel.text = "By Date"
         
@@ -879,7 +981,7 @@ class PhotosViewController: BaseViewController {
         filterContainerStackView.addArrangedSubview(filterView)
         filterContainerStackView.addArrangedSubview(gridAndListView)
         
-        filterContainerView.backgroundColor = .white
+        filterContainerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         filterContainerView.layer.cornerRadius = DesignMetrics.Padding.size8
         filterContainerView.heightAnchor == DesignMetrics.Dimensions.height51
         filterContainerStackView.verticalAnchors == filterContainerView.verticalAnchors
@@ -1042,7 +1144,10 @@ class PhotosViewController: BaseViewController {
                 let options = PHImageRequestOptions()
                 options.isSynchronous = true
                 options.deliveryMode = .highQualityFormat
-                let targetSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                options.resizeMode = .exact  // Ensures the image is not scaled down
+                options.isNetworkAccessAllowed = true  // Allows downloading from iCloud if needed
+                // Set targetSize to .zero to get the original size
+                let targetSize = CGSize.zero 
 
                 imageManager.requestImage(for: mediaData.asset!, targetSize: targetSize, contentMode: .aspectFit, options: options) { [weak self] (image, info) in
                     guard let self = self, let image = image else {
@@ -1070,11 +1175,41 @@ class PhotosViewController: BaseViewController {
         case .document:
             if let mediaData = filesDataSource[dateKey]?[item] {
                 if let documentUrl = mediaData.url {
-                    previewDocument(at: documentUrl)
+                    // Copy the file to Documents directory if needed
+                    if let permanentUrl = copyFileToDocuments(from: documentUrl) {
+                        previewDocument(at: permanentUrl)
+                    } else {
+                        print("Failed to copy file to a permanent location")
+                    }
                 }
             }
         }
     }
+    
+    private func copyFileToDocuments(from tempUrl: URL) -> URL? {
+        let fileManager = FileManager.default
+
+        // Get the file name and destination path in the Documents directory
+        let fileName = tempUrl.lastPathComponent
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let permanentUrl = documentsDirectory.appendingPathComponent(fileName)
+
+        // If the file already exists in the Documents directory, return its URL
+        if fileManager.fileExists(atPath: permanentUrl.path) {
+            return permanentUrl
+        }
+
+        // Copy the file from tmp to Documents
+        do {
+            try fileManager.copyItem(at: tempUrl, to: permanentUrl)
+            print("File copied to: \(permanentUrl.path)")
+            return permanentUrl
+        } catch {
+            print("Error copying file: \(error)")
+            return nil
+        }
+    }
+
     
     private func previewDocument(at url: URL) {
         documentInteractionController = UIDocumentInteractionController(url: url)
@@ -1304,20 +1439,36 @@ extension PhotosViewController: UICollectionViewDelegate , UIScrollViewDelegate{
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let section = sortedSectionKeys[indexPath.section]
-        if let items = filesDataSource[section], indexPath.item < items.count {
-            let mediaData = items[indexPath.item]
-            loadImage(for: mediaData.asset!, into: cell, ImageName: mediaData.name, ImageSize: mediaData.size, cellindexPath: indexPath)
+        
+        switch currentMediaType {
+        case .image,.favourite,.shared,.video:
+            let section = sortedSectionKeys[indexPath.section]
+            if let items = filesDataSource[section], indexPath.item < items.count {
+                let mediaData = items[indexPath.item]
+                loadImage(for: mediaData.asset!, into: cell, ImageName: mediaData.name, ImageSize: mediaData.size, cellindexPath: indexPath)
+            }
+            
+        case .document:
+            break
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        // Handle cells that are no longer visible
-          let section = sortedSectionKeys[indexPath.section]
-          if let items = filesDataSource[section], indexPath.item < items.count {
-              let mediaData = items[indexPath.item]
-              cancelImageLoad(for: mediaData.asset!)
-          }
+        switch currentMediaType {
+        case .image,.favourite,.shared,.video:
+            // Handle cells that are no longer visible
+            let section = sortedSectionKeys[indexPath.section]
+            if let items = filesDataSource[section], indexPath.item < items.count {
+                let mediaData = items[indexPath.item]
+                cancelImageLoad(for: mediaData.asset!)
+            }
+            
+        case .document:
+            break
+            
+        }
+        
+        
           
           // Remove button targets
           if let imagesCell = cell as? ImagesCollectionViewCell {

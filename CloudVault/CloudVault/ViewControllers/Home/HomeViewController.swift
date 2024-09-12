@@ -18,9 +18,9 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     }()
     private lazy var storageView: UIView = {
         let containerView = UIView()
-        containerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        containerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         containerView.layer.cornerRadius = DesignMetrics.Padding.size12
-        containerView.heightAnchor == 250
+        containerView.heightAnchor == 224 // 250
         return containerView
     }()
     private lazy var filesContainerView: UIView = {
@@ -31,12 +31,14 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         return filesContainerView
     }()
     private lazy var storageGraphView: StorageUsageView = {
-        let storageView = StorageUsageView(images: 2, videos: 2, documents: 2, audio: 2, files: 2, contacts: 2, free: 88)
+        let storageView = StorageUsageView(images: 10, videos: 10, documents: 10, audio: 10, files: 10, contacts: 12, free: 38)
+        // Animate the view changes with updated percentages
+//        storageView.animateViewChanges(images: 2, videos: 2, documents: 2, audio: 2, files: 2, contacts: 2, free: 88, duration: 2.0)
         return storageView
     }()
     private lazy var sliderView: UIView = {
         let sliderView = UIView()
-        sliderView.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.968627451, blue: 0.9882352941, alpha: 1)
+        sliderView.backgroundColor =  UIColor(named: "appBackgroundColor")
         sliderView.heightAnchor == 98
         sliderView.layer.cornerRadius = 8
         return sliderView
@@ -52,7 +54,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     private lazy var storageLabel: UILabel = {
         let storageLabel = UILabel()
         storageLabel.textAlignment = .left
-        storageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        storageLabel.textColor = UIColor(named: "appPrimaryTextColor")
         storageLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 20)
         storageLabel.text = "Storage Overview"
         return storageLabel
@@ -60,7 +62,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     private lazy var usedStorageLabel: UILabel = {
         let usedStorageLabel = UILabel()
         usedStorageLabel.textAlignment = .left
-        usedStorageLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.5409491922)
+        usedStorageLabel.textColor = UIColor(named: "appSubHeadingTextColor")
         usedStorageLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 10)
         usedStorageLabel.text = "01GB used from out of 100GB"
         return usedStorageLabel
@@ -101,32 +103,59 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     private lazy var imagesViewContainer: AppFilesView = {
         let imagesViewContainer = AppFilesView(fileImage: UIImage(named: "imagesIcon") ?? UIImage.appIcon, titleOfFile: "Images", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 1, green: 0.3607843137, blue: 0.2196078431, alpha: 1))
         imagesViewContainer.configureRoundedCorners(corners: [.topLeft], radius: DesignMetrics.Padding.size8)
+        
+        // Add tap gesture recognizer
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleImageViewTap))
+            imagesViewContainer.isUserInteractionEnabled = true // Ensure the view is interactive
+            imagesViewContainer.addGestureRecognizer(tapGesture)
+        
         return imagesViewContainer
     }()
     private lazy var videosViewContainer: AppFilesView = {
         let videosViewContainer = AppFilesView(fileImage: UIImage(named: "videosIconHome") ?? UIImage.appIcon, titleOfFile: "Videos", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0.04705882353, green: 0.6549019608, blue: 1, alpha: 1))
+        // Add tap gesture recognizer
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleVideoViewTap))
+        videosViewContainer.isUserInteractionEnabled = true // Ensure the view is interactive
+        videosViewContainer.addGestureRecognizer(tapGesture)
+        
         return videosViewContainer
     }()
     private lazy var documentsViewContainer: AppFilesView = {
         let documentsViewContainer = AppFilesView(fileImage: UIImage(named: "documentsIconHome") ?? UIImage.appIcon, titleOfFile: "Documents", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0, green: 0.8588235294, blue: 0.6509803922, alpha: 1))
         documentsViewContainer.configureRoundedCorners(corners: [.topRight], radius: DesignMetrics.Padding.size8)
+        // Add tap gesture recognizer
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDocumentViewTap))
+        documentsViewContainer.isUserInteractionEnabled = true // Ensure the view is interactive
+        documentsViewContainer.addGestureRecognizer(tapGesture)
         return documentsViewContainer
     }()
     private lazy var audioViewContainer: AppFilesView = {
         let audioViewContainer = AppFilesView(fileImage: UIImage(named: "audiosIconHome") ?? UIImage.appIcon, titleOfFile: "Audio", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0.8039215686, green: 0, blue: 0.8745098039, alpha: 1))
         audioViewContainer.configureRoundedCorners(corners: [.bottomLeft], radius: DesignMetrics.Padding.size8)
+        // Add tap gesture recognizer
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleAudioViewTap))
+        audioViewContainer.isUserInteractionEnabled = true // Ensure the view is interactive
+        audioViewContainer.addGestureRecognizer(tapGesture)
         return audioViewContainer
     }()
     private lazy var filesViewContainer: AppFilesView = {
         let filesViewContainer = AppFilesView(fileImage: UIImage(named: "filesIcon") ?? UIImage.appIcon, titleOfFile: "Files", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 1, green: 0.768627451, blue: 0.1294117647, alpha: 1))
+        // Add tap gesture recognizer
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleFileViewTap))
+        filesViewContainer.isUserInteractionEnabled = true // Ensure the view is interactive
+        filesViewContainer.addGestureRecognizer(tapGesture)
         return filesViewContainer
     }()
     private lazy var contactsViewContainer: AppFilesView = {
         let contactsViewContainer = AppFilesView(fileImage: UIImage(named: "contactIcon") ?? UIImage.appIcon, titleOfFile: "Contacts", totalCount: "000", totalSize: "00GB", labelColor: #colorLiteral(red: 0.2352941176, green: 0.8549019608, blue: 0.01960784314, alpha: 1))
         contactsViewContainer.configureRoundedCorners(corners: [.bottomRight], radius: DesignMetrics.Padding.size8)
+        // Add tap gesture recognizer
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleContactViewTap))
+        contactsViewContainer.isUserInteractionEnabled = true // Ensure the view is interactive
+        contactsViewContainer.addGestureRecognizer(tapGesture)
         return contactsViewContainer
     }()
-    private let numberOfSlides = 7
+    private let numberOfSlides = 3
     private var timer: Timer?
     private lazy var recentFilesArray: [RecentImageData] = [RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage1", imageName: "Lilly", imageSize: "Size: 2.5 MB"), RecentImageData(recentImage: "recentImage2", imageName: "Hair Girl", imageSize: "Size: 891 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB"), RecentImageData(recentImage: "recentImage", imageName: "School Crush", imageSize: "Size: 120 KB")]
     
@@ -150,6 +179,57 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
        // self.view.isUserInteractionEnabled = false
 //        showProgress()
        // scheduleLocalNotification()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
+       
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        resetIconsTransforms() // Resets the transform to the original state before reanimating
+        startIconsAnimations()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // Optional: Remove animations when the view disappears to ensure they are restarted when the view reappears.
+        removeIconsAnimations()
+    }
+    
+    private func resetIconsTransforms() {
+        imagesViewContainer.transform = .identity
+        videosViewContainer.transform = .identity
+        documentsViewContainer.transform = .identity
+        audioViewContainer.transform = .identity
+        filesViewContainer.transform = .identity
+        contactsViewContainer.transform = .identity
+    }
+
+    private func startIconsAnimations() {
+        imagesViewContainer.animateIcons()
+        videosViewContainer.animateIcons()
+        documentsViewContainer.animateIcons()
+        audioViewContainer.animateIcons()
+        filesViewContainer.animateIcons()
+        contactsViewContainer.animateIcons()
+    }
+
+    private func removeIconsAnimations() {
+        imagesViewContainer.layer.removeAllAnimations()
+        videosViewContainer.layer.removeAllAnimations()
+        documentsViewContainer.layer.removeAllAnimations()
+        audioViewContainer.layer.removeAllAnimations()
+        filesViewContainer.layer.removeAllAnimations()
+        contactsViewContainer.layer.removeAllAnimations()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.layoutIfNeeded()
     }
     
     func scheduleLocalNotification() {
@@ -180,8 +260,8 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
             // Set up overlay constraints to cover the main content area, not the side menu
             overlayView.topAnchor == view.topAnchor
             overlayView.bottomAnchor == view.bottomAnchor
-            overlayView.leadingAnchor == view.leadingAnchor + 250
-            overlayView.trailingAnchor == view.trailingAnchor
+            overlayView.trailingAnchor == view.trailingAnchor - 250
+            overlayView.leadingAnchor == view.leadingAnchor
             
             // Add tap gesture to overlay to hide side menu
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideSideMenu))
@@ -205,12 +285,12 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
             view.addSubview(sideMenuView)
             
             // Set initial layout constraints for SideMenuView
-            sideMenuView.topAnchor == view.topAnchor
-            sideMenuView.bottomAnchor == view.bottomAnchor
+            sideMenuView.topAnchor == view.topAnchor - 20
+            sideMenuView.bottomAnchor == view.safeAreaLayoutGuide.bottomAnchor
             sideMenuView.widthAnchor == 250 // Set the width of the side menu
 
             // Initially, position the menu off-screen
-            sideMenuLeadingConstraint = sideMenuView.leadingAnchor == view.leadingAnchor - 250
+            sideMenuLeadingConstraint = sideMenuView.trailingAnchor == view.trailingAnchor + 250
             
             // Call to layout to apply constraints
             view.layoutIfNeeded()
@@ -221,11 +301,51 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
             sideMenuView.storageInfoLabel.text = "Storage: 10 GB used of 50 GB"
             
             // Example: Adding a background color to the menu
-            sideMenuView.backgroundColor = UIColor.white
+            sideMenuView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         }
         
     
+    // Function to handle tap gesture
+    @objc private func handleImageViewTap() {
+        print("imagesViewContainer tapped")
+        // Add your action here, e.g., navigate to another screen or show an alert
+        self.showAlert(on: self, title: "DataBox", message: "No items available to display. Please add images to see them here.")
+    }
     
+    // Function to handle tap gesture
+    @objc private func handleVideoViewTap() {
+        print("videoViewContainer tapped")
+        // Add your action here, e.g., navigate to another screen or show an alert
+        self.showAlert(on: self, title: "DataBox", message: "No items available to display. Please add videos to see them here.")
+    }
+    
+    // Function to handle tap gesture
+    @objc private func handleDocumentViewTap() {
+        print("documentViewContainer tapped")
+        // Add your action here, e.g., navigate to another screen or show an alert
+        self.showAlert(on: self, title: "DataBox", message: "No items available to display. Please add documents to see them here.")
+    }
+    
+    // Function to handle tap gesture
+    @objc private func handleAudioViewTap() {
+        print("audioViewContainer tapped")
+        // Add your action here, e.g., navigate to another screen or show an alert
+        self.showAlert(on: self, title: "DataBox", message: "No items available to display. Please add audios to see them here.")
+    }
+    
+    // Function to handle tap gesture
+    @objc private func handleFileViewTap() {
+        print("fileViewContainer tapped")
+        // Add your action here, e.g., navigate to another screen or show an alert
+        self.showAlert(on: self, title: "DataBox", message: "No items available to display. Please add files to see them here.")
+    }
+    
+    // Function to handle tap gesture
+    @objc private func handleContactViewTap() {
+        print("contactViewContainer tapped")
+        // Add your action here, e.g., navigate to another screen or show an alert
+        self.showAlert(on: self, title: "DataBox", message: "No items available to display. Please add contacts to see them here.")
+    }
     
     override func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true, showAsSubViewController: Bool = false) {
         super.configureUI(title: title, showNavBar: showNavBar, showBackButton: showBackButton, hideBackground: hideBackground, showMainNavigation: showMainNavigation, addHorizontalPadding: addHorizontalPadding, showAsSubViewController: showAsSubViewController)
@@ -243,7 +363,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
             sideMenuLeadingConstraint.constant = 0 // Move the menu on-screen
             overlayView.isHidden = false
 
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.1) {
                 self.overlayView.alpha = 1
                 self.view.layoutIfNeeded()
             }
@@ -251,9 +371,9 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
 
         // Function to hide the side menu
         @objc func hideSideMenu() {
-            sideMenuLeadingConstraint.constant = -250 // Move the menu off-screen
+            sideMenuLeadingConstraint.constant = 250 // Move the menu off-screen
 
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: 0.1, animations: {
                 self.overlayView.alpha = 0
                 self.view.layoutIfNeeded()
             }) { _ in
@@ -273,7 +393,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     private func configureStorageView() {
         let storageStackView = UIStackView()
         storageStackView.axis = .vertical
-        storageStackView.spacing = DesignMetrics.Padding.size20
+        storageStackView.spacing = DesignMetrics.Padding.size8
         
         let storageLabelView = UIView()
         storageLabelView.backgroundColor = .clear
@@ -302,14 +422,17 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         storageLabelStackArrowView.widthAnchor == 60
         
         let innerViewforArrow = UIView()
-        innerViewforArrow.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.968627451, blue: 0.9882352941, alpha: 1)
+        innerViewforArrow.backgroundColor = UIColor(named: "appBackgroundColor")
+        innerViewforArrow.layer.cornerRadius = 15
         innerViewforArrow.widthAnchor == 30
         innerViewforArrow.heightAnchor == 30
         
         storageLabelStackArrowView.addSubview(innerViewforArrow)
         innerViewforArrow.addSubview(arrowButton)
-        innerViewforArrow.centerAnchors == storageLabelStackArrowView.centerAnchors
-        arrowButton.centerAnchors == innerViewforArrow.centerAnchors
+        innerViewforArrow.centerYAnchor == storageLabelStackArrowView.centerYAnchor
+        innerViewforArrow.trailingAnchor == storageLabelStackArrowView.trailingAnchor
+//        innerViewforArrow.centerAnchors == storageLabelStackArrowView.centerAnchors
+        arrowButton.edgeAnchors == innerViewforArrow.edgeAnchors//innerViewforArrow.centerAnchors
         arrowButton.addTarget(self, action: #selector(arrowButtonTapped(_:)), for: .touchUpInside)
         
         storageLabelStackView.addArrangedSubview(storageLabelStackContentView)
@@ -320,7 +443,6 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         
         storageGraphView.heightAnchor == 20
         storageGraphView.layer.cornerRadius = 8
-        
         storageStackView.addArrangedSubview(storageLabelView)
         storageStackView.addArrangedSubview(storageGraphView)
         storageStackView.addArrangedSubview(sliderView)
@@ -328,8 +450,6 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         storageView.addSubview(storageStackView)
         storageStackView.edgeAnchors == storageView.edgeAnchors + 16
         
-        let forwardArrowView = UIView()
-        forwardArrowView.backgroundColor = .green
         appendViewToMainVStack(view: storageView)
     }
     
@@ -362,7 +482,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     }
     
     private func startAutoScroll() {
-        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(scrollToNextSlide), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(scrollToNextSlide), userInfo: nil, repeats: true)
     }
     
     @objc private func scrollToNextSlide() {
@@ -383,7 +503,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         
         let upperView = UIView()
         upperView.backgroundColor = .clear
-        upperView.heightAnchor == 116
+        upperView.heightAnchor == 100
         
         let upperStackView = UIStackView()
         upperStackView.axis = .horizontal
@@ -414,7 +534,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         filesContainerStackView.addArrangedSubview(bottomView)
         filesContainerView.addSubview(filesContainerStackView)
         filesContainerStackView.edgeAnchors == filesContainerView.edgeAnchors
-        appendViewToMainVStack(view: filesContainerView, topPadding: 24)
+        appendViewToMainVStack(view: filesContainerView, topPadding: 12)
     }
     
     private func setupRecentHeadingView() {
@@ -424,7 +544,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         
         let recentFileLabel = UILabel()
         recentFileLabel.textAlignment = .left
-        recentFileLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        recentFileLabel.textColor = UIColor(named: "appPrimaryTextColor")
         recentFileLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
         recentFileLabel.text = "Recent Files"
         
@@ -439,7 +559,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         recentFileLabel.centerYAnchor == containerView.centerYAnchor
         gotoAllButton.trailingAnchor == containerView.trailingAnchor - 8
         gotoAllButton.centerYAnchor == containerView.centerYAnchor
-        appendViewToMainVStack(view: containerView, topPadding: 16)
+        appendViewToMainVStack(view: containerView, topPadding: 12)
     }
     
     private func setupRecentContainerView() {
@@ -460,12 +580,12 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         containerView.heightAnchor == 125
         containerView.addSubview(recentCollectionView)
         recentCollectionView.edgeAnchors == containerView.edgeAnchors
-        appendViewToMainVStack(view: containerView, topPadding: 16)
+        appendViewToMainVStack(view: containerView, topPadding: 12)
     }
     
     private func setupRecentContainerWithNoData() {
         let containerView = UIView()
-        containerView.backgroundColor = .white
+        containerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         containerView.layer.cornerRadius = DesignMetrics.Padding.size8
         containerView.heightAnchor == 125
         
@@ -490,7 +610,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         
         noRecentFileLabel.topAnchor == emptyRecentImageView.bottomAnchor + 16
         noRecentFileLabel.centerXAnchor == emptyRecentImageView.centerXAnchor
-        appendViewToMainVStack(view: containerView, topPadding: 16)
+        appendViewToMainVStack(view: containerView, topPadding: 12)
     }
     
     @objc private func arrowButtonTapped(_ sender: UIButton) {
@@ -511,7 +631,12 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numberOfSlides
+        if(collectionView == sliderCollectionView) {
+            return numberOfSlides
+        }
+        else {
+            return recentFilesArray.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -521,36 +646,36 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "slideCell", for: indexPath) as! DataBoxCollectionViewCell
                 cell.titleOfDataBox = "Try Databox Website"
                 cell.descriptionOfDataBox = "Experience seamless navigation and top-notch services on our website"
-                cell.backgroundColor = #colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
+                cell.backgroundColor = .clear//#colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
                 return cell
             case 1:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "slideCell", for: indexPath) as! DataBoxCollectionViewCell
                 cell.titleOfDataBox = "End-To- Encryption"
                 cell.descriptionOfDataBox = "Protect your data with our end-to-end encryption, to make it secure"
-                cell.backgroundColor = #colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
+                cell.backgroundColor = .clear//#colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
                 return cell
             case 2:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "slideCell", for: indexPath) as! DataBoxCollectionViewCell
                 cell.titleOfDataBox = "File Manager"
                 cell.descriptionOfDataBox = "Organize and access your files effortlessly with our intuitive File Manager"
-                cell.backgroundColor = #colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
+                cell.backgroundColor = .clear//#colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
                 return cell
             case 3:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storageCell", for: indexPath) as! OutOfStorageCollectionViewCell
-                cell.storageBackgroundColor = #colorLiteral(red: 0.8901960784, green: 0.1176470588, blue: 0.1411764706, alpha: 1)
+                cell.storageBackgroundColor = #colorLiteral(red: 0.8901960784, green: 0.1176470588, blue: 0.1411764706, alpha: 1).withAlphaComponent(0.7)
                 cell.storageImageName = "storageRedImage"
                 cell.storageCrossImageName = "storageRedCross"
                 return cell
             case 4:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "storageCell", for: indexPath) as! OutOfStorageCollectionViewCell
-                cell.storageBackgroundColor = #colorLiteral(red: 0.4980392157, green: 0.6745098039, blue: 0, alpha: 1)
+                cell.storageBackgroundColor = #colorLiteral(red: 0.4980392157, green: 0.6745098039, blue: 0, alpha: 1).withAlphaComponent(0.7)
                 cell.storageImageName = "storageGreenImage"
                 cell.storageCrossImageName = "storageGreenCross"
                 return cell
             default:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reviewsCell", for: indexPath) as! ReviewsCollectionViewCell
                 cell.reviewUserImageName = "reviewUserImage"
-                cell.backgroundColor = #colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
+                cell.backgroundColor = .clear//#colorLiteral(red: 0.9969579577, green: 0.9919913411, blue: 0.9963858724, alpha: 1)
                 return cell
             }
         }

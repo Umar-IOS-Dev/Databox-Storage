@@ -41,7 +41,7 @@ class OtpSuccessView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = UIColor.black
+        label.textColor = UIColor(named: "appPrimaryTextColor")
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +51,7 @@ class OtpSuccessView: UIView {
     private let subTitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textColor = UIColor.gray
+        label.textColor = UIColor(named: "appSubTextColor")
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +62,7 @@ class OtpSuccessView: UIView {
         let button = UIButton()
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
-        button.backgroundColor = UIColor.blue
+        button.backgroundColor = UIColor(named: "secondaryButtonBG")
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

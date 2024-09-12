@@ -11,9 +11,9 @@ import Anchorage
 class RecentCollectionViewCell: UICollectionViewCell {
     private let recentContainerView: UIView = {
         let containerView = UIView()
-        containerView.backgroundColor = .white
+        containerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         containerView.layer.borderWidth = 1 // Adjust the border width
-        containerView.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) // Adjust the border color
+        containerView.layer.borderColor = UIColor(named: "appBackgroundViewColor")?.cgColor // Adjust the border color
         containerView.layer.cornerRadius = 8 // Adjust the corner radius
         return containerView
     }()
@@ -26,14 +26,14 @@ class RecentCollectionViewCell: UICollectionViewCell {
     private let imageNameLabel: UILabel = {
         let imageNameLabel = UILabel()
         imageNameLabel.textAlignment = .left
-        imageNameLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        imageNameLabel.textColor = UIColor(named: "appPrimaryTextColor")
         imageNameLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
         return imageNameLabel
     }()
     private let imageSizeLabel: UILabel = {
         let imageSizeLabel = UILabel()
         imageSizeLabel.textAlignment = .left
-        imageSizeLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        imageSizeLabel.textColor = UIColor(named: "appPrimaryTextColor")
         imageSizeLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 6)
         return imageSizeLabel
     }()

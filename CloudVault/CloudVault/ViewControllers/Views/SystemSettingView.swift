@@ -58,7 +58,7 @@ class SystemSettingView: UIView {
                titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
            ])
            
-           titleLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+           titleLabel.textColor =  UIColor(named: "appPrimaryTextColor")
            titleLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14)
        }
 

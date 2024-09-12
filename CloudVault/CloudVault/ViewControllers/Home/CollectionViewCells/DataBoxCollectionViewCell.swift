@@ -35,7 +35,7 @@ class DataBoxCollectionViewCell: UICollectionViewCell {
     }()
     private let dataBoxImageView: UIImageView = {
         let dataBoxImageView = UIImageView()
-        dataBoxImageView.contentMode = .scaleAspectFit
+        dataBoxImageView.contentMode = .scaleToFill
         dataBoxImageView.image = UIImage(named: "dataBoxImage")
         return dataBoxImageView
     }()
@@ -59,13 +59,27 @@ class DataBoxCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func updateGifImage() {
+        let gifName: String = "sliderDataBox"
+//        if traitCollection.userInterfaceStyle == .dark {
+//            gifName = "OnBoarding1Dark"  // Use the dark mode GIF
+//        } else {
+//            gifName = "splashLight"  // Use the light mode GIF
+//        }
+        
+        if let gif = try? UIImage(gifName: gifName) {
+            dataBoxImageView.setGifImage(gif)
+            dataBoxImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
+        }
+    }
+    
     private func setupContainerView() {
         addSubview(dataBoxContainerView)
         dataBoxContainerView.edgeAnchors == edgeAnchors
         
         let dataBoxContainerStackView = UIStackView()
         dataBoxContainerStackView.axis = .horizontal
-        dataBoxContainerStackView.spacing = DesignMetrics.Padding.size16
+        dataBoxContainerStackView.spacing = DesignMetrics.Padding.size0
         
         let titleAndDescriptionView = UIView()
         titleAndDescriptionView.backgroundColor = .clear
@@ -73,6 +87,8 @@ class DataBoxCollectionViewCell: UICollectionViewCell {
         let titleAndDescriptionStackView = UIStackView()
         titleAndDescriptionStackView.axis = .vertical
         titleAndDescriptionStackView.spacing = DesignMetrics.Padding.size0
+        
+        
         
         titleAndDescriptionStackView.addArrangedSubview(titleLabel)
         titleAndDescriptionStackView.addArrangedSubview(descriptionLabel)
@@ -84,10 +100,11 @@ class DataBoxCollectionViewCell: UICollectionViewCell {
         let dataBoxViewForImage = UIView()
         dataBoxViewForImage.backgroundColor = .clear
         dataBoxViewForImage.widthAnchor == 120
-        dataBoxViewForImage.heightAnchor == 60
+        //dataBoxViewForImage.heightAnchor == 60 // no need to set it
         
         dataBoxViewForImage.addSubview(dataBoxImageView)
         dataBoxImageView.edgeAnchors == dataBoxViewForImage.edgeAnchors + 4
+        updateGifImage()
         
         dataBoxContainerStackView.addArrangedSubview(titleAndDescriptionView)
         dataBoxContainerStackView.addArrangedSubview(dataBoxViewForImage)

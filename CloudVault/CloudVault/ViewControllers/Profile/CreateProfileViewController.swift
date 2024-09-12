@@ -66,6 +66,8 @@ class CreateProfileViewController: BaseViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor(named: "appBackgroundColor")
+        nameTextField.delegate = self
+        genderTextField.delegate = self
         switch createProfileWith {
         case .profileGuestUser:
             configureUI(title: titleOfProfile.value, showBackButton: true, hideBackground: true, showMainNavigation: false)
@@ -96,7 +98,7 @@ class CreateProfileViewController: BaseViewController {
     
     private func configueInfoView() {
         let containerView = UIView()
-        containerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        containerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         containerView.layer.cornerRadius = DesignMetrics.Padding.size12
         containerView.heightAnchor == DesignMetrics.Dimensions.height357
         
@@ -109,8 +111,8 @@ class CreateProfileViewController: BaseViewController {
         profilePicContainerView.heightAnchor == DesignMetrics.Dimensions.height160
         
         let profilePicView = UIView()
-        profilePicView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9333333333, blue: 0.9647058824, alpha: 1)
-        profilePicView.layer.cornerRadius = DesignMetrics.Padding.size16
+        profilePicView.backgroundColor = UIColor(named: "appBackgroundColor")
+        profilePicView.layer.cornerRadius = DesignMetrics.Padding.size20
         
         profilePicContainerView.addSubview(profilePicView)
         profilePicView.topAnchor == profilePicContainerView.topAnchor + DesignMetrics.Padding.size16
@@ -142,7 +144,7 @@ class CreateProfileViewController: BaseViewController {
         
         let fromGallerLabel = UILabel()
         fromGallerLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
-        fromGallerLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        fromGallerLabel.textColor = .white/*UIColor(named: "appBackgroundViewColor")*/
         fromGallerLabel.textAlignment = .left
         fromGallerLabel.text = "From Gallery"
         fromGallerLabel.heightAnchor == DesignMetrics.Dimensions.height16
@@ -169,13 +171,13 @@ class CreateProfileViewController: BaseViewController {
         
         let headingLabel = UILabel()
         headingLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 18)
-        headingLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
+        headingLabel.textColor = UIColor(named: "appPrimaryTextColor")
         headingLabel.textAlignment = .left
         headingLabel.text = "Your Name*"
         headingLabel.heightAnchor == DesignMetrics.Dimensions.height20
         
         let nameContainerView = UIView()
-        nameContainerView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9333333333, blue: 0.9647058824, alpha: 1)
+        nameContainerView.backgroundColor = UIColor(named: "textFieldBG")
         nameContainerView.heightAnchor == DesignMetrics.Dimensions.height50
         nameContainerView.layer.cornerRadius = DesignMetrics.Padding.size8
         nameContainerView.addSubview(nameTextField)
@@ -186,13 +188,13 @@ class CreateProfileViewController: BaseViewController {
         
         let headingLabelGender = UILabel()
         headingLabelGender.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 18)
-        headingLabelGender.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
+        headingLabelGender.textColor = UIColor(named: "appPrimaryTextColor")
         headingLabelGender.textAlignment = .left
         headingLabelGender.text = "Your Gender"
         headingLabelGender.heightAnchor == DesignMetrics.Padding.size20
         
         let genderContainerView = UIView()
-        genderContainerView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9333333333, blue: 0.9647058824, alpha: 1)
+        genderContainerView.backgroundColor = UIColor(named: "textFieldBG")
         genderContainerView.heightAnchor == DesignMetrics.Dimensions.height50
         genderContainerView.layer.cornerRadius = DesignMetrics.Padding.size8
         genderContainerView.addSubview(genderTextField)
@@ -228,7 +230,7 @@ class CreateProfileViewController: BaseViewController {
     
     private func configureChoosePersonalityImageView() {
         let personalityContainerView = UIView()
-        personalityContainerView.backgroundColor = .white
+        personalityContainerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         personalityContainerView.layer.cornerRadius = DesignMetrics.Padding.size12
         personalityContainerView.heightAnchor == DesignMetrics.Dimensions.height210
         
@@ -246,17 +248,17 @@ class CreateProfileViewController: BaseViewController {
         
         let headingLabelGender = UILabel()
         headingLabelGender.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
-        headingLabelGender.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
+        headingLabelGender.textColor = UIColor(named: "appPrimaryTextColor")
         headingLabelGender.textAlignment = .left
         headingLabelGender.text = "Choose your Personality"
         headingLabelGender.heightAnchor == DesignMetrics.Dimensions.height20
         
         let seeAllBtn = UIButton()
         seeAllBtn.setFont(FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 14), for: .normal)
-        seeAllBtn.setTitleColor(#colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1), for: .normal)
+        seeAllBtn.setTitleColor(UIColor(named: "appPrimaryTextColor"), for: .normal)
         seeAllBtn.setTitle("See All", for: .normal)
         seeAllBtn.backgroundColor = .clear
-        seeAllBtn.heightAnchor == DesignMetrics.Dimensions.height20
+        seeAllBtn.heightAnchor == 40//DesignMetrics.Dimensions.height20
         seeAllBtn.addTarget(self, action: #selector(seeAllButtonTapped(_:)), for: .touchUpInside)
         
         headingStackView.addArrangedSubview(headingLabelGender)
@@ -370,7 +372,7 @@ class CreateProfileViewController: BaseViewController {
     private func configureFooterView() {
         let footerView = UIView()
         footerView.addSubview(saveButton)
-        footerView.backgroundColor = .white
+        footerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         saveButton.edgeAnchors == footerView.edgeAnchors + DesignMetrics.Padding.size16
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         addFooterView(footerView: footerView, height: 93)
@@ -413,6 +415,14 @@ class CreateProfileViewController: BaseViewController {
                               completion: nil)
         }
     }
+}
+
+extension CreateProfileViewController: UITextFieldDelegate {
+    // UITextFieldDelegate method
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder() // Dismiss the keyboard
+            return true
+        }
 }
 
 

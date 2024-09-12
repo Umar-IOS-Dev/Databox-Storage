@@ -13,7 +13,7 @@ class SideMenuView: UIView {
     let profileImageView = UIImageView()
     let userNameLabel = UILabel()
     let emailLabel = UILabel()
-    let imagesGraphView = StorageHorizontalUsageView(filledPercentage: 54, graphViewColor: #colorLiteral(red: 0.3098039216, green: 0.3529411765, blue: 0.4196078431, alpha: 0.2471035289), filledColor: #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1))
+    let imagesGraphView = StorageHorizontalUsageView(filledPercentage: 54, graphViewColor: #colorLiteral(red: 0.3098039216, green: 0.3529411765, blue: 0.4196078431, alpha: 0.2471035289), filledColor: UIColor(named: "appPrimaryTextColor") ?? .blue)
     let storageInfoLabel = UILabel()
     private let separatorView = UIView()
     let actionButton = UIView()
@@ -44,16 +44,16 @@ class SideMenuView: UIView {
         
         // Labels
         userNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        userNameLabel.textColor = .black
+        userNameLabel.textColor = UIColor(named: "appPrimaryTextColor")
         
         emailLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        emailLabel.textColor = .darkGray
+        emailLabel.textColor = UIColor(named: "onBoardingSubTextColor")
         
         storageInfoLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
-        storageInfoLabel.textColor = .darkGray
+        storageInfoLabel.textColor = UIColor(named: "onBoardingSubTextColor")
         
         // Separator
-        separatorView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9333333333, blue: 0.9647058824, alpha: 1)
+        separatorView.backgroundColor = UIColor(named: "appDeselectedTabbarColor")
         
         // Action Button
         actionButton.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
@@ -142,7 +142,7 @@ class SideMenuView: UIView {
         let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        titleLabel.textColor = .black
+        titleLabel.textColor = UIColor(named: "appPrimaryTextColor")
         titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
         let menuItemStack = UIStackView(arrangedSubviews: [iconView, titleLabel])

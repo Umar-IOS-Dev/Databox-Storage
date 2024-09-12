@@ -67,7 +67,9 @@ class LoginViewController: BaseViewController {
         customView.topAnchor == view.safeAreaLayoutGuide.topAnchor + DesignMetrics.Padding.size12
         customView.leadingAnchor == view.leadingAnchor
         customView.trailingAnchor == view.trailingAnchor
-        customView.heightAnchor == view.heightAnchor * 0.25
+        customView.heightAnchor == view.heightAnchor * 0.10
+        customView.animateIcons()
+        //customView.rotateIconImageView()
         appendViewToMainVStack(view: customView)
     }
     
@@ -78,14 +80,14 @@ class LoginViewController: BaseViewController {
         
         let welcomeLabel = UILabel()
         welcomeLabel.font = FontManagerDatabox.shared.cloudVaultItalicSemiLightText(ofSize: 22)
-        welcomeLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
+        welcomeLabel.textColor = UIColor(named: "loginTitleTextColor")
         welcomeLabel.textAlignment = .left
         welcomeLabel.text = "Welcome to"
         welcomeLabel.heightAnchor == DesignMetrics.Padding.size24
         
         let dataBoxLabel = UILabel()
         dataBoxLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 50)
-        dataBoxLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
+        dataBoxLabel.textColor = UIColor(named: "loginTitleTextColor")
         dataBoxLabel.textAlignment = .left
         dataBoxLabel.text = "Databox"
         
@@ -94,7 +96,7 @@ class LoginViewController: BaseViewController {
         
         welcomeView.addSubview(welcomeStack)
         welcomeStack.edgeAnchors == welcomeView.edgeAnchors
-        appendViewToMainVStack(view: welcomeView, topPadding: DesignMetrics.Padding.size16)
+        appendViewToMainVStack(view: welcomeView)
     }
     
     private func configureGuestAndNumberView() {
@@ -195,7 +197,7 @@ class LoginViewController: BaseViewController {
         leftImageView.image = UIImage(named: "rightLineImage")
         
         let sepratorLabel = UILabel()
-        sepratorLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
+        sepratorLabel.textColor = UIColor(named: "loginTitleTextColor")
         sepratorLabel.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 18)
         sepratorLabel.text = "OR continue with"
         sepratorLabel.heightAnchor == DesignMetrics.Padding.size14
@@ -236,7 +238,7 @@ class LoginViewController: BaseViewController {
         googleIconImageView.heightAnchor == DesignMetrics.Dimensions.height28
         
         let googleAccountLabel = UILabel()
-        googleAccountLabel.textColor = #colorLiteral(red: 0.1333333333, green: 0.1294117647, blue: 0.3568627451, alpha: 1)
+        googleAccountLabel.textColor = UIColor(named: "loginTitleTextColor")
         googleAccountLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 18)
         googleAccountLabel.text = "Google Account"
         

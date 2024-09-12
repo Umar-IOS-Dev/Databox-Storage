@@ -33,7 +33,7 @@ class CardView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 18)
-        label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        label.textColor = UIColor(named: "appPrimaryTextColor")
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +42,7 @@ class CardView: UIView {
     
     private let topImageContainerView: UIView = {
         let topView = UIView()
-        topView.backgroundColor = #colorLiteral(red: 0.9375980496, green: 0.957516253, blue: 0.9958238006, alpha: 1)
+        topView.backgroundColor = UIColor(named: "termsImageBgColor")
         topView.translatesAutoresizingMaskIntoConstraints = false
         return topView
     }()
@@ -58,16 +58,17 @@ class CardView: UIView {
     private let descriptionLabel: UITextView = {
         let label = UITextView()
         label.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
-        label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        label.textColor = UIColor(named: "termsDescriptionTextColor")
         label.backgroundColor = .clear
         label.textAlignment = .justified
+        label.isEditable = false
         return label
     }()
     
     private let subTitleLabel: UILabel = {
         let label = UILabel()
         label.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10)
-        label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 0.4582801871)
+        label.textColor = UIColor(named: "termsSubTextColor")
         label.text = "First read Terms & Conditions then continue"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -77,7 +78,7 @@ class CardView: UIView {
     
     private let agreementTermsView: UIView = {
         let termsView = UIView()
-        termsView.backgroundColor = #colorLiteral(red: 0.9176470588, green: 0.9333333333, blue: 0.9647058824, alpha: 1)
+        termsView.backgroundColor = UIColor(named: "termsAgreementBG")
         return termsView
     }()
     
@@ -104,7 +105,7 @@ class CardView: UIView {
     }
     
     private func setupView(title: String, description: String) {
-        backgroundColor = UIColor(named: "appBackgroundColor")
+        backgroundColor = UIColor(named: "cardViewBgColor")
         layer.cornerRadius = DesignMetrics.Padding.size8
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.1
@@ -113,6 +114,7 @@ class CardView: UIView {
         
         addSubview(scrollView)
         scrollView.edgeAnchors == edgeAnchors
+        scrollView.showsHorizontalScrollIndicator = false
         
         scrollView.addSubview(contentView)
         contentView.edgeAnchors == scrollView.edgeAnchors
@@ -146,7 +148,7 @@ class CardView: UIView {
         descriptionLabel.topAnchor == subTitleLabel.bottomAnchor + DesignMetrics.Padding.size24
         descriptionLabel.leadingAnchor == contentView.leadingAnchor + DesignMetrics.Padding.size16
         descriptionLabel.trailingAnchor == contentView.trailingAnchor - DesignMetrics.Padding.size16
-        descriptionLabel.heightAnchor == DesignMetrics.Dimensions.height110
+        descriptionLabel.heightAnchor == DesignMetrics.Dimensions.height148
         
         let attributedTextForDescription = setAttributedText(description, fontForText: FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 10))
         descriptionLabel.attributedText = attributedTextForDescription
@@ -172,7 +174,7 @@ class CardView: UIView {
         checkTermsLabel.textAlignment = .left
         let checkTermsText = "By clicking continue button you are agree to the Privacy Policy and Terms & Conditions"
         checkTermsLabel.numberOfLines = 0
-        checkTermsLabel.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        checkTermsLabel.textColor = UIColor(named: "appPrimaryTextColor")
         let attributedTextForCheckTerms = setAttributedText(checkTermsText, fontForText: FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 12))
         checkTermsLabel.attributedText = attributedTextForCheckTerms
         
@@ -186,7 +188,7 @@ class CardView: UIView {
         agreementTermsStack.verticalAnchors == agreementTermsView.verticalAnchors
         
         contentView.addSubview(continueButton)
-        continueButton.topAnchor == agreementTermsView.bottomAnchor + DesignMetrics.Padding.size20
+        continueButton.topAnchor == agreementTermsView.bottomAnchor + DesignMetrics.Padding.size12
         continueButton.leadingAnchor == contentView.leadingAnchor + DesignMetrics.Padding.size16
         continueButton.trailingAnchor == contentView.trailingAnchor - DesignMetrics.Padding.size16
         continueButton.heightAnchor == DesignMetrics.Dimensions.height65
@@ -202,7 +204,7 @@ class CardView: UIView {
         if sender.isSelected {
             continueButton.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
         } else {
-            continueButton.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9333333333, blue: 0.9647058824, alpha: 1)
+            continueButton.backgroundColor = UIColor(named: "termsButtonColor")
         }
     }
     
@@ -219,6 +221,7 @@ class CardView: UIView {
 
            let attributedString = NSAttributedString(string: text, attributes: [
                .paragraphStyle: paragraphStyle,
+               .foregroundColor: UIColor(named: "termsDescriptionTextColor") ?? .appPrimaryText,
                .font: fontForText//UIFont.cloudVaultRegularText(ofSize: 12) // Adjust the font as needed
            ])
         return attributedString

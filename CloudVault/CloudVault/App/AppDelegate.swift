@@ -9,9 +9,10 @@ import UIKit
 import Firebase
 import GoogleSignIn
 import UserNotifications
+import FirebaseMessaging
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
 
 
@@ -29,6 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
+        
+        application.registerForRemoteNotifications()
+        Messaging.messaging().delegate = self
         return true
     }
     
@@ -93,6 +97,20 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         print("Notification received with content: \(userInfo)")
         completionHandler()
     }
+    
+    
+    // This method is called when APNS successfully registers the app and returns a device token.
+       func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+           // Set APNS token for FCM
+           Messaging.messaging().apnsToken = deviceToken
+           print("APNS Token: \(deviceToken)")
+       }
+
+       // Handle registration failure
+       func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+           print("Failed to register for remote notifications: \(error.localizedDescription)")
+       }
+    
 }
 
 

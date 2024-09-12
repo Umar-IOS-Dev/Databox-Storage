@@ -234,7 +234,7 @@ class ImagesCollectionViewCell: UICollectionViewCell {
 class SectionBackgroundDecorationView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "appBackgroundViewColor")
         layer.cornerRadius = 8
         layer.masksToBounds = true
     }
@@ -262,7 +262,7 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
     var imageNameLabel: UILabel = {
         let label = UILabel()
         label.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 16)
-        label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        label.textColor =  UIColor(named: "appPrimaryTextColor")
         label.textAlignment = .left
         label.layer.cornerRadius = 4
         label.clipsToBounds = true
@@ -272,7 +272,7 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
     var sizeLabel: UILabel = {
         let label = UILabel()
         label.font = FontManagerDatabox.shared.cloudVaultRegularText(ofSize: 12)
-        label.textColor = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
+        label.textColor =  UIColor(named: "appPrimaryTextColor")
         label.clipsToBounds = true
         label.textAlignment = .left
         return label
@@ -300,7 +300,7 @@ class ImagesCollectionViewCell1: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
         

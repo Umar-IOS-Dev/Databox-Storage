@@ -65,6 +65,7 @@ struct DesignMetrics {
         static let height90:  CGFloat = 90.0
         static let height100: CGFloat = 100.0
         static let height110: CGFloat = 110.0
+        static let height130: CGFloat = 130.0
         static let height135: CGFloat = 135.0
         static let height148: CGFloat = 148.0
         static let height156: CGFloat = 156.0
@@ -107,6 +108,7 @@ struct DesignMetrics {
         static let width88:  CGFloat = 88.0
         static let width120: CGFloat = 120.0
         static let width127_75: CGFloat = 127.75
+        static let width130: CGFloat = 130.0
         static let width148: CGFloat = 148.0
         static let width164: CGFloat = 164.0
         static let width166: CGFloat = 166.0
