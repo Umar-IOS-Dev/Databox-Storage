@@ -27,6 +27,7 @@
 		63603F082C67831E00F4C115 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603F072C67831E00F4C115 /* ContactsCollectionViewCell.swift */; };
 		63603F0A2C6A1C8B00F4C115 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63603F092C6A1C8B00F4C115 /* ContactsViewController.swift */; };
 		638A4BAF2C60F035003B0DEC /* DocumentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A4BAE2C60F035003B0DEC /* DocumentsViewController.swift */; };
+		63A861C82C9C4B85000572F7 /* DataboxLockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A861C72C9C4B85000572F7 /* DataboxLockViewController.swift */; };
 		63ADF6452C60FE750017F5CC /* DocumentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ADF6442C60FE740017F5CC /* DocumentTableViewCell.swift */; };
 		63B19A432C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A422C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift */; };
 		63B19A452C7C459C00BB2CEC /* ImagePreviewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B19A442C7C459C00BB2CEC /* ImagePreviewAnimator.swift */; };
@@ -146,6 +147,7 @@
 		63603F072C67831E00F4C115 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		63603F092C6A1C8B00F4C115 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		638A4BAE2C60F035003B0DEC /* DocumentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentsViewController.swift; sourceTree = "<group>"; };
+		63A861C72C9C4B85000572F7 /* DataboxLockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataboxLockViewController.swift; sourceTree = "<group>"; };
 		63ADF6442C60FE740017F5CC /* DocumentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTableViewCell.swift; sourceTree = "<group>"; };
 		63B19A422C79EC5000BB2CEC /* FeedBackCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackCollectionViewCell.swift; sourceTree = "<group>"; };
 		63B19A442C7C459C00BB2CEC /* ImagePreviewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewAnimator.swift; sourceTree = "<group>"; };
@@ -286,6 +288,14 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
+		63A861C62C9C4B29000572F7 /* PinLock */ = {
+			isa = PBXGroup;
+			children = (
+				63A861C72C9C4B85000572F7 /* DataboxLockViewController.swift */,
+			);
+			path = PinLock;
+			sourceTree = "<group>";
+		};
 		63B19A412C79EB5300BB2CEC /* cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -356,6 +366,7 @@
 		63C3E4D12C3C079D0060F257 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				63A861C62C9C4B29000572F7 /* PinLock */,
 				631869C02C731CDD0026F389 /* Feedback */,
 				63603EE42C6384DA00F4C115 /* Storage */,
 				63C3E5522C5B69A10060F257 /* Files */,
@@ -851,6 +862,7 @@
 				63C3E4EF2C3E90130060F257 /* CardPresentAnimationController.swift in Sources */,
 				63C3E4DA2C3C0A210060F257 /* OnboardingViewController.swift in Sources */,
 				63603EFC2C64F77E00F4C115 /* StorageViewController.swift in Sources */,
+				63A861C82C9C4B85000572F7 /* DataboxLockViewController.swift in Sources */,
 				631869C62C731D430026F389 /* ReplyFeedbackViewController.swift in Sources */,
 				63C3E5162C49325A0060F257 /* EmojiViewController.swift in Sources */,
 				63C3E4E72C3CF30E0060F257 /* BaseViewController.swift in Sources */,

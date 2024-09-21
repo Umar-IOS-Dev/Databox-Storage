@@ -160,7 +160,17 @@ class BaseViewController: UIViewController {
             } else {
                 // Fallback on earlier versions
             }
-            backButton.setImage(.cloudVaultBackButton?.withRenderingMode(.alwaysOriginal), for: .normal)
+            
+            if let backButtonImage = UIImage.cloudVaultBackButton {
+                let backButtonColor = UIColor(named: "appPrimaryTextColor") ?? .black
+                
+                // Apply rendering mode and tint color
+                let tintedBackButtonImage = backButtonImage.withRenderingMode(.alwaysTemplate)
+                backButton.setImage(tintedBackButtonImage, for: .normal)
+                
+                // Set the tint color of the button
+                backButton.tintColor = backButtonColor
+            }
             
             if showBackButton {
                 let backButtonView = UIView()
@@ -373,11 +383,13 @@ class BaseViewController: UIViewController {
         
         let searchImageView = UIImageView()
         searchImageView.contentMode = .scaleAspectFit
-        searchImageView.image = UIImage(named: "searchIcon")
+        searchImageView.image = UIImage(named: "searchIcon")?.withRenderingMode(.alwaysTemplate)
+        searchImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         
         let hamburgerImageView = UIImageView()
         hamburgerImageView.contentMode = .scaleAspectFit
-        hamburgerImageView.image = UIImage(named: "hamburgerIcon")
+        hamburgerImageView.image = UIImage(named: "hamburgerIcon")?.withRenderingMode(.alwaysTemplate)
+        hamburgerImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         
         getProView.addSubview(animationView)
         searchView.addSubview(searchImageView)

@@ -12,7 +12,8 @@ class LoginNumberViewController: BaseViewController {
     
     private var countryCode = "+92"
     private var userNumber = ""
-    let customView = AppIconView(backgroundImage: UIImage(named: "appIconBgImage")!, iconImage: UIImage(named: "appIconImage")!)
+    private let customView = AppIconView(backgroundImage: UIImage(named: "appIconBgImage")!, iconImage: UIImage(named: "appIconImage")!)
+    
     private let nextButton: UIButton = {
         let button = UIButton()
         button.setTitle("Next", for: .normal)
@@ -55,7 +56,8 @@ class LoginNumberViewController: BaseViewController {
         customView.topAnchor == view.safeAreaLayoutGuide.topAnchor + DesignMetrics.Padding.size12
         customView.leadingAnchor == view.leadingAnchor
         customView.trailingAnchor == view.trailingAnchor
-        customView.heightAnchor == view.heightAnchor * 0.25
+        customView.heightAnchor == view.bounds.height * 0.25 //view.heightAnchor * 0.10
+        customView.animateIcons()
         appendViewToMainVStack(view: customView)
     }
     
@@ -87,7 +89,7 @@ class LoginNumberViewController: BaseViewController {
         
         containerView.addSubview(containerStack)
         containerStack.edgeAnchors == containerView.edgeAnchors
-        appendViewToMainVStack(view: containerView, topPadding: DesignMetrics.Padding.size24)
+        appendViewToMainVStack(view: containerView, topPadding: DesignMetrics.Padding.size0)
     }
     
     

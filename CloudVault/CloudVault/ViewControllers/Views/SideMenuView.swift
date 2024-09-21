@@ -16,7 +16,7 @@ class SideMenuView: UIView {
     let imagesGraphView = StorageHorizontalUsageView(filledPercentage: 54, graphViewColor: #colorLiteral(red: 0.3098039216, green: 0.3529411765, blue: 0.4196078431, alpha: 0.2471035289), filledColor: UIColor(named: "appPrimaryTextColor") ?? .blue)
     let storageInfoLabel = UILabel()
     private let separatorView = UIView()
-    let actionButton = UIView()
+    let proButtonView = UIView()
     var menuItems = [UIView]()
     var mainStack = UIStackView()
     private let scrollView = UIScrollView()
@@ -56,8 +56,47 @@ class SideMenuView: UIView {
         separatorView.backgroundColor = UIColor(named: "appDeselectedTabbarColor")
         
         // Action Button
-        actionButton.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
-        actionButton.layer.cornerRadius = 8
+        proButtonView.backgroundColor = #colorLiteral(red: 0.2039215686, green: 0.4823529412, blue: 0.9294117647, alpha: 1)
+        proButtonView.layer.cornerRadius = 8
+        
+        let proButtonHStackContainer = UIStackView()
+        proButtonHStackContainer.axis = .horizontal
+        proButtonHStackContainer.spacing = 8
+       
+        
+        let proImageView = UIImageView()
+        proImageView.contentMode = .scaleAspectFit
+        proImageView.image = UIImage(named: "sidebarProIcon")
+        proImageView.widthAnchor == 30
+        
+        let proTitleLabel = UILabel()
+        proTitleLabel.textColor = .white
+        proTitleLabel.text = "Get More Storage"
+        proTitleLabel.font = FontManagerDatabox.shared.cloudVaultBoldText(ofSize: 12)
+        
+        let proArrowView = UIView()
+        proArrowView.widthAnchor == 20
+        
+        let proArrowImageView = UIImageView()
+        proArrowImageView.contentMode = .scaleAspectFit
+        proArrowImageView.image = UIImage(named: "arrowWhite")
+        proArrowImageView.heightAnchor == 16
+        proArrowImageView.widthAnchor == 16
+        
+        proArrowView.addSubview(proArrowImageView)
+        
+        proArrowImageView.centerAnchors == proArrowView.centerAnchors
+        
+        proButtonHStackContainer.addArrangedSubview(proImageView)
+        proButtonHStackContainer.addArrangedSubview(proTitleLabel)
+        proButtonHStackContainer.addArrangedSubview(proArrowView)
+        
+        proButtonView.addSubview(proButtonHStackContainer)
+        proButtonHStackContainer.leadingAnchor == proButtonView.leadingAnchor + 8
+        proButtonHStackContainer.trailingAnchor == proButtonView.trailingAnchor - 8
+        proButtonHStackContainer.heightAnchor == 30
+        proButtonHStackContainer.centerYAnchor == proButtonView.centerYAnchor
+        proButtonHStackContainer.backgroundColor = .clear
         
         // Menu Items
         for (index, title) in menuTitles.enumerated() {
@@ -76,7 +115,7 @@ class SideMenuView: UIView {
         spacerView.backgroundColor = .clear
         
         // Adding to the content view
-        mainStack = UIStackView(arrangedSubviews: [profileImageView, userNameLabel, emailLabel, imagesGraphView, storageInfoLabel, separatorView, actionButton] + menuItems )
+        mainStack = UIStackView(arrangedSubviews: [profileImageView, userNameLabel, emailLabel, imagesGraphView, storageInfoLabel, separatorView, proButtonView] + menuItems )
         mainStack.axis = .vertical
         mainStack.spacing = 12
         
@@ -118,12 +157,12 @@ class SideMenuView: UIView {
         separatorView.heightAnchor == 2
         
         // Constraints for actionButton
-        actionButton.sizeAnchors == CGSize(width: 178, height: 46)
+        proButtonView.sizeAnchors == CGSize(width: 178, height: 46)
         
         // Constraints for menuItems
         menuItems.forEach { menuItem in
             menuItem.heightAnchor == 46
-            menuItem.widthAnchor == actionButton.widthAnchor
+            menuItem.widthAnchor == proButtonView.widthAnchor
         }
         
         // Set constraints for contentView's height to match mainStack's height
@@ -135,7 +174,8 @@ class SideMenuView: UIView {
     }
     
     private func createMenuItem(title: String, icon: UIImage) -> UIView {
-        let iconView = UIImageView(image: icon)
+        let iconView = UIImageView(image: icon.withRenderingMode(.alwaysTemplate))
+        iconView.tintColor = UIColor(named: "appPrimaryTextColor")
         iconView.contentMode = .scaleAspectFit
         iconView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 

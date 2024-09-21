@@ -172,11 +172,11 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             selectedVC.view.addSubview(bottomSheetView!)
             bottomSheetView?.translatesAutoresizingMaskIntoConstraints = false
             
-            bottomSheetHeightConstraint = bottomSheetView?.heightAnchor.constraint(equalToConstant: 400)
+            bottomSheetHeightConstraint = bottomSheetView?.heightAnchor.constraint(equalToConstant: 430)
             bottomSheetHeightConstraint?.isActive = true
 
             // Set bottom constraint initially off-screen
-            bottomSheetHeightConstraint = bottomSheetView!.bottomAnchor.constraint(equalTo: selectedVC.view.bottomAnchor, constant: 400)
+            bottomSheetHeightConstraint = bottomSheetView!.bottomAnchor.constraint(equalTo: selectedVC.view.bottomAnchor, constant: 430)
             bottomSheetHeightConstraint?.isActive = true
 
             NSLayoutConstraint.activate([
@@ -212,7 +212,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         // Animate the hiding of the bottom sheet
         UIView.animate(withDuration: 0.3, animations: {
             self.dimmingView?.alpha = 0.0
-            self.bottomSheetHeightConstraint?.constant = 400 // Move it off-screen
+            self.bottomSheetHeightConstraint?.constant = 430 // Move it off-screen
             selectedVC.view.layoutIfNeeded()
         }) { _ in
             self.bottomSheetView?.isHidden = true
@@ -232,7 +232,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         imageNameLabel.text = "Add to Databox"
         
         let separatorView = UIView()
-        separatorView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9333333333, blue: 0.9647058824, alpha: 1)
+        separatorView.backgroundColor =  UIColor(named: "appDeselectedTabbarColor")
         
         bottomSheetView.addSubview(imageNameLabel)
         bottomSheetView.addSubview(separatorView)
@@ -323,7 +323,8 @@ extension CustomTabBarController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BottomSheetOptionCell", for: indexPath) as! BottomSheetOptionCell
         cell.titleLabel.text = bottomSheetOptions[indexPath.row].title
         cell.titleLabel.textColor =  UIColor(named: "appPrimaryTextColor")
-        cell.iconImageView.image = bottomSheetOptions[indexPath.row].icon
+        cell.iconImageView.image = bottomSheetOptions[indexPath.row].icon.withRenderingMode(.alwaysTemplate)
+        cell.iconImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         cell.selectionStyle = .none
         cell.backgroundColor = .clear
         return cell
@@ -334,7 +335,7 @@ extension CustomTabBarController: UITableViewDelegate, UITableViewDataSource {
         print("Selected option: \(selectedOption.title)")
         // Handle the selection
         UIView.animate(withDuration: 0.3) {
-            self.bottomSheetHeightConstraint?.constant = 400
+            self.bottomSheetHeightConstraint?.constant = 430
             self.bottomSheetView?.isHidden = true
             self.dismissBottomSheet()
             switch indexPath.row {

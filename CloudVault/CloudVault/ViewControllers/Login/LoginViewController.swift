@@ -67,7 +67,7 @@ class LoginViewController: BaseViewController {
         customView.topAnchor == view.safeAreaLayoutGuide.topAnchor + DesignMetrics.Padding.size12
         customView.leadingAnchor == view.leadingAnchor
         customView.trailingAnchor == view.trailingAnchor
-        customView.heightAnchor == view.heightAnchor * 0.10
+        customView.heightAnchor == view.bounds.height * 0.25 //view.heightAnchor * 0.10
         customView.animateIcons()
         //customView.rotateIconImageView()
         appendViewToMainVStack(view: customView)

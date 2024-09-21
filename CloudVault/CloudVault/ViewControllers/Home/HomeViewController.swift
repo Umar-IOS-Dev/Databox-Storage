@@ -190,14 +190,14 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        resetIconsTransforms() // Resets the transform to the original state before reanimating
-        startIconsAnimations()
+       // resetIconsTransforms() // Resets the transform to the original state before reanimating
+      //  startIconsAnimations()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // Optional: Remove animations when the view disappears to ensure they are restarted when the view reappears.
-        removeIconsAnimations()
+       // removeIconsAnimations()
     }
     
     private func resetIconsTransforms() {

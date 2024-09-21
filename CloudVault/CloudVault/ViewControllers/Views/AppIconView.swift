@@ -104,7 +104,7 @@ class AppIconView: UIView {
         iconImageView.image = iconImage
         
         backgroundImageView.edgeAnchors == edgeAnchors
-        iconImageView.centerAnchors == centerAnchors
+        iconImageView.centerAnchors == backgroundImageView.centerAnchors
         iconImageView.widthAnchor == DesignMetrics.Dimensions.width130
         iconImageView.heightAnchor == DesignMetrics.Dimensions.height130
         

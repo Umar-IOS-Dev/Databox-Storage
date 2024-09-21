@@ -143,7 +143,7 @@ class SettingsViewController: BaseViewController {
         
         let settingSeparateView = UIView()
         settingSeparateView.heightAnchor == 1
-        settingSeparateView.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.968627451, blue: 0.9882352941, alpha: 1)
+        settingSeparateView.backgroundColor = UIColor(named: "appDeselectedTabbarColor")
         
         let autoBackUpView = UIView()
         autoBackUpView.heightAnchor == 42
@@ -153,7 +153,8 @@ class SettingsViewController: BaseViewController {
         autoBackUpContentView.leftImageView.image = UIImage(named: "autoBackUpIcon")
         autoBackUpContentView.titleLabel.text = "Auto Backup"
         
-        autoBackUpContentView.rightImageView.image = UIImage(named: "forwardArrow")
+        autoBackUpContentView.rightImageView.image = UIImage(named: "forwardArrow")?.withRenderingMode(.alwaysTemplate)
+        autoBackUpContentView.rightImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         
         autoBackUpView.addSubview(autoBackUpContentView)
         autoBackUpContentView.verticalAnchors == autoBackUpView.verticalAnchors + 4
@@ -165,7 +166,8 @@ class SettingsViewController: BaseViewController {
         let notificationContentView = SystemSettingView()
         notificationContentView.leftImageView.image = UIImage(named: "notificationIcon")
         notificationContentView.titleLabel.text = "Notification"
-        notificationContentView.rightImageView.image = UIImage(named: "forwardArrow")
+        notificationContentView.rightImageView.image = UIImage(named: "forwardArrow")?.withRenderingMode(.alwaysTemplate)
+        notificationContentView.rightImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         
         notificationView.addSubview(notificationContentView)
         notificationContentView.verticalAnchors == notificationView.verticalAnchors + 4
@@ -177,7 +179,8 @@ class SettingsViewController: BaseViewController {
         let themeContentView = SystemSettingView()
         themeContentView.leftImageView.image = UIImage(named: "themeIcon")
         themeContentView.titleLabel.text = "Theme"
-        themeContentView.rightImageView.image = UIImage(named: "forwardArrow")
+        themeContentView.rightImageView.image = UIImage(named: "forwardArrow")?.withRenderingMode(.alwaysTemplate)
+        themeContentView.rightImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         
         themeView.addSubview(themeContentView)
         themeContentView.verticalAnchors == themeView.verticalAnchors + 4
@@ -190,7 +193,8 @@ class SettingsViewController: BaseViewController {
         let clearCacheContentView = SystemSettingView()
         clearCacheContentView.leftImageView.image = UIImage(named: "clearCacheIcon")
         clearCacheContentView.titleLabel.text = "Clear Cache"
-        clearCacheContentView.rightImageView.image = UIImage(named: "forwardArrow")
+        clearCacheContentView.rightImageView.image = UIImage(named: "forwardArrow")?.withRenderingMode(.alwaysTemplate)
+        clearCacheContentView.rightImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         
         clearCacheView.addSubview(clearCacheContentView)
         clearCacheContentView.verticalAnchors == clearCacheView.verticalAnchors + 4
@@ -202,7 +206,8 @@ class SettingsViewController: BaseViewController {
         let cacheSizeContentView = SystemSettingView()
         cacheSizeContentView.leftImageView.image = UIImage(named: "cacheSizeIcon")
         cacheSizeContentView.titleLabel.text = "Cache Size"
-        cacheSizeContentView.rightImageView.image = UIImage(named: "forwardArrow")
+        cacheSizeContentView.rightImageView.image = UIImage(named: "forwardArrow")?.withRenderingMode(.alwaysTemplate)
+        cacheSizeContentView.rightImageView.tintColor = UIColor(named: "appPrimaryTextColor")
         
         cacheSizeView.addSubview(cacheSizeContentView)
         cacheSizeContentView.verticalAnchors == cacheSizeView.verticalAnchors + 4
@@ -254,7 +259,7 @@ class SettingsViewController: BaseViewController {
         
         let privacyAndTermsSeparateView = UIView()
         privacyAndTermsSeparateView.heightAnchor == 1
-        privacyAndTermsSeparateView.backgroundColor = #colorLiteral(red: 0.9529411765, green: 0.968627451, blue: 0.9882352941, alpha: 1)
+        privacyAndTermsSeparateView.backgroundColor = UIColor(named: "appDeselectedTabbarColor")
         
         let privacyPolicyView = UIView()
         privacyPolicyView.heightAnchor == 42
@@ -382,6 +387,11 @@ class SettingsViewController: BaseViewController {
     private func handleCacheSizeContentTap() {
         // Handle cache size content tap
         print("Cache Size Tapped")
+        guard navigationController != nil else { print("not navigation")
+            return }
+        print("manageStorageBtn Tapped")
+        let databoxLockVC = DataboxLockViewController()
+        self.navigationController?.pushViewController(databoxLockVC, animated: true)
     }
     
     private func giveFeedbackTap() {
