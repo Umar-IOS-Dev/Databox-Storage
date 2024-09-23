@@ -10,6 +10,8 @@ import Anchorage
 import FirebaseAuth
 import GoogleSignIn
 import FirebaseCore
+import AuthenticationServices
+import CryptoKit
 
 class LoginViewController: BaseViewController {
     
@@ -38,6 +40,15 @@ class LoginViewController: BaseViewController {
         return googleContainerView
     }()
     
+    private let appleContainerView: UIView = {
+        let appleContainerView = UIView()
+        appleContainerView.backgroundColor = .clear
+        appleContainerView.heightAnchor == DesignMetrics.Dimensions.height60
+        return appleContainerView
+    }()
+    
+    fileprivate var currentNonce: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -59,6 +70,7 @@ class LoginViewController: BaseViewController {
         configureGuestAndNumberView()
         configureSepratorView()
         configureGoogleSignInView()
+        setupAppleSignInButton()
     }
     
     private func setupTopAppIconView() {
@@ -183,7 +195,7 @@ class LoginViewController: BaseViewController {
         
         guestAndNumberView.addSubview(guestAndNumberStackView)
         guestAndNumberStackView.edgeAnchors == guestAndNumberView.edgeAnchors
-        appendViewToMainVStack(view: guestAndNumberView, topPadding: DesignMetrics.Padding.size50)
+        appendViewToMainVStack(view: guestAndNumberView, topPadding: DesignMetrics.Padding.size24)
     }
     
     private func configureSepratorView() {
@@ -259,6 +271,65 @@ class LoginViewController: BaseViewController {
         googleStackView.leadingAnchor == googleView.leadingAnchor + DesignMetrics.Padding.size24
         googleStackView.trailingAnchor == googleView.trailingAnchor
         appendViewToMainVStack(view: googleContainerView, topPadding: DesignMetrics.Padding.size32)
+    }
+    
+    private func setupAppleSignInButton() {
+        let appleView = UIView()
+        appleView.backgroundColor = #colorLiteral(red: 0.7777122855, green: 0.7926475406, blue: 0.8181691766, alpha: 1).withAlphaComponent(0.4)
+        appleContainerView.addSubview(appleView)
+        
+        appleView.layer.cornerRadius = DesignMetrics.Padding.size8
+        appleView.topAnchor == appleContainerView.topAnchor
+        appleView.bottomAnchor == appleContainerView.bottomAnchor
+        appleView.widthAnchor == DesignMetrics.Dimensions.width247
+        appleView.centerXAnchor == appleContainerView.centerXAnchor
+        
+//        
+//        let appleSignInButton = ASAuthorizationAppleIDButton()
+//        appleSignInButton.backgroundColor = .clear
+//        appleSignInButton.addTarget(self, action: #selector(handleAppleSignIn), for: .touchUpInside)
+//        appleView.addSubview(appleSignInButton)
+        
+        
+        
+        // Create a custom button
+               let customAppleSignInButton = UIButton(type: .system)
+               customAppleSignInButton.setTitle("Sign in with Apple", for: .normal)
+               customAppleSignInButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+               customAppleSignInButton.setTitleColor(UIColor(named: "loginTitleTextColor"), for: .normal)
+               customAppleSignInButton.backgroundColor = .clear
+               customAppleSignInButton.layer.cornerRadius = 8
+               
+               // Add an icon to the button (optional)
+               if let appleLogo = UIImage(systemName: "applelogo") {
+                   customAppleSignInButton.setImage(appleLogo, for: .normal)
+                   customAppleSignInButton.tintColor = UIColor(named: "loginTitleTextColor")
+                   customAppleSignInButton.imageView?.contentMode = .scaleAspectFit
+                   customAppleSignInButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -30, bottom: 0, right: 0)
+               }
+        
+        // Set button constraints or frame
+               // customAppleSignInButton.frame = CGRect(x: 50, y: 100, width: 250, height: 50) // Example frame
+        appleView.addSubview(customAppleSignInButton)
+        customAppleSignInButton.edgeAnchors == appleView.edgeAnchors
+                
+                // Add action for the button
+                customAppleSignInButton.addTarget(self, action: #selector(handleAppleSignIn), for: .touchUpInside)
+        
+        
+        //appleSignInButton.edgeAnchors == appleView.edgeAnchors
+        appendViewToMainVStack(view: appleContainerView, topPadding: 12)
+    }
+    
+    @objc func handleAppleSignIn() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+               let request = appleIDProvider.createRequest()
+               request.requestedScopes = [.fullName, .email]
+               
+               let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+               authorizationController.delegate = self
+               authorizationController.presentationContextProvider = self
+               authorizationController.performRequests()
     }
     
     func socialGoogleLogin(){
@@ -360,6 +431,52 @@ extension LoginViewController {
         googleContainerView.isHidden = false
         self.view.alpha = 1.0
     }
+    
+    // Adapted from https://auth0.com/docs/api-auth/tutorials/nonce#generate-a-cryptographically-random-nonce
+    private func randomNonceString(length: Int = 32) -> String {
+      precondition(length > 0)
+      let charset: Array<Character> =
+          Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+      var result = ""
+      var remainingLength = length
+
+      while remainingLength > 0 {
+        let randoms: [UInt8] = (0 ..< 16).map { _ in
+          var random: UInt8 = 0
+          let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+          if errorCode != errSecSuccess {
+            fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
+          }
+          return random
+        }
+
+        randoms.forEach { random in
+          if remainingLength == 0 {
+            return
+          }
+
+          if random < charset.count {
+            result.append(charset[Int(random)])
+            remainingLength -= 1
+          }
+        }
+      }
+
+      return result
+    }
+    
+    private func sha256(_ input: String) -> String {
+        
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            return String(format: "%02x", $0)
+        }.joined()
+        
+        return hashString
+    }
+    
+    
 }
 
 extension LoginViewController: OtpSuccesCardControllerDelegate {
@@ -367,3 +484,52 @@ extension LoginViewController: OtpSuccesCardControllerDelegate {
        showViews()
     }
 }
+
+extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let userID = appleIDCredential.user
+            let identityToken = appleIDCredential.identityToken
+            let authorizationCode = appleIDCredential.authorizationCode
+            
+            // Convert identityToken and authorizationCode to String
+            guard let identityTokenString = identityToken != nil ? String(data: identityToken!, encoding: .utf8) : nil else { return }
+            guard let authorizationCodeString = authorizationCode != nil ? String(data: authorizationCode!, encoding: .utf8) : nil else { return }
+            let nonce = randomNonceString()
+            currentNonce = nonce
+            
+            let firebaseCredential = OAuthProvider.credential(
+                withProviderID: "apple.com",               // Correct provider ID for Apple Sign-In
+                idToken: identityTokenString,          // ID token received from Apple
+                rawNonce: sha256(nonce),               // Your hashed nonce if you're using it
+                accessToken: authorizationCodeString   // Authorization code from Apple (optional)
+            )
+            
+            
+            Auth.auth().signIn(with: firebaseCredential) { (authResult, error) in
+                if let error = error {
+                    print("Firebase sign in with Apple credential failed: \(error)")
+                    return
+                }
+                
+                // User is signed in
+                print("User is signed in with Firebase UID: \(authResult?.user.uid ?? "")")
+                UserDefaults.standard.set(userID, forKey: "appleAuthorizedUserIDKey")
+                // Proceed to the main app screen
+                self.navigateOutOfOtpPinForGoogleAndPhone()
+            }
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error
+        print("Sign in with Apple failed: \(error.localizedDescription)")
+    }
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+}
+
+

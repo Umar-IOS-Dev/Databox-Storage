@@ -13,7 +13,7 @@ class OTPViewController: BaseViewController {
     
     let customView = AppIconView(backgroundImage: UIImage(named: "appIconBgImage")!, iconImage: UIImage(named: "appIconImage")!)
     var userNumber = ""
-    let userPhoneNumber = "+923475248433"
+    let userPhoneNumber = "+923018501238"
     let userOtp = "111100"
     var verificationID = ""
     let activityIndicator = UIActivityIndicatorView(style: .large)

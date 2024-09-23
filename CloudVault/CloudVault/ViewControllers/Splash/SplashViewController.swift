@@ -9,19 +9,9 @@ import UIKit
 import SwiftyGif
 import Anchorage
 import FirebaseAuth
+import AuthenticationServices
 
 class SplashViewController: BaseViewController {
-    
-//    let gifImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.contentMode = .scaleAspectFit
-//        // Set up the gifImageView
-//        if let gif = try? UIImage(gifName: "OnBoarding1") {
-//            imageView.setGifImage(gif)
-//        }
-//        
-//        return imageView
-//    }()
     
     let gifImageView: UIImageView = {
             let imageView = UIImageView()
@@ -35,7 +25,7 @@ class SplashViewController: BaseViewController {
         stack.spacing = DesignMetrics.Padding.size8
         return stack
     }()
-    let activityIndicator = UIActivityIndicatorView(style: .large)
+   
     
     deinit {
         print("SplashViewController is being deallocated")
@@ -66,18 +56,7 @@ class SplashViewController: BaseViewController {
         configureFooterView()
 //        showProgress()
         updateGifImage()
-       // setupActivityIndicator()
-       // activityIndicator.startAnimating()
-       // self.view.bringSubviewToFront(activityIndicator)
     }
-    
-//    func setupActivityIndicator() {
-//            activityIndicator.center = view.center
-//            activityIndicator.hidesWhenStopped = true
-//        activityIndicator.color = #colorLiteral(red: 0.1490196078, green: 0.2, blue: 0.2784313725, alpha: 1)
-//            view.addSubview(activityIndicator)
-//        }
-    
     // Method to update the GIF image based on the current interface style (light/dark mode)
        private func updateGifImage() {
            let gifName: String
@@ -138,34 +117,45 @@ class SplashViewController: BaseViewController {
     
     private func transitionToOnboarding() {
         if let user = Auth.auth().currentUser {
-                // User is signed in.
-                print("User is signed in with uid: \(user.uid)")
-                // Navigate to the main app screen or perform any other actions needed.
-           // activityIndicator.stopAnimating()
+            // User is signed in with Firebase.
+            print("User is signed in with uid: \(user.uid)")
+            if let savedUserID = UserDefaults.standard.string(forKey: "appleAuthorizedUserIDKey") {
+                let appleIDProvider = ASAuthorizationAppleIDProvider()
+                appleIDProvider.getCredentialState(forUserID: savedUserID) { [weak self] (credentialState, error) in
+                    guard let self = self else { return }
+                    switch credentialState {
+                    case .authorized:
+                        // The Apple ID credential is still valid.
+                        print("User is signed in with Apple ID.")
+                        // Proceed to the main app screen.
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+                            guard let self = self else { return }
+                            self.transitionToMainApp()
+                        }
+                    case .revoked, .notFound:
+                        // The Apple ID credential is either revoked or does not exist.
+                        print("Apple ID credential revoked or not found. Showing onboarding screens.")
+                        DispatchQueue.main.async {
+                            self.showOnBoardingScreens()
+                        }
+                    default:
+                        break
+                     }
+               }
+            }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
-                guard let self = self else { return }
-               // hideProgress()
-                self.transitionToMainApp()
-               // logoutUser()
+            else {
+                // Proceed to the main app screen.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+                    guard let self = self else { return }
+                    self.transitionToMainApp()
+                }
             }
-          //  self.showHomeViewController()
-//            let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-//            onboardingPageVC.modalTransitionStyle = .crossDissolve
-//            onboardingPageVC.modalPresentationStyle = .fullScreen
-//            present(onboardingPageVC, animated: true, completion: nil)
-            } else {
-                // No user is signed in.
-                print("No user is signed in.")
-               // hideProgress()
-              //  activityIndicator.stopAnimating()
-                // Show the login screen or perform any other actions needed.
-//                let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-//                onboardingPageVC.modalTransitionStyle = .crossDissolve
-//                onboardingPageVC.modalPresentationStyle = .fullScreen
-//                present(onboardingPageVC, animated: true, completion: nil)
-                self.transitionToMainApp()
-            }
+        } else {
+            print("No user is signed in. Showing onboarding screens.")
+            self.showOnBoardingScreens()
+            
+        }
     }
     
     private func showHomeViewController() {
@@ -181,6 +171,14 @@ class SplashViewController: BaseViewController {
                               completion: nil)
         }
     }
+    
+    private func showOnBoardingScreens() {
+        let onboardingPageVC = OnboardingPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        onboardingPageVC.modalTransitionStyle = .crossDissolve
+        onboardingPageVC.modalPresentationStyle = .fullScreen
+        present(onboardingPageVC, animated: true, completion: nil)
+    }
+    
     
     private func transitionToMainApp() {
             let tabBarController = CustomTabBarController()
@@ -217,15 +215,18 @@ class SplashViewController: BaseViewController {
         do {
             try Auth.auth().signOut()
             print("User logged out successfully.")
-            
             // Navigate to the login screen or take necessary action
             // For example, if you are using a navigation controller:
             // self.navigationController?.popToRootViewController(animated: true)
+            if let savedUserID = UserDefaults.standard.string(forKey: "appleAuthorizedUserIDKey") {
+                UserDefaults.standard.removeObject(forKey: "appleAuthorizedUserIDKey")
+            }
             
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
         }
     }
+    
     
    
 }
