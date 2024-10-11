@@ -7,6 +7,8 @@
 
 import UIKit
 import Anchorage
+import FirebaseAuth
+import StoreKit
 
 class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     private lazy var profileImageView: UIImageView = {
@@ -179,6 +181,45 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
        // self.view.isUserInteractionEnabled = false
 //        showProgress()
        // scheduleLocalNotification()
+        if #available(iOS 15.0, *) {
+            fetchAndCheckSubscription()
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
+    @available(iOS 15.0, *)
+    func fetchAndCheckSubscription() {
+        Task {
+            await checkSubscriptionStatus()
+        }
+    }
+    
+    @available(iOS 15.0, *)
+    func checkSubscriptionStatus() async {
+        do {
+            // Fetch all the active entitlements (transactions that have not been revoked or expired)
+            for await verificationResult in Transaction.currentEntitlements {
+                switch verificationResult {
+                case .verified(let transaction):
+                    // The transaction is verified and can be trusted
+                    let productID = transaction.productID
+                    print("Active subscription product ID: \(productID)")
+                    
+                    // Check if the product ID matches your subscription IDs
+                    if productID == "monthly_basic" {
+                        print("User is subscribed to your subscription plan.")
+                    }
+                    
+                case .unverified(_, let error):
+                    // The transaction could not be verified
+                    print("Unverified transaction: \(error.localizedDescription)")
+                }
+            }
+            
+        } catch {
+            print("Failed to fetch transactions: \(error.localizedDescription)")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -229,6 +270,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        view.bringSubviewToFront(sideMenuView)
         view.layoutIfNeeded()
     }
     
@@ -260,7 +302,7 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
             // Set up overlay constraints to cover the main content area, not the side menu
             overlayView.topAnchor == view.topAnchor
             overlayView.bottomAnchor == view.bottomAnchor
-            overlayView.trailingAnchor == view.trailingAnchor - 250
+            overlayView.trailingAnchor == view.trailingAnchor //- 250
             overlayView.leadingAnchor == view.leadingAnchor
             
             // Add tap gesture to overlay to hide side menu
@@ -268,25 +310,40 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
             overlayView.addGestureRecognizer(tapGesture)
         }
     
+    override func handleGetProTapped() {
+        showOnBoardingScreensForPremium()
+    }
+    
     override func handleHamBurgerTapped() {
-        print("this is correct hamburger")
         toggleSideMenu()
     }
     
+    private func showOnBoardingScreensForPremium() {
+        //let onboardingPageVC = PremiumPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        let onboardingPageVC = PremiumPageViewController()
+      //  onboardingPageVC.modalTransitionStyle = .crossDissolve
+        onboardingPageVC.modalPresentationStyle = .fullScreen
+        present(onboardingPageVC, animated: true, completion: nil)
+    }
+    
+   
+    
     private func setupSidemenu() {
             // Sample menu titles and icons
-            let menuTitles = ["Home", "Settings", "Profile", "Help", "Logout"]
-            let menuIcons = [UIImage(named: "audioIcon"), UIImage(named: "contactsIcon"), UIImage(named: "documentsIcon"), UIImage(named: "folderIcon"), UIImage(named: "photosIcon")]
+            let menuTitles = ["My Profile", "DataBox Lock", "Dark Mode", "Auto Backup", "Setting", "Feedback", "Privacy Policy", "Terms of Service", "Rate App", "Share App", "Logout"]
+            let menuIcons = [UIImage(named: "sideMenuProfileIcon"), UIImage(named: "sideMenuLockIcon"), UIImage(named: "sideMenuDarkmodeIcon"), UIImage(named: "sideMenuAutoBackupIcon"), UIImage(named: "settings"), UIImage(named: "sideMenuFeedBackIcon"), UIImage(named: "sideMenuPrivacyPolicyIcon"), UIImage(named: "sideMenuTermsIcon"), UIImage(named: "sideMenuRateAppIcon"), UIImage(named: "sideMenuShareIcon"), UIImage(systemName: "rectangle.portrait.and.arrow.right")]
             
             // Initialize SideMenuView
             sideMenuView = SideMenuView(menuTitles: menuTitles, menuIcons: menuIcons.compactMap { $0 })
-            
+            sideMenuView.delegate = self
+        sideMenuView.isOpaque = true
+       
             // Add SideMenuView to the view controller's view
             view.addSubview(sideMenuView)
             
             // Set initial layout constraints for SideMenuView
             sideMenuView.topAnchor == view.topAnchor - 20
-            sideMenuView.bottomAnchor == view.safeAreaLayoutGuide.bottomAnchor
+            sideMenuView.bottomAnchor == view.bottomAnchor
             sideMenuView.widthAnchor == 250 // Set the width of the side menu
 
             // Initially, position the menu off-screen
@@ -362,9 +419,11 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         func showSideMenu() {
             sideMenuLeadingConstraint.constant = 0 // Move the menu on-screen
             overlayView.isHidden = false
+            self.tabBarController?.tabBar.alpha = 0
 
-            UIView.animate(withDuration: 0.1) {
+            UIView.animate(withDuration: 0.4) {
                 self.overlayView.alpha = 1
+                self.tabBarController?.tabBar.alpha = 0
                 self.view.layoutIfNeeded()
             }
         }
@@ -373,11 +432,13 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         @objc func hideSideMenu() {
             sideMenuLeadingConstraint.constant = 250 // Move the menu off-screen
 
-            UIView.animate(withDuration: 0.1, animations: {
+            UIView.animate(withDuration: 0.4, animations: {
                 self.overlayView.alpha = 0
+                self.tabBarController?.tabBar.alpha = 1
                 self.view.layoutIfNeeded()
             }) { _ in
                 self.overlayView.isHidden = true
+                self.tabBarController?.tabBar.alpha = 1
             }
         }
         
@@ -730,6 +791,123 @@ class HomeViewController: BaseViewController, UICollectionViewDelegate, UICollec
         let page = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(page)
     }
+    
+    func logoutUser() {
+        do {
+            try Auth.auth().signOut()
+            print("User logged out successfully.")
+            // Navigate to the login screen or take necessary action
+            // For example, if you are using a navigation controller:
+            // self.navigationController?.popToRootViewController(animated: true)
+            if let savedUserID = UserDefaults.standard.string(forKey: "appleAuthorizedUserIDKey") {
+                UserDefaults.standard.removeObject(forKey: "appleAuthorizedUserIDKey")
+            }
+            
+        } catch let signOutError as NSError {
+            print("Error signing out: %@", signOutError)
+        }
+    }
+    
+    func shareApp() {
+        // Define the app's URL to be shared
+        let appURL = URL(string: "https://apps.apple.com/app/385W4V923B") // Replace YOUR_APP_ID with your actual app ID
+        
+        // Create an array of items to share, including the app URL
+        let itemsToShare: [Any] = ["Check out this amazing app!", appURL as Any]
+        
+        // Initialize a UIActivityViewController with the items to share
+        let activityViewController = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil)
+        
+        // Exclude certain activities from the share options, if desired
+        activityViewController.excludedActivityTypes = [.assignToContact, .addToReadingList, .postToFlickr]
+        
+        // Present the activity view controller
+        if let viewController = UIApplication.shared.keyWindow?.rootViewController {
+            viewController.present(activityViewController, animated: true, completion: nil)
+        }
+    }
+    
+    private func showDataboxLockVC() {
+        guard navigationController != nil else { print("not navigation")
+            return }
+        
+        let databoxLockVC = DataboxLockViewController()
+        self.navigationController?.pushViewController(databoxLockVC, animated: true)
+    }
+    
+    private func giveFeedbackTap() {
+        // Handle cache size content tap
+        print("feedback Tapped")
+        guard navigationController != nil else { print("not navigation")
+            return }
+        print("feedback Tapped")
+        let feedbackVC = FeedbackViewController()
+        self.navigationController?.pushViewController(feedbackVC, animated: true)
+    }
+}
+
+extension HomeViewController: SideMenuTapDelegate {
+    func didTapMenuItem(atIndex menuIndex: Int) {
+        switch menuIndex {
+        case 0:
+            hideSideMenu()
+            print("Profile Tapped")
+            let createProfileVC = CreateProfileViewController(titleOfProfile: .home, createProfileWith: .profileHome)
+            self.navigationController?.pushViewController(createProfileVC, animated: true)
+        case 1:
+            hideSideMenu()
+            print("DataBox Lock Tapped")
+            showDataboxLockVC()
+        case 2:
+            hideSideMenu()
+            print("DarkMode Tapped")
+            
+        case 3:
+            hideSideMenu()
+            print("AutoBackup Tapped")
+        case 4:
+            hideSideMenu()
+            print("setting Tapped")
+//            let myCustomTabbar = CustomTabBarController()
+//            myCustomTabbar.tabBarButtonTapped(myCustomTabbar.tabButtons[4])
+            self.tabBarController?.selectedIndex = 4
+//            self.tabBarController?.tabBar.tintColor = .brown//UIColor(named: "appPrimaryTextColor") ?? .gray
+        case 5:
+            hideSideMenu()
+            print("FeedBack Tapped")
+            giveFeedbackTap()
+        case 6:
+            hideSideMenu()
+            print("PrivacyPolicy Tapped")
+        case 7:
+            hideSideMenu()
+            print("TermsOfService Tapped")
+        case 8:
+            hideSideMenu()
+            print("RateApp Tapped")
+        case 9:
+            hideSideMenu()
+            print("ShareApp Tapped")
+            DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+                guard let self = self else { return }
+                self.shareApp()
+            }
+        case 10:
+            hideSideMenu()
+            showProgressForLogout()
+            print("Logout Tapped")
+            self.logoutUser()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+                guard let self = self else { return }
+                self.hideProgress()
+            }
+        default:
+            break
+            
+        }
+    }
+    
+    
 }
 
 

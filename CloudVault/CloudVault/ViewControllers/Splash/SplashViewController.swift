@@ -148,7 +148,8 @@ class SplashViewController: BaseViewController {
                 // Proceed to the main app screen.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
                     guard let self = self else { return }
-                    self.transitionToMainApp()
+                   // self.transitionToMainApp()
+                    self.logoutUser()
                 }
             }
         } else {

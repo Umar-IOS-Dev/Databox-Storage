@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>590144599728-qp8sf2g6bmdae2e1gts063m8g71ognu3.apps.googleusercontent.com</string>
+	<string>847841328564-ooirk2pj0b5djv82a2ss1m94sk7ee61f.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.590144599728-qp8sf2g6bmdae2e1gts063m8g71ognu3</string>
+	<string>com.googleusercontent.apps.847841328564-ooirk2pj0b5djv82a2ss1m94sk7ee61f</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDikzN7Ik3HHVA0-axZsHdwujI4X7OU5VA</string>
+	<string>AIzaSyCuvF2EdwNztKBEMi17eXwU6ZddLp1GYW4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>590144599728</string>
+	<string>847841328564</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.appinator.cloudVault</string>
+	<string>com.appinator.databox</string>
 	<key>PROJECT_ID</key>
-	<string>cloudvault-f6d92</string>
+	<string>databox-ios</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cloudvault-f6d92.appspot.com</string>
+	<string>databox-ios.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:590144599728:ios:434e36ac1f9d448b832d75</string>
+	<string>1:847841328564:ios:185f38a82022e3536b86e1</string>
 </dict>
 </plist>

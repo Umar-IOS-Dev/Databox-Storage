@@ -12,6 +12,11 @@ import GoogleSignIn
 import FirebaseCore
 import AuthenticationServices
 import CryptoKit
+import Amplify
+import AWSCognitoIdentityProvider
+import AWSCognitoAuthPlugin
+import AWSCognitoIdentity
+import AWSAPIPlugin
 
 class LoginViewController: BaseViewController {
     
@@ -354,12 +359,32 @@ class LoginViewController: BaseViewController {
                         } else {
                             // User is signed in
                             print("User signed in")
-                            self.navigateOutOfOtpPinForGoogleAndPhone()
+                           // self.navigateOutOfOtpPinForGoogleAndPhone()
+                            if let idTokenData = idToken.data(using: .utf8) { // Replace with your actual token
+                                self.federateToIdentityPools(with: idToken)
+                            }
                         }
                     }
                 }
     }
     
+    func federateToIdentityPools(with token: String) {
+        // Ensure that the token is valid
+        guard !token.isEmpty else {
+            print("Token is empty")
+            return
+        }
+        
+        Task {
+            do {
+                let plugin = try Amplify.Auth.getPlugin(for: "awsCognitoAuthPlugin") as? AWSCognitoAuthPlugin
+                let result = try await plugin?.federateToIdentityPool(withProviderToken: token, for: .google)
+                print("Successfully federated user to identity pool with result:", result ?? "")
+            } catch {
+                print("Failed to federate to identity pool with error:", error)
+            }
+        }
+    }
     
     
     @objc func googleButtonTapped() {

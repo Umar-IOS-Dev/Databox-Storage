@@ -21,6 +21,7 @@ class SideMenuView: UIView {
     var mainStack = UIStackView()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    weak var delegate: SideMenuTapDelegate?
     
     init(menuTitles: [String], menuIcons: [UIImage]) {
         super.init(frame: .zero)
@@ -99,16 +100,16 @@ class SideMenuView: UIView {
         proButtonHStackContainer.backgroundColor = .clear
         
         // Menu Items
-        for (index, title) in menuTitles.enumerated() {
-            let menuItemView = createMenuItem(title: title, icon: menuIcons[index])
-            menuItems.append(menuItemView)
-        }
+                for (index, title) in menuTitles.enumerated() {
+                    let menuItemView = createMenuItem(title: title, icon: menuIcons[index])
+                    menuItemView.tag = index // Set tag to identify the menu item
+                    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(menuItemTapped(_:)))
+                    menuItemView.addGestureRecognizer(tapGesture)
+                    menuItemView.isUserInteractionEnabled = true // Enable user interaction
+                    menuItems.append(menuItemView)
+                }
         
-        // Menu Items
-        for (index, title) in menuTitles.enumerated() {
-            let menuItemView = createMenuItem(title: title, icon: menuIcons[index])
-            menuItems.append(menuItemView)
-        }
+        
         
         // Spacer view to fill remaining space
         let spacerView = UIView()
@@ -202,6 +203,23 @@ class SideMenuView: UIView {
         
         return menuItemView
     }
+    
+    
+    @objc private func menuItemTapped(_ sender: UITapGestureRecognizer) {
+            if let tappedView = sender.view {
+                let index = tappedView.tag // Get the index of the tapped menu item
+                print("Menu item \(index) tapped.")
+                // Handle the action based on the index
+                // You can call different methods based on the index if needed
+                delegate?.didTapMenuItem(atIndex: index)
+                
+            }
+        }
+}
+
+
+protocol SideMenuTapDelegate: AnyObject {
+    func didTapMenuItem(atIndex menuIndex: Int)
 }
 
 

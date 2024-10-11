@@ -75,6 +75,8 @@ class CreateProfileViewController: BaseViewController {
             configureUI(title: titleOfProfile.value, showBackButton: false, hideBackground: true, showMainNavigation: false)
         case .profileGoogle:
             configureUI(title: titleOfProfile.value, showBackButton: false, hideBackground: true, showMainNavigation: false)
+        case .profileHome:
+            configureUI(title: titleOfProfile.value, showBackButton: true, hideBackground: true, showMainNavigation: false)
         }
         hideFocusbandOptionFromNavBar()
     }
@@ -211,6 +213,8 @@ class CreateProfileViewController: BaseViewController {
         case .profileGoogle:
             headingLabelGender.text = "Your Gmail*"
             genderTextField.placeholder = "hudammugfhal218@gmail.com"
+        case .profileHome:
+            break
         }
         
         containerStackForName.addArrangedSubview(headingLabel)
@@ -397,6 +401,16 @@ class CreateProfileViewController: BaseViewController {
                 self.showAlert(on: self, title: "DataBox", message: "Please fill all required fields to proceed.")
               return
             }
+        case .profileHome:
+            if(nameTextField.text == "" || genderTextField.text == "") {
+                self.showAlert(on: self, title: "DataBox", message: "Please fill all required fields to proceed.")
+              return
+            }
+            else {
+                self.navigationController?.popViewController(animated: true)
+                return
+            }
+            
         }
         
         showHomeViewController()
@@ -436,11 +450,12 @@ extension CreateProfileViewController: EmojiSelectionViewDelegate {
 enum TitleOfProfile{
     case guestUser
     case phoneNumberOrGoogle
-    
+    case home
     var value:String{
         switch self {
         case .guestUser: return "Create Guest User"
         case .phoneNumberOrGoogle: return "   Create Profile"
+        case .home: return "Edit Profile"
         }
     }
 }
@@ -449,12 +464,13 @@ enum Profile{
     case profileGuestUser
     case profilePhoneNumber
     case profileGoogle
-    
+    case profileHome
     var value:String{
         switch self {
         case .profileGuestUser: return "Create profile with guest"
         case .profilePhoneNumber: return "Create profile with phone number"
         case .profileGoogle: return "Create profile with google"
+        case .profileHome: return "Edit Profile"
         }
     }
 }

@@ -352,6 +352,9 @@ class BaseViewController: UIViewController {
         getProView.widthAnchor == 42
         getProView.heightAnchor == 42
         getProView.layer.cornerRadius = 21
+        // Add tap gesture recognizer to the view for getPro
+        let tapGestureGetProView = UITapGestureRecognizer(target: self, action: #selector(handleGetProTapped))
+        getProView.addGestureRecognizer(tapGestureGetProView)
         
         let animationView = LottieAnimationView(name: "proIcon")
         // Set up the animation properties
@@ -366,14 +369,13 @@ class BaseViewController: UIViewController {
         searchView.heightAnchor == 42
         searchView.layer.cornerRadius = 21
         
-        
         let hamburgerView = UIView()
         hamburgerView.backgroundColor = UIColor(named: "appBackgroundViewColor")
         hamburgerView.widthAnchor == 42
         hamburgerView.heightAnchor == 42
         hamburgerView.layer.cornerRadius = 21
         
-        // Add tap gesture recognizer to the view
+        // Add tap gesture recognizer to the view for hamburger
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleHamBurgerTapped))
         hamburgerView.addGestureRecognizer(tapGesture)
         
@@ -412,7 +414,7 @@ class BaseViewController: UIViewController {
         navBarContainer.addSubview(stackView)
         stackView.edgeAnchors == navBarContainer.edgeAnchors
     }
-    
+
     /// If you think this is the last view you are appending please call appendEmptyViewToBottom().
     func appendViewToMainVStack(view: UIView,
                                 topPadding: CGFloat? = nil,
@@ -478,6 +480,22 @@ class BaseViewController: UIViewController {
         
     }
     
+    func showProgressForLogout() {
+        DispatchQueue.main.async {
+            // Show loading indicator
+            SVProgressHUD.show()
+            // SVProgressHUD.showProgress(0.5) // 50% progress
+            SVProgressHUD.setDefaultStyle(.dark)
+            SVProgressHUD.setDefaultMaskType(.black)
+            SVProgressHUD.setForegroundColor(UIColor(named: "appPrimaryTextColor") ?? .white)
+            SVProgressHUD.setBackgroundColor(UIColor(named: "appBackgroundViewColor") ?? .gray)
+            SVProgressHUD.show(withStatus: "Logout...")
+            SVProgressHUD.setRingThickness(2)
+        }
+        
+    }
+    
+    
     func hideProgress() {
         DispatchQueue.main.async {
             SVProgressHUD.dismiss()
@@ -529,8 +547,14 @@ class BaseViewController: UIViewController {
     }
     
     // Action function that gets called when the view is tapped
+        @objc func handleGetProTapped() {
+            print("GetPro was tapped!")
+            // Perform any action you want when the view is tapped
+        }
+    
+    // Action function that gets called when the view is tapped
         @objc func handleHamBurgerTapped() {
-            print("H was tapped!")
+            print("Hamburger was tapped!")
             // Perform any action you want when the view is tapped
         }
     

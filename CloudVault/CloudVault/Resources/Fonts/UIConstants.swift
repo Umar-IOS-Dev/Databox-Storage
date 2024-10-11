@@ -29,6 +29,7 @@ struct DesignMetrics {
         static let size37: CGFloat = 37.0
         static let size40: CGFloat = 40.0
         static let size44: CGFloat = 44.0
+        static let size48: CGFloat = 48.0
         static let size50: CGFloat = 50.0
     }
     

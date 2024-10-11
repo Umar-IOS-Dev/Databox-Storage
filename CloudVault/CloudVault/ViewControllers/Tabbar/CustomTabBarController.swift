@@ -12,7 +12,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private var customTabBar: CustomTabBar!
     private var centerButton: UIButton!
-    private var tabButtons: [UIButton] = []
+    var tabButtons: [UIButton] = []
     private var bottomSheetView: UIView?
     private var bottomSheetHeightConstraint: NSLayoutConstraint?
     private var dimmingView: UIView? // Added dimming view
@@ -38,7 +38,6 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.delegate = self // Set the delegate
 
         // Create the view controllers for each tab
@@ -70,6 +69,10 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         // Add custom tab bar buttons
         setupCustomTabBarButtons()
+    }
+    
+    deinit {
+        print("tabbar deallocation")
     }
 
     private func setupCustomTabBarButtons() {
@@ -129,7 +132,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         tabBarButtonTapped(tabButtons[0])
     }
 
-    @objc private func tabBarButtonTapped(_ sender: UIButton) {
+    @objc func tabBarButtonTapped(_ sender: UIButton) {
         for button in tabButtons {
             button.tintColor = deselectedTintColor
         }
@@ -172,11 +175,11 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             selectedVC.view.addSubview(bottomSheetView!)
             bottomSheetView?.translatesAutoresizingMaskIntoConstraints = false
             
-            bottomSheetHeightConstraint = bottomSheetView?.heightAnchor.constraint(equalToConstant: 430)
+            bottomSheetHeightConstraint = bottomSheetView?.heightAnchor.constraint(equalToConstant: 350)
             bottomSheetHeightConstraint?.isActive = true
 
             // Set bottom constraint initially off-screen
-            bottomSheetHeightConstraint = bottomSheetView!.bottomAnchor.constraint(equalTo: selectedVC.view.bottomAnchor, constant: 430)
+            bottomSheetHeightConstraint = bottomSheetView!.bottomAnchor.constraint(equalTo: selectedVC.view.bottomAnchor, constant: 350)
             bottomSheetHeightConstraint?.isActive = true
 
             NSLayoutConstraint.activate([
@@ -184,13 +187,14 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 bottomSheetView!.trailingAnchor.constraint(equalTo: selectedVC.view.trailingAnchor),
                 bottomSheetHeightConstraint!
             ])
-            
+            self.tabBar.isHidden = true
             // Add content to the bottom sheet
             setupBottomSheetContent()
             setupNotchView()
         } else {
             // If the bottom sheet view already exists, make sure it's not hidden
             bottomSheetView?.isHidden = false
+            self.tabBar.isHidden = true
         }
 
         // Ensure layout is updated
@@ -207,13 +211,13 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
 
     @objc private func dismissBottomSheet() {
-        guard let selectedVC = selectedViewController else { return }
-        
+        //  guard let selectedVC = selectedViewController else { return }
+        self.tabBar.isHidden = false
         // Animate the hiding of the bottom sheet
         UIView.animate(withDuration: 0.3, animations: {
             self.dimmingView?.alpha = 0.0
-            self.bottomSheetHeightConstraint?.constant = 430 // Move it off-screen
-            selectedVC.view.layoutIfNeeded()
+            self.bottomSheetHeightConstraint?.constant = 350 // Move it off-screen
+           // selectedVC.view.layoutIfNeeded()
         }) { _ in
             self.bottomSheetView?.isHidden = true
         }
@@ -335,7 +339,7 @@ extension CustomTabBarController: UITableViewDelegate, UITableViewDataSource {
         print("Selected option: \(selectedOption.title)")
         // Handle the selection
         UIView.animate(withDuration: 0.3) {
-            self.bottomSheetHeightConstraint?.constant = 430
+            self.bottomSheetHeightConstraint?.constant = 350
             self.bottomSheetView?.isHidden = true
             self.dismissBottomSheet()
             switch indexPath.row {
