@@ -76,11 +76,57 @@ class DataboxLockViewController: BaseViewController {
         pinView.layer.cornerRadius = 8
         pinView.heightAnchor == 56
         
+        let pinViewLabel = UILabel()
+        pinViewLabel.text = "Create Passcode"
+        pinViewLabel.textColor = UIColor(named: "appPrimaryTextColor")
+        pinViewLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 16)
+        
+        let pinImageView = UIImageView()
+        pinImageView.contentMode = .scaleAspectFit
+        pinImageView.backgroundColor = .clear
+        pinImageView.image = UIImage(named: "passcodeImage")
+       // pinImageView.image = UIImage(named: "faceIdImage")
+        pinImageView.heightAnchor == 32
+        pinImageView.widthAnchor == 32
+        
+        let pinHStackView = UIStackView()
+        pinHStackView.axis = .horizontal
+        pinHStackView.spacing = 10
+        
+        pinHStackView.addArrangedSubview(pinImageView)
+        pinHStackView.addArrangedSubview(pinViewLabel)
+        
+        pinView.addSubview(pinHStackView)
+        pinHStackView.edgeAnchors == pinView.edgeAnchors + 8
+        
         let faceIdView = UIView()
         faceIdView.backgroundColor = UIColor(named: "termsButtonColor")
         faceIdView.layer.cornerRadius = 8
         faceIdView.heightAnchor == 56
         
+        
+        let faceIdLabel = UILabel()
+        faceIdLabel.text = "Setup FaceID"
+        faceIdLabel.textColor = UIColor(named: "appPrimaryTextColor")
+        faceIdLabel.font = FontManagerDatabox.shared.cloudVaultSemiBoldText(ofSize: 16)
+        
+        let faceIdImageView = UIImageView()
+        faceIdImageView.contentMode = .scaleAspectFit
+        faceIdImageView.backgroundColor = .clear
+        faceIdImageView.image = UIImage(named: "faceIdImage")
+       // pinImageView.image = UIImage(named: "faceIdImage")
+        faceIdImageView.heightAnchor == 32
+        faceIdImageView.widthAnchor == 32
+        
+        let faceIdHStackView = UIStackView()
+        faceIdHStackView.axis = .horizontal   
+        faceIdHStackView.spacing = 10
+        
+        faceIdHStackView.addArrangedSubview(faceIdImageView)
+        faceIdHStackView.addArrangedSubview(faceIdLabel)
+        
+        faceIdView.addSubview(faceIdHStackView)
+        faceIdHStackView.edgeAnchors == faceIdView.edgeAnchors + 8
         
         
         

@@ -18,6 +18,15 @@ class SettingsViewController: BaseViewController {
         hideFocusbandOptionFromNavBar()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+            super.traitCollectionDidChange(previousTraitCollection)
+            
+            // Update switch when system theme changes (optional)
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                
+            }
+        }
+    
     override func configureUI(title: String, showNavBar: Bool = true, showBackButton: Bool = true, hideBackground: Bool = false, showMainNavigation: Bool = false, addHorizontalPadding: Bool = true, showAsSubViewController: Bool = false) {
         super.configureUI(title: title, showNavBar: showNavBar, showBackButton: showBackButton, hideBackground: hideBackground, showMainNavigation: showMainNavigation, addHorizontalPadding: addHorizontalPadding, showAsSubViewController: showAsSubViewController)
         setupStorageView()
@@ -377,12 +386,26 @@ class SettingsViewController: BaseViewController {
     private func handleThemeContentTap() {
         // Handle theme content tap
         print("Theme Tapped")
+        // Switch to dark mode
+       // overrideUserInterfaceStyle = .dark
+        updateAppTheme(isDarkMode: true)
     }
     
     private func handleClearCacheContentTap() {
         // Handle clear cache content tap
         print("Clear Cache Tapped")
+        // Switch to dark mode
+       // overrideUserInterfaceStyle = .light
+        updateAppTheme(isDarkMode: false)
     }
+    
+    // Function to update the app theme
+    func updateAppTheme(isDarkMode: Bool) {
+           if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first {
+               window.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+           }
+       }
     
     private func handleCacheSizeContentTap() {
         // Handle cache size content tap

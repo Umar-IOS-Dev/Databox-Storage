@@ -18,6 +18,10 @@ import AWSCognitoAuthPlugin
 import AWSCognitoIdentity
 import AWSAPIPlugin
 
+
+
+
+
 class LoginViewController: BaseViewController {
     
     private let customView = AppIconView(backgroundImage: UIImage(named: "appIconBgImage")!, iconImage: UIImage(named: "appIconImage")!)
@@ -350,7 +354,7 @@ class LoginViewController: BaseViewController {
                         return
                     }
 
-                    let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.accessToken.tokenString)
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.refreshToken.tokenString)
 
                     Auth.auth().signIn(with: credential) { result, error in
                         if let error = error {
@@ -360,28 +364,117 @@ class LoginViewController: BaseViewController {
                             // User is signed in
                             print("User signed in")
                            // self.navigateOutOfOtpPinForGoogleAndPhone()
-                            if let idTokenData = idToken.data(using: .utf8) { // Replace with your actual token
-                                self.federateToIdentityPools(with: idToken)
-                            }
+//                            if let idTokenData = idToken.data(using: .utf8) { // Replace with your actual token
+//                                self.federateToIdentityPools(with: idToken)
+//                            }
+                            self.configureAmplify(with: idToken)
+                            
+                            
                         }
                     }
                 }
     }
     
-    func federateToIdentityPools(with token: String) {
-        // Ensure that the token is valid
-        guard !token.isEmpty else {
-            print("Token is empty")
-            return
+    func configureAmplify(with token: String) {
+
+        
+        do {
+            // Automatically loads from amplifyconfiguration.json
+            try Amplify.add(plugin: AWSCognitoAuthPlugin())
+            try Amplify.configure()
+            Amplify.Logging.logLevel = .debug
+
+            print("Amplify configured successfully")
+            Task {
+               try await self.federateToIdentityPoolsUsingCustomIdentityId(with: token)
+            }
+        } catch {
+            print("An error occurred setting up Amplify: \(error)")
         }
+        
+        
+    }
+    
+    
+    
+//    func federateToIdentityPools(with token: String) {
+//        // Ensure that the token is valid
+//        guard !token.isEmpty else {
+//            print("Token is empty")
+//            return
+//        }
+//
+//        Task {
+//            do {
+//                let plugin = try Amplify.Auth.getPlugin(for: "awsCognitoAuthPlugin") as? AWSCognitoAuthPlugin
+//
+//                let developerProvidedIdentity = "securetoken.google.com/databox-ios"
+//                // Create options with a developerProvidedIdentityID if available, or pass nil for now
+//                let options = AuthFederateToIdentityPoolRequest.Options()
+//
+//                // Call federateToIdentityPool with the options
+//                let result = try await plugin?.federateToIdentityPool(withProviderToken: token, for: .google, options: options)
+//
+//                print("Successfully federated user to identity pool with result:", result ?? "")
+//            } catch {
+//                print("Failed to federate to identity pool with error:", error)
+//                // Retry federating the user if necessary
+//                self.federateToIdentityPools(with: token)
+//            }
+//        }
+//    }
+    
+    
+    func federateToIdentityPools(with token: String) {
+        guard
+            let plugin = try? Amplify.Auth.getPlugin(for: "awsCognitoAuthPlugin") as? AWSCognitoAuthPlugin
+        else { return }
         
         Task {
             do {
-                let plugin = try Amplify.Auth.getPlugin(for: "awsCognitoAuthPlugin") as? AWSCognitoAuthPlugin
-                let result = try await plugin?.federateToIdentityPool(withProviderToken: token, for: .google)
-                print("Successfully federated user to identity pool with result:", result ?? "")
+                let result = try await plugin.federateToIdentityPool(
+                    withProviderToken: token,
+                    for: .google
+                )
+                print("Successfully federated user to identity pool with result:", result)
             } catch {
                 print("Failed to federate to identity pool with error:", error)
+                Task {
+                    try await clearFederationToIdentityPools()
+                }
+            }
+        }
+    }
+    
+    func clearFederationToIdentityPools() async throws {
+        guard let authCognitoPlugin = try Amplify.Auth.getPlugin(
+            for: "awsCognitoAuthPlugin") as? AWSCognitoAuthPlugin else {
+            fatalError("Unable to get the Auth plugin")
+        }
+        do {
+            try await authCognitoPlugin.clearFederationToIdentityPool()
+            print("Federation cleared successfully")
+        } catch {
+            print("Clear federation failed with error: \(error)")
+        }
+    }
+    
+    func federateToIdentityPoolsUsingCustomIdentityId(with token: String) async throws {
+        guard let authCognitoPlugin = try Amplify.Auth.getPlugin(
+            for: "awsCognitoAuthPlugin") as? AWSCognitoAuthPlugin else {
+            fatalError("Unable to get the Auth plugin")
+        }
+        do {
+            let identityId = "us-east-1_Le3C0PcJd"
+            let result = try await authCognitoPlugin.federateToIdentityPool(
+                withProviderToken: token,
+                for: .google,
+                options: .init(developerProvidedIdentityID: nil))
+            print("Federation successful with result: \(result)")
+        } catch {
+            print("Failed to federate to identity pools with error: \(error)")
+            Task {
+               // try await clearFederationToIdentityPools()
             }
         }
     }

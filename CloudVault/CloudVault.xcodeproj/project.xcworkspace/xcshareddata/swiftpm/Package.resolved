@@ -1,5 +1,5 @@
 {
-  "originHash" : "ae94f71bd70fb89be75a03d13d31f7dd0847a35e5e4ccf825ab7c9dc4d398ac2",
+  "originHash" : "24e155288c08e912f4bac0ae59ec9b17578d4f7ca20cfd8bf096a89ecaa67f38",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -11,9 +11,9 @@
       }
     },
     {
-      "identity" : "amplify-swift",
+      "identity" : "amplify-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/aws-amplify/amplify-swift.git",
+      "location" : "https://github.com/aws-amplify/amplify-ios.git",
       "state" : {
         "revision" : "95d8f16780c4e11a243fdae93c386195347aea66",
         "version" : "2.42.1"

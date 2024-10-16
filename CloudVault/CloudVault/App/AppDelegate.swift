@@ -13,10 +13,7 @@ import FirebaseMessaging
 import StoreKit
 import Amplify
 import AWSCognitoAuthPlugin
-//import AWSAPIPlugin
-//import AWSCognitoAuthPlugin
-//import AWSDataStorePlugin
-//import AWSS3StoragePlugin
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
@@ -39,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         
         application.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
-        configureAmplify()
+      //  configureAmplify()
         // Observe payment transactions
         SKPaymentQueue.default().add(SubscriptionManager.shared)
         
@@ -68,17 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     }
     
     func configureAmplify() {
-//        do {
-//            try Amplify.add(plugin: AWSCognitoAuthPlugin())
-//            try Amplify.add(plugin: AWSAPIPlugin())
-//          //  try Amplify.add(plugin: AWSDataStorePlugin(modelRegistration: AmplifyModels()))
-//            try Amplify.add(plugin: AWSS3StoragePlugin())
-//
-//            try Amplify.configure()
-//            print("Amplify configured successfully")
-//        } catch {
-//            print("An error occurred setting up Amplify: \(error)")
-//        }
+
         
         do {
             // Automatically loads from amplifyconfiguration.json

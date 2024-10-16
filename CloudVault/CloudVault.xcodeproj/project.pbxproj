@@ -14,6 +14,11 @@
 		631869C62C731D430026F389 /* ReplyFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C52C731D430026F389 /* ReplyFeedbackViewController.swift */; };
 		631869CA2C731F380026F389 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869C92C731F380026F389 /* FeedbackViewController.swift */; };
 		631869CC2C732FD60026F389 /* FeedbackSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631869CB2C732FD50026F389 /* FeedbackSegmentedView.swift */; };
+		6335FDDA2CBFCEB900D2F567 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6335FDD92CBFCEB900D2F567 /* AWSAPIPlugin */; };
+		6335FDDC2CBFCEB900D2F567 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6335FDDB2CBFCEB900D2F567 /* AWSCloudWatchLoggingPlugin */; };
+		6335FDDE2CBFCEB900D2F567 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6335FDDD2CBFCEB900D2F567 /* AWSCognitoAuthPlugin */; };
+		6335FDE02CBFCEB900D2F567 /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6335FDDF2CBFCEB900D2F567 /* AWSDataStorePlugin */; };
+		6335FDE22CBFCEB900D2F567 /* AWSLocationGeoPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6335FDE12CBFCEB900D2F567 /* AWSLocationGeoPlugin */; };
 		6339919A2C918B3300EF3D02 /* sliderDataBox.gif in Resources */ = {isa = PBXBuildFile; fileRef = 633991992C918B3300EF3D02 /* sliderDataBox.gif */; };
 		6339919C2C91C74700EF3D02 /* ProgressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6339919B2C91C74600EF3D02 /* ProgressButton.swift */; };
 		6339919F2C92F54500EF3D02 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6339919E2C92F54500EF3D02 /* Lottie */; };
@@ -34,13 +39,6 @@
 		6366BEDA2CB7F1B30085508F /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366BED92CB7F1B30085508F /* SideMenuView.swift */; };
 		6366BEDC2CB7F1FC0085508F /* CreateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366BEDB2CB7F1FC0085508F /* CreateProfileViewController.swift */; };
 		6366BEDE2CB7F8650085508F /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366BEDD2CB7F8650085508F /* CustomTabBarController.swift */; };
-		6366BEE12CB7FE9B0085508F /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6366BEE02CB7FE9B0085508F /* AWSAPIPlugin */; };
-		6366BEE32CB7FE9B0085508F /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6366BEE22CB7FE9B0085508F /* AWSCognitoAuthPlugin */; };
-		6366BEE52CB7FE9B0085508F /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6366BEE42CB7FE9B0085508F /* AWSDataStorePlugin */; };
-		6366BEE72CB7FE9B0085508F /* AWSPluginsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6366BEE62CB7FE9B0085508F /* AWSPluginsCore */; };
-		6366BEE92CB7FE9B0085508F /* AWSPredictionsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6366BEE82CB7FE9B0085508F /* AWSPredictionsPlugin */; };
-		6366BEEB2CB7FE9B0085508F /* AWSS3StoragePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 6366BEEA2CB7FE9B0085508F /* AWSS3StoragePlugin */; };
-		6366BEED2CB7FE9B0085508F /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = 6366BEEC2CB7FE9B0085508F /* Amplify */; };
 		6366BEF12CB807C20085508F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6366BEF02CB807C20085508F /* Main.storyboard */; };
 		6366BEF32CB8E9940085508F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6366BEF22CB8E9940085508F /* GoogleService-Info.plist */; };
 		638A4BAF2C60F035003B0DEC /* DocumentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A4BAE2C60F035003B0DEC /* DocumentsViewController.swift */; };
@@ -246,25 +244,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6366BEE32CB7FE9B0085508F /* AWSCognitoAuthPlugin in Frameworks */,
-				6366BEE12CB7FE9B0085508F /* AWSAPIPlugin in Frameworks */,
+				6335FDDA2CBFCEB900D2F567 /* AWSAPIPlugin in Frameworks */,
 				63603EF62C64B9F300F4C115 /* SVProgressHUD in Frameworks */,
-				6366BEE52CB7FE9B0085508F /* AWSDataStorePlugin in Frameworks */,
-				6366BEE72CB7FE9B0085508F /* AWSPluginsCore in Frameworks */,
 				63C3E55F2C5BB9E80060F257 /* FirebaseAppDistribution-Beta in Frameworks */,
 				63B19A532C8F0FDD00BB2CEC /* FirebaseMessaging in Frameworks */,
 				631869BF2C6F83850026F389 /* SDWebImageMapKit in Frameworks */,
+				6335FDDE2CBFCEB900D2F567 /* AWSCognitoAuthPlugin in Frameworks */,
+				6335FDE22CBFCEB900D2F567 /* AWSLocationGeoPlugin in Frameworks */,
 				63C3E4D62C3C081C0060F257 /* Anchorage in Frameworks */,
 				6339919F2C92F54500EF3D02 /* Lottie in Frameworks */,
-				6366BEE92CB7FE9B0085508F /* AWSPredictionsPlugin in Frameworks */,
 				63C3E55B2C5BB9E80060F257 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				63C3E4DF2C3C0EE10060F257 /* SwiftyGif in Frameworks */,
 				63C3E5572C5BB9E80060F257 /* FirebaseAnalytics in Frameworks */,
 				631869BD2C6F83850026F389 /* SDWebImage in Frameworks */,
-				6366BEED2CB7FE9B0085508F /* Amplify in Frameworks */,
+				6335FDDC2CBFCEB900D2F567 /* AWSCloudWatchLoggingPlugin in Frameworks */,
 				63C3E5682C5CEAA20060F257 /* GoogleSignInSwift in Frameworks */,
 				63C3E55D2C5BB9E80060F257 /* FirebaseAppCheck in Frameworks */,
-				6366BEEB2CB7FE9B0085508F /* AWSS3StoragePlugin in Frameworks */,
+				6335FDE02CBFCEB900D2F567 /* AWSDataStorePlugin in Frameworks */,
 				63C3E5592C5BB9E80060F257 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				63C3E5632C5CAE800060F257 /* FirebaseAuth in Frameworks */,
 				63C3E5662C5CEAA20060F257 /* GoogleSignIn in Frameworks */,
@@ -299,6 +295,13 @@
 				63B19A412C79EB5300BB2CEC /* cells */,
 			);
 			path = Feedback;
+			sourceTree = "<group>";
+		};
+		6335FD482CBFC5B100D2F567 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		63603EE42C6384DA00F4C115 /* Storage */ = {
@@ -343,8 +346,9 @@
 				63C3E4B62C3BFAF00060F257 /* CloudVaultTests */,
 				63C3E4C02C3BFAF00060F257 /* CloudVaultUITests */,
 				63C3E49E2C3BFAEF0060F257 /* Products */,
-				63C3E4D42C3C081C0060F257 /* Frameworks */,
 				902B7093BEA6ED6ECB701C03 /* AmplifyConfig */,
+				F3975F323798D1D026C736F3 /* AmplifyModels */,
+				6335FD482CBFC5B100D2F567 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -416,13 +420,6 @@
 				63C3E5502C5907630060F257 /* CustomActionSheetViewController.swift */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		63C3E4D42C3C081C0060F257 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		63C3E4D72C3C09F30060F257 /* Splash */ = {
@@ -640,6 +637,13 @@
 			name = AmplifyConfig;
 			sourceTree = "<group>";
 		};
+		F3975F323798D1D026C736F3 /* AmplifyModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AmplifyModels;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -674,13 +678,11 @@
 				631869BE2C6F83850026F389 /* SDWebImageMapKit */,
 				63B19A522C8F0FDD00BB2CEC /* FirebaseMessaging */,
 				6339919E2C92F54500EF3D02 /* Lottie */,
-				6366BEE02CB7FE9B0085508F /* AWSAPIPlugin */,
-				6366BEE22CB7FE9B0085508F /* AWSCognitoAuthPlugin */,
-				6366BEE42CB7FE9B0085508F /* AWSDataStorePlugin */,
-				6366BEE62CB7FE9B0085508F /* AWSPluginsCore */,
-				6366BEE82CB7FE9B0085508F /* AWSPredictionsPlugin */,
-				6366BEEA2CB7FE9B0085508F /* AWSS3StoragePlugin */,
-				6366BEEC2CB7FE9B0085508F /* Amplify */,
+				6335FDD92CBFCEB900D2F567 /* AWSAPIPlugin */,
+				6335FDDB2CBFCEB900D2F567 /* AWSCloudWatchLoggingPlugin */,
+				6335FDDD2CBFCEB900D2F567 /* AWSCognitoAuthPlugin */,
+				6335FDDF2CBFCEB900D2F567 /* AWSDataStorePlugin */,
+				6335FDE12CBFCEB900D2F567 /* AWSLocationGeoPlugin */,
 			);
 			productName = CloudVault;
 			productReference = 63C3E49D2C3BFAEF0060F257 /* CloudVault.app */;
@@ -762,7 +764,7 @@
 				63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */,
 				631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				6339919D2C92F54500EF3D02 /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */,
+				6335FDD82CBFCEB900D2F567 /* XCRemoteSwiftPackageReference "amplify-ios" */,
 			);
 			productRefGroup = 63C3E49E2C3BFAEF0060F257 /* Products */;
 			projectDirPath = "";
@@ -1308,6 +1310,14 @@
 				minimumVersion = 5.19.6;
 			};
 		};
+		6335FDD82CBFCEB900D2F567 /* XCRemoteSwiftPackageReference "amplify-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/amplify-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.42.1;
+			};
+		};
 		6339919D2C92F54500EF3D02 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -1322,14 +1332,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.3.1;
-			};
-		};
-		6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/aws-amplify/amplify-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.42.1;
 			};
 		};
 		63C3E4D02C3C07500060F257 /* XCRemoteSwiftPackageReference "Anchorage" */ = {
@@ -1377,6 +1379,31 @@
 			package = 631869BB2C6F83850026F389 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImageMapKit;
 		};
+		6335FDD92CBFCEB900D2F567 /* AWSAPIPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6335FDD82CBFCEB900D2F567 /* XCRemoteSwiftPackageReference "amplify-ios" */;
+			productName = AWSAPIPlugin;
+		};
+		6335FDDB2CBFCEB900D2F567 /* AWSCloudWatchLoggingPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6335FDD82CBFCEB900D2F567 /* XCRemoteSwiftPackageReference "amplify-ios" */;
+			productName = AWSCloudWatchLoggingPlugin;
+		};
+		6335FDDD2CBFCEB900D2F567 /* AWSCognitoAuthPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6335FDD82CBFCEB900D2F567 /* XCRemoteSwiftPackageReference "amplify-ios" */;
+			productName = AWSCognitoAuthPlugin;
+		};
+		6335FDDF2CBFCEB900D2F567 /* AWSDataStorePlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6335FDD82CBFCEB900D2F567 /* XCRemoteSwiftPackageReference "amplify-ios" */;
+			productName = AWSDataStorePlugin;
+		};
+		6335FDE12CBFCEB900D2F567 /* AWSLocationGeoPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6335FDD82CBFCEB900D2F567 /* XCRemoteSwiftPackageReference "amplify-ios" */;
+			productName = AWSLocationGeoPlugin;
+		};
 		6339919E2C92F54500EF3D02 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6339919D2C92F54500EF3D02 /* XCRemoteSwiftPackageReference "lottie-ios" */;
@@ -1386,41 +1413,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63603EF42C64B9F300F4C115 /* XCRemoteSwiftPackageReference "SVProgressHUD" */;
 			productName = SVProgressHUD;
-		};
-		6366BEE02CB7FE9B0085508F /* AWSAPIPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSAPIPlugin;
-		};
-		6366BEE22CB7FE9B0085508F /* AWSCognitoAuthPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSCognitoAuthPlugin;
-		};
-		6366BEE42CB7FE9B0085508F /* AWSDataStorePlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSDataStorePlugin;
-		};
-		6366BEE62CB7FE9B0085508F /* AWSPluginsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPluginsCore;
-		};
-		6366BEE82CB7FE9B0085508F /* AWSPredictionsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPredictionsPlugin;
-		};
-		6366BEEA2CB7FE9B0085508F /* AWSS3StoragePlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSS3StoragePlugin;
-		};
-		6366BEEC2CB7FE9B0085508F /* Amplify */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6366BEDF2CB7FE9B0085508F /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = Amplify;
 		};
 		63B19A522C8F0FDD00BB2CEC /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;

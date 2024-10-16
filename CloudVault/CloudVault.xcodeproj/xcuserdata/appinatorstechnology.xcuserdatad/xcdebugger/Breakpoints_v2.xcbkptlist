@@ -531,84 +531,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "DE6F0218-A077-4CC5-96F9-3D7B6AAA9CAA"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudVault/ViewControllers/Views/SideMenuView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "setupViews(menuTitles:menuIcons:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7BF9A23F-E95A-4F4E-84E8-3370CC7EC3DE"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudVault/ViewControllers/Home/HomeViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
-            landmarkName = "setupSidemenu()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "7BF9A23F-E95A-4F4E-84E8-3370CC7EC3DE - 8830134c9787c5e3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CloudVault.HomeViewController.setupSidemenu() -&gt; ()"
-                  moduleName = "CloudVault.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Home/HomeViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "337"
-                  endingLineNumber = "337">
-               </Location>
-               <Location
-                  uuid = "7BF9A23F-E95A-4F4E-84E8-3370CC7EC3DE - d61c58dbe26f53d5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.UIImage&gt;) -&gt; Swift.Optional&lt;__C.UIImage&gt; in CloudVault.HomeViewController.setupSidemenu() -&gt; ()"
-                  moduleName = "CloudVault.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Home/HomeViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "337"
-                  endingLineNumber = "337">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DF54D4EC-EBB4-4DE4-9544-52F483C97556"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "364"
-            endingLineNumber = "364"
-            landmarkName = "socialGoogleLogin()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "0A3294D6-511B-4B80-88E6-7B27A925AAB4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -616,8 +538,8 @@
             filePath = "CloudVault/App/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "application(_:open:options:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -625,15 +547,79 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "937D27C3-DD5A-4D76-AA75-4038C67B409E"
+            uuid = "99803A34-3C77-4D1F-9E72-5EF1F2602760"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../Library/Developer/Xcode/DerivedData/CloudVault-dzkfoyipxylryabspjdxqfjdekpq/SourcePackages/checkouts/amplify-swift/AmplifyPlugins/Auth/Sources/AWSCognitoAuthPlugin/Request/AuthFederateToIdentityPoolRequest.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "init(token:provider:options:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "252A9875-9C03-44CF-8B10-6462D19B4F62"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373"
+            startingLineNumber = "416"
+            endingLineNumber = "416"
+            landmarkName = "LoginViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C823F48-7D2F-4AF7-98B8-7983FDD97B5E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "422"
+            endingLineNumber = "422"
+            landmarkName = "LoginViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B2D2CC5C-05D0-4082-92EE-E8D6155D1106"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "420"
+            endingLineNumber = "420"
+            landmarkName = "LoginViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "923879B9-F8BE-4F71-A6F4-03A2D43F21EA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
             landmarkName = "federateToIdentityPools(with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -641,15 +627,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4B2D5D4D-C1A9-43B3-B058-F300E5396381"
+            uuid = "E71EEC98-879B-488D-99DF-26F81C662471"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "379"
-            endingLineNumber = "379"
+            startingLineNumber = "441"
+            endingLineNumber = "441"
             landmarkName = "federateToIdentityPools(with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -657,61 +643,45 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "29E40A79-644A-4729-BE73-469B6AF904FF"
+            uuid = "49BFE33F-083D-472B-A4BD-7B4F344EDC8A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "380"
-            endingLineNumber = "380"
-            landmarkName = "federateToIdentityPools(with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1B6AFD27-A512-4571-9660-16AFAD0CCB3A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
-            landmarkName = "federateToIdentityPools(with:)"
+            startingLineNumber = "451"
+            endingLineNumber = "451"
+            landmarkName = "clearFederationToIdentityPools()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "1B6AFD27-A512-4571-9660-16AFAD0CCB3A - 2cb5bebc1fb4012c"
+                  uuid = "49BFE33F-083D-472B-A4BD-7B4F344EDC8A - 6da319305c8bbb9a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 () async -&gt; () in CloudVault.LoginViewController.federateToIdentityPools(with: Swift.String) -&gt; ()"
+                  symbolName = "(1) suspend resume partial function for CloudVault.LoginViewController.clearFederationToIdentityPools() async throws -&gt; ()"
                   moduleName = "CloudVault.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Login/LoginViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "384"
-                  endingLineNumber = "384">
+                  startingLineNumber = "451"
+                  endingLineNumber = "451">
                </Location>
                <Location
-                  uuid = "1B6AFD27-A512-4571-9660-16AFAD0CCB3A - a3bb1c04562e2f2f"
+                  uuid = "49BFE33F-083D-472B-A4BD-7B4F344EDC8A - 6da319305c8bbb9a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for closure #1 () async -&gt; () in CloudVault.LoginViewController.federateToIdentityPools(with: Swift.String) -&gt; ()"
+                  symbolName = "(1) suspend resume partial function for CloudVault.LoginViewController.clearFederationToIdentityPools() async throws -&gt; ()"
                   moduleName = "CloudVault.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Login/LoginViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "384"
-                  endingLineNumber = "384">
+                  startingLineNumber = "451"
+                  endingLineNumber = "451">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -719,45 +689,73 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F2ED1956-9107-4405-ADAF-6C335E4A0ECF"
+            uuid = "D70DF22B-47C9-4712-825C-CD366BCFE320"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "382"
-            endingLineNumber = "382"
-            landmarkName = "federateToIdentityPools(with:)"
+            startingLineNumber = "455"
+            endingLineNumber = "455"
+            landmarkName = "clearFederationToIdentityPools()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "F2ED1956-9107-4405-ADAF-6C335E4A0ECF - 2cb5bebc1fb4016a"
+                  uuid = "D70DF22B-47C9-4712-825C-CD366BCFE320 - 6da319305c8bb406"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 () async -&gt; () in CloudVault.LoginViewController.federateToIdentityPools(with: Swift.String) -&gt; ()"
+                  symbolName = "(1) suspend resume partial function for CloudVault.LoginViewController.clearFederationToIdentityPools() async throws -&gt; ()"
                   moduleName = "CloudVault.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Login/LoginViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "382"
-                  endingLineNumber = "382">
+                  startingLineNumber = "455"
+                  endingLineNumber = "455">
                </Location>
                <Location
-                  uuid = "F2ED1956-9107-4405-ADAF-6C335E4A0ECF - 99e1fd86e1134d68"
+                  uuid = "D70DF22B-47C9-4712-825C-CD366BCFE320 - fff4a8bf2a7b93fc"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for closure #1 () async -&gt; () in CloudVault.LoginViewController.federateToIdentityPools(with: Swift.String) -&gt; ()"
+                  symbolName = "(2) await resume partial function for CloudVault.LoginViewController.clearFederationToIdentityPools() async throws -&gt; ()"
                   moduleName = "CloudVault.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Login/LoginViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "382"
-                  endingLineNumber = "382">
+                  startingLineNumber = "455"
+                  endingLineNumber = "455">
+               </Location>
+               <Location
+                  uuid = "D70DF22B-47C9-4712-825C-CD366BCFE320 - d7dda223be52f804"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for CloudVault.LoginViewController.clearFederationToIdentityPools() async throws -&gt; ()"
+                  moduleName = "CloudVault.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Login/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "455"
+                  endingLineNumber = "455">
+               </Location>
+               <Location
+                  uuid = "D70DF22B-47C9-4712-825C-CD366BCFE320 - 723577dd6f4d9e0b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for CloudVault.LoginViewController.clearFederationToIdentityPools() async throws -&gt; ()"
+                  moduleName = "CloudVault.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/appinatorstechnology/Documents/GitHub/Umar-IOS-Dev/CloudVault/CloudVault/ViewControllers/Login/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "455"
+                  endingLineNumber = "455">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -765,32 +763,80 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "09114D0C-7828-4ACC-931A-63E2E413B89F"
+            uuid = "FF6F0B93-5EA6-40DF-9295-69A3894C2598"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CloudVault/App/AppDelegate.swift"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "configureAmplify()"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
+            landmarkName = "clearFederationToIdentityPools()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E9D02021-F798-4D36-B195-A5E186F914D0"
+            uuid = "805592AF-222D-4FBB-8AD3-497AB359768D"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CloudVault/App/AppDelegate.swift"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "configureAmplify()"
+            startingLineNumber = "468"
+            endingLineNumber = "468"
+            landmarkName = "federateToIdentityPoolsUsingCustomIdentityId(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B51D2930-83F1-4260-9CFB-E59898EE0F22"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "473"
+            endingLineNumber = "473"
+            landmarkName = "federateToIdentityPoolsUsingCustomIdentityId(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CBAC5457-FD1E-485B-B676-47E0BD33CB99"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "475"
+            endingLineNumber = "475"
+            landmarkName = "federateToIdentityPoolsUsingCustomIdentityId(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1D75B19E-1C8D-4907-938B-9CFA5F42C3C9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudVault/ViewControllers/Login/LoginViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "456"
+            endingLineNumber = "456"
+            landmarkName = "clearFederationToIdentityPools()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
